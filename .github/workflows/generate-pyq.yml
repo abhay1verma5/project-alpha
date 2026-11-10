@@ -2,7 +2,7 @@ name: PYQ Generator + Crawler
 
 on:
   schedule:
-    - cron: '30 */2 * * *'  # Every 2 hours
+    - cron: '20 * * * *'    # Every hour at :20
   workflow_dispatch:
     inputs:
       exam:

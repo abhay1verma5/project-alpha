@@ -4,7 +4,7 @@ name: PYQ import (open datasets)
 # listed in backend/pyq/import_sources.py and commit the database.
 on:
   schedule:
-    - cron: '15 1 * * *'
+    - cron: '40 * * * *'    # Every hour at :40
   workflow_dispatch:
 
 permissions:
