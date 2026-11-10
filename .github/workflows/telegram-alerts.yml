@@ -44,6 +44,9 @@ jobs:
       - name: Fill last dates from notification PDFs
         run: python manage.py extract_pdf_dates --apply --limit 60
 
+      - name: Re-categorize and backfill qualification
+        run: timeout 120 python manage.py recategorize_jobs --all 2>&1 || echo "[DONE]"
+
       - name: Channel alerts for new notices
         run: python manage.py send_telegram_alerts
 
