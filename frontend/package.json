@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "next telemetry disable || true"
+    "cf-build": "npx @opennextjs/cloudflare",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.16",
     "@radix-ui/react-dialog": "^1.2.0",
     "@radix-ui/react-dropdown-menu": "^2.1.25",
     "@radix-ui/react-select": "^2.3.8",
@@ -36,6 +38,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.160.0"
   }
 }

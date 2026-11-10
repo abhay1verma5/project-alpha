@@ -75,6 +75,9 @@ export const metadata: Metadata = {
   },
 };
 
+// ISR: cache all pages for 1 hour, serve stale while revalidating
+export const revalidate = 3600;
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,

@@ -1,0 +1,13 @@
+{
+  "name": "sarkarialert-frontend",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_CACHE_WORKERS_KV",
+      "id": "1595346dbb524c06a5eab064f861c270"
+    }
+  ]
+}
