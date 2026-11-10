@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 PSU_SOURCES = [
     {
         "name": "SBI",
-        "url": "https://www.sbi.co.in/web/careers/current-openings",
+        "url": "https://bank.sbi/web/careers/current-openings",
         "org": "State Bank of India (SBI)",
         "category": "banking",
     },
@@ -36,7 +36,7 @@ PSU_SOURCES = [
     },
     {
         "name": "GAIL",
-        "url": "https://gailonline.com/careers.html",
+        "url": "https://gailonline.com/career",
         "org": "GAIL (India) Limited",
         "category": "engineering",
     },
@@ -48,7 +48,7 @@ PSU_SOURCES = [
     },
     {
         "name": "BSNL",
-        "url": "https://bfrportal.bsnl.in/Bfr/careers",
+        "url": "https://www.bsnl.co.in/opencms/bsnl/BSNL/services/careers/",
         "org": "Bharat Sanchar Nigam Limited (BSNL)",
         "category": "engineering",
     },
@@ -56,6 +56,12 @@ PSU_SOURCES = [
         "name": "India Post",
         "url": "https://www.indiapost.gov.in/vacancies",
         "org": "India Post",
+        "category": "other",
+    },
+    {
+        "name": "EPFO",
+        "url": "https://www.epfindia.gov.in/site_en/index.php",
+        "org": "Employees' Provident Fund Organisation (EPFO)",
         "category": "other",
     },
 ]

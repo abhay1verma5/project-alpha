@@ -5,11 +5,12 @@ logger = logging.getLogger(__name__)
 
 POLICE_SITES = [
     {"name": "UP Police", "url": "https://uppbpb.gov.in", "state": "uttar_pradesh"},
-    {"name": "Bihar Police", "url": "https://csbc.bih.nic.in", "state": "bihar"},
-    {"name": "MP Police", "url": "https://peb.mp.gov.in", "state": "madhya_pradesh"},
+    {"name": "Bihar Police", "url": "https://www.csbc.bih.nic.in", "state": "bihar"},
+    {"name": "MP Police", "url": "https://esb.mp.gov.in", "state": "madhya_pradesh"},
     {"name": "Rajasthan Police", "url": "https://police.rajasthan.gov.in", "state": "rajasthan"},
     {"name": "Delhi Police", "url": "https://delhipolice.gov.in", "state": "delhi"},
     {"name": "SSC CPO", "url": "https://ssc.gov.in", "state": "all_india"},
+    {"name": "Haryana Police", "url": "https://hssc.gov.in", "state": "haryana"},
 ]
 
 

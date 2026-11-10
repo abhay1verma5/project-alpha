@@ -1,11 +1,12 @@
 """Re-categorize existing jobs using the improved keyword mapping.
 
-Also fixes content_type based on title keywords (result, admit card, etc.)."""
+Also fixes content_type based on title keywords (result, admit card, etc.)
+and backfills missing qualification from title keywords."""
 
 import re
 from django.core.management.base import BaseCommand
 from jobs.models import Job
-from crawler.parsers.aggregator import guess_category, guess_state
+from crawler.parsers.aggregator import guess_category, guess_state, guess_qualification
 
 
 # Patterns to detect content_type from title
@@ -42,12 +43,14 @@ class Command(BaseCommand):
         updated_cat = 0
         updated_state = 0
         updated_ct = 0
+        updated_qual = 0
         changes = {}
 
         for job in jobs:
             new_cat = guess_category(job.title)
             new_state = guess_state(job.title)
             new_ct = guess_content_type(job.title)
+            new_qual = guess_qualification(job.title)
             changed = False
             fields = []
 
@@ -73,16 +76,24 @@ class Command(BaseCommand):
                 changed = True
                 fields.append("content_type")
 
+            # Backfill missing qualification from title
+            if new_qual and not job.qualification:
+                job.qualification = new_qual
+                updated_qual += 1
+                changed = True
+                fields.append("qualification")
+
             if changed and not options["dry_run"]:
                 job.save(update_fields=fields)
 
         self.stdout.write(f"\nCategory changes: {updated_cat}")
         self.stdout.write(f"State changes: {updated_state}")
         self.stdout.write(f"Content type fixes: {updated_ct}")
+        self.stdout.write(f"Qualification fills: {updated_qual}")
         for change, count in sorted(changes.items(), key=lambda x: -x[1]):
             self.stdout.write(f"  {change}: {count}")
 
         if options["dry_run"]:
             self.stdout.write("\n[DRY RUN] No changes saved.")
         else:
-            self.stdout.write(self.style.SUCCESS(f"\n[OK] Updated {updated_cat + updated_state + updated_ct} jobs"))
+            self.stdout.write(self.style.SUCCESS(f"\n[OK] Updated {updated_cat + updated_state + updated_ct + updated_qual} fields across jobs"))

@@ -23,22 +23,22 @@ JUDICIARY_SOURCES = [
         "state": "delhi",
     },
     {
-        "name": "Bombay HC",
-        "url": "https://bombayhighcourt.nic.in/recruitment.php",
-        "org": "Bombay High Court",
-        "state": "maharashtra",
-    },
-    {
-        "name": "Madras HC",
-        "url": "https://www.mhc.tn.gov.in/judis/recruitment",
-        "org": "Madras High Court",
-        "state": "tamil_nadu",
-    },
-    {
         "name": "Calcutta HC",
         "url": "https://www.calcuttahighcourt.gov.in/Notices/recruiment-notice",
         "org": "Calcutta High Court",
         "state": "west_bengal",
+    },
+    {
+        "name": "Karnataka HC",
+        "url": "https://karnatakajudiciary.kar.nic.in/recruitmentNotifications.php",
+        "org": "Karnataka High Court",
+        "state": "karnataka",
+    },
+    {
+        "name": "Patna HC",
+        "url": "https://patnahighcourt.gov.in/recruitments",
+        "org": "Patna High Court",
+        "state": "bihar",
     },
 ]
 

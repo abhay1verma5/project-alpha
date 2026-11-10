@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 from datetime import date
 
@@ -7,6 +8,13 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import slugify
+
+# Reject titles that are clearly garbage (Angular templates, JS artifacts, etc.)
+_BAD_TITLE_RE = re.compile(
+    r"\{\{|translate\s*\}|angular\.|ng-|<%|<script|javascript:|"
+    r"^\s*#|^\s*\d+\s*$|^(home|menu|undefined|null|NaN)\s*$",
+    re.I,
+)
 
 from crawler.parsers.ssc import SSCParser
 from crawler.parsers.upsc import UPSCParser
@@ -23,7 +31,7 @@ from crawler.parsers.psu import PSUParser
 from crawler.parsers.judiciary import JudiciaryParser
 from crawler.parsers.aggregator import (
     SarkariResultParser, FreeJobAlertParser, EmploymentNewsParser,
-    SarkariExamParser, RojgarResultParser,
+    SarkariExamParser, RojgarResultParser, guess_qualification,
 )
 from jobs.models import CrawlLog, Job
 
@@ -113,7 +121,10 @@ class Command(BaseCommand):
                 new_count = 0
                 for job_data in raw_jobs:
                     title = job_data.get("title", "").strip()
-                    if not title:
+                    if not title or len(title) < 10:
+                        continue
+                    # Reject garbage titles (Angular templates, JS artifacts)
+                    if _BAD_TITLE_RE.search(title):
                         continue
 
                     slug = slugify(title)[:550]
@@ -128,6 +139,9 @@ class Command(BaseCommand):
                         new_count += 1
                         continue
 
+                    # Auto-fill qualification from title if not provided
+                    qual = job_data.get("qualification") or guess_qualification(title)
+
                     Job.objects.create(
                         title=title,
                         slug=slug,
@@ -138,7 +152,7 @@ class Command(BaseCommand):
                         vacancies=job_data.get("vacancies"),
                         last_date=job_data.get("last_date"),
                         age_limit=job_data.get("age_limit"),
-                        qualification=job_data.get("qualification"),
+                        qualification=qual,
                         salary=job_data.get("salary"),
                         apply_link=clean_apply_link(job_data.get("apply_link")),
                         notification_pdf=job_data.get("notification_pdf"),

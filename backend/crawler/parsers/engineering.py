@@ -12,7 +12,7 @@ ENGINEERING_SOURCES = [
     },
     {
         "name": "GATE",
-        "url": "https://gate2025.iitr.ac.in/",
+        "url": "https://gate2026.iisc.ac.in/",
         "org": "GATE — Graduate Aptitude Test in Engineering",
         "state": "all_india",
     },
@@ -48,20 +48,26 @@ ENGINEERING_SOURCES = [
     },
     {
         "name": "ONGC",
-        "url": "https://www.ongcindia.com/wps/wcm/connect/en/careers/",
+        "url": "https://www.ongcindia.com/web/guest/careers",
         "org": "Oil and Natural Gas Corporation (ONGC)",
         "state": "all_india",
     },
     {
         "name": "NTPC",
-        "url": "https://www.ntpc.co.in/careers",
+        "url": "https://www.ntpc.co.in/en/careers",
         "org": "NTPC Limited",
         "state": "all_india",
     },
     {
         "name": "IOCL",
-        "url": "https://iocl.com/people/career-with-iocl",
+        "url": "https://iocl.com/pages/career-with-iocl",
         "org": "Indian Oil Corporation Limited (IOCL)",
+        "state": "all_india",
+    },
+    {
+        "name": "NPCIL",
+        "url": "https://npcilcareers.co.in/",
+        "org": "Nuclear Power Corporation of India (NPCIL)",
         "state": "all_india",
     },
 ]

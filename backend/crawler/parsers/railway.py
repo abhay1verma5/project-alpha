@@ -13,11 +13,13 @@ class RailwayParser(BaseParser):
     def parse(self):
         jobs = []
         urls = [
-            (self.base_url, "Railway Recruitment Board"),
-            ("https://rrbcdg.gov.in", "Railway Recruitment Board"),
-            ("https://www.rrbmumbai.gov.in", "RRB Mumbai"),
-            ("https://www.rrbkolkata.gov.in", "RRB Kolkata"),
-            ("https://www.rrbchennai.gov.in", "RRB Chennai"),
+            ("https://rrb.indianrailways.gov.in", "Railway Recruitment Board"),
+            ("https://rrb.indianrailways.gov.in/chandigarh", "RRB Chandigarh"),
+            ("https://rrb.indianrailways.gov.in/mumbai", "RRB Mumbai"),
+            ("https://rrb.indianrailways.gov.in/kolkata", "RRB Kolkata"),
+            ("https://rrb.indianrailways.gov.in/chennai", "RRB Chennai"),
+            ("https://rrb.indianrailways.gov.in/allahabad", "RRB Allahabad"),
+            ("https://rrcprygj.org", "RRC Prayagraj"),
         ]
 
         for url, org in urls:

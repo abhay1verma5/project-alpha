@@ -257,6 +257,63 @@ def guess_state(title):
     return "all_india"
 
 
+QUALIFICATION_MAP = [
+    # Post-graduation
+    ("ph.d", "PhD"),
+    ("m.tech", "M.Tech"),
+    ("m.e.", "M.E."),
+    ("m.sc", "M.Sc"),
+    ("mba", "MBA"),
+    ("mca", "MCA"),
+    ("m.a.", "M.A."),
+    ("m.com", "M.Com"),
+    ("post graduate", "Post Graduate"),
+    ("pg ", "Post Graduate"),
+    # Graduation
+    ("b.tech", "B.Tech"),
+    ("b.e.", "B.E."),
+    ("b.sc", "B.Sc"),
+    ("b.com", "B.Com"),
+    ("b.a.", "B.A."),
+    ("bba", "BBA"),
+    ("bca", "BCA"),
+    ("b.ed", "B.Ed"),
+    ("llb", "LLB"),
+    ("mbbs", "MBBS"),
+    ("bds", "BDS"),
+    ("b.pharma", "B.Pharma"),
+    ("b.pharm", "B.Pharma"),
+    ("graduate", "Graduation"),
+    ("degree", "Graduation"),
+    ("gnm", "GNM Nursing"),
+    ("anm", "ANM Nursing"),
+    # Diploma/ITI
+    ("diploma", "Diploma"),
+    ("iti", "ITI"),
+    ("polytechnic", "Diploma"),
+    # School level
+    ("12th", "12th Pass"),
+    ("10+2", "12th Pass"),
+    ("inter ", "12th Pass"),
+    ("intermediate", "12th Pass"),
+    ("higher secondary", "12th Pass"),
+    ("10th", "10th Pass"),
+    ("matric", "10th Pass"),
+    ("high school", "10th Pass"),
+    ("8th", "8th Pass"),
+    ("5th", "5th Pass"),
+]
+
+
+def guess_qualification(title):
+    """Guess minimum qualification from title keywords."""
+    title_lower = title.lower()
+    for keyword, qual in QUALIFICATION_MAP:
+        if keyword in title_lower:
+            return qual
+    return None
+
+
 def extract_number(text):
     """Extract a number from text like '17,727' or '1500'."""
     if not text:

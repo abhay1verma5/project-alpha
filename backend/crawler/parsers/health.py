@@ -18,7 +18,7 @@ HEALTH_SOURCES = [
     },
     {
         "name": "ESIC",
-        "url": "https://www.esic.gov.in/recruitment",
+        "url": "https://www.esic.gov.in",
         "org": "Employees' State Insurance Corporation (ESIC)",
         "state": "all_india",
     },
@@ -32,6 +32,12 @@ HEALTH_SOURCES = [
         "name": "BECIL",
         "url": "https://www.becil.com/vacancies.aspx",
         "org": "Broadcast Engineering Consultants India Limited (BECIL)",
+        "state": "all_india",
+    },
+    {
+        "name": "JIPMER",
+        "url": "https://jipmer.edu.in/careers",
+        "org": "JIPMER Puducherry",
         "state": "all_india",
     },
 ]

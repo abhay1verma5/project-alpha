@@ -16,8 +16,9 @@ class TeachingParser(BaseParser):
             ("https://ctet.nic.in", "CTET", "all_india"),
             ("https://upbasiceduboard.gov.in", "UP TET", "uttar_pradesh"),
             ("https://bsebstet.com", "Bihar STET", "bihar"),
-            ("https://www.kvs.gov.in", "Kendriya Vidyalaya Sangathan", "all_india"),
-            ("https://www.nvs.gov.in", "Navodaya Vidyalaya Samiti", "all_india"),
+            ("http://www.kvs.gov.in", "Kendriya Vidyalaya Sangathan", "all_india"),
+            ("https://navodaya.gov.in", "Navodaya Vidyalaya Samiti", "all_india"),
+            ("https://dsssb.delhi.gov.in", "DSSSB Teaching", "delhi"),
         ]
 
         for url, org, state in urls:

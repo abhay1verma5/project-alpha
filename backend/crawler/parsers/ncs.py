@@ -16,7 +16,7 @@ class NCSParser(BaseParser):
         api_url = f"{self.base_url}/api/govt-jobs"
         html = self.fetch(api_url)
         if not html:
-            html = self.fetch(f"{self.base_url}/content/government-jobs")
+            html = self.fetch(f"{self.base_url}/content/govt-jobs")
 
         if not html:
             return jobs

@@ -77,13 +77,24 @@ class BaseParser(ABC):
             return False
         return bool(cls._NOTICE_RE.search(text))
 
-    @staticmethod
-    def clean_text(text):
+    # Patterns that indicate scraped garbage, not a real title.
+    _GARBAGE_RE = re.compile(
+        r"\{\{|translate\s*\}|angular\.|ng-|<%|<script|javascript:|"
+        r"^(home|menu|close|back|next|prev|loading|error|undefined|null|NaN)$",
+        re.I,
+    )
+
+    @classmethod
+    def clean_text(cls, text):
         if not text:
             return ""
         text = re.sub(r"\s+", " ", text.strip())
         # Link captions often end with a call-to-action that is not part of the title.
-        return re.sub(r"\s*(read more|click here|view details|know more)\s*\.?$", "", text, flags=re.I).strip()
+        text = re.sub(r"\s*(read more|click here|view details|know more)\s*\.?$", "", text, flags=re.I).strip()
+        # Reject garbage (Angular templates, JS artifacts, etc.)
+        if cls._GARBAGE_RE.search(text):
+            return ""
+        return text
 
     @staticmethod
     def parse_date(date_str):
