@@ -41,8 +41,8 @@ yarn-error.log*
 .wrangler
 .dev.vars
 
-# netlify
-.netlify
+# vercel
+.vercel
 
 # typescript
 *.tsbuildinfo
