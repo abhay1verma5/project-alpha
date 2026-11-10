@@ -1,0 +1,16 @@
+__pycache__
+*.pyc
+*.log
+crawl.log
+.env
+scripts/
+db_full.sqlite3
+db_deploy.sqlite3
+db_prod.sqlite3
+db_prod.sqlite3.gz
+db.sqlite3.gz
+db.sqlite3.xz
+db.sqlite3
+bel_all_questions.json
+seed_*.py
+pyq/bulk_data/

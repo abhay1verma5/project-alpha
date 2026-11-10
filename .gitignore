@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+# *.sqlite3 — keep db.sqlite3 tracked for Vercel deployment
+
+# Node
+node_modules/
+.next/
+out/
+
+# Env
+.env
+.env.*
+.env.local
+.env.production
+.env.prod
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+.vercel
+backend/db.sqlite3

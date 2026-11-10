@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+/* Override Tailwind v4 dark mode to use .dark class (next-themes) instead of OS media query */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-primary: #1a3a5c;
+  --color-primary-hover: #0f2a45;
+  --color-accent: #e65100;
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border-color);
+  --color-muted: var(--muted);
+  --color-gov-blue: #1a3a5c;
+  --color-gov-saffron: #ff6f00;
+  --color-gov-green: #1b5e20;
+}
+
+:root {
+  --background: #f5f7fa;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border-color: #d1d5db;
+  --muted: #4b5563;
+}
+
+.dark {
+  --background: #050a18;
+  --foreground: #f1f5f9;
+  --surface: #0f1729;
+  --surface-hover: #162036;
+  --border-color: #1e293b;
+  --muted: #94a3b8;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Skip-to-content link — visually hidden until focused */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary, #1a3a5c);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-to-content:focus {
+  top: 0;
+  outline: 2px solid #ff6f00;
+  outline-offset: 2px;
+}
+
+/* Screen reader only — visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+::selection {
+  background-color: #1a3a5c;
+  color: white;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* Government gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #1a3a5c, #ff6f00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card hover lift (desktop only) */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (min-width: 769px) {
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
+  }
+  .dark .card-hover:hover {
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Desktop scrollbar */
+@media (min-width: 769px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+}
+
+/* Safe area for bottom nav on notched phones */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Pulse for urgent badges */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Mobile responsiveness fixes ── */
+
+/* Ensure minimum touch targets on mobile */
+@media (max-width: 640px) {
+  /* Increase touch area for save/share buttons in job cards */
+  .job-action-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Safe-area padding for bottom nav on notched devices */
+@media (max-width: 768px) {
+  main {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Print styles for PDF download */
+@media print {
+  header, footer, nav, .bottom-nav,
+  button, [class*="fixed"], [class*="sticky"] {
+    display: none !important;
+  }
+  body { background: white !important; color: black !important; font-size: 12pt; }
+  .dark { --background: #fff; --foreground: #000; --surface: #fff; --border-color: #ccc; --muted: #666; }
+  main { padding: 0 !important; }
+  * { box-shadow: none !important; }
+  .bg-gradient-to-br, .bg-gradient-to-r { background: #1a3a5c !important; }
+}

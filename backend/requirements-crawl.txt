@@ -1,0 +1,6 @@
+# Extra dependencies for crawling (used in GitHub Actions only)
+# Vercel only needs requirements.txt (lightweight)
+google-genai>=2.0
+scrapy>=2.11
+scrapegraphai>=1.0
+PyPDF2>=3.0

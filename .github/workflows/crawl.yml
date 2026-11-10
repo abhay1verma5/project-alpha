@@ -1,0 +1,114 @@
+name: Daily Job Crawler
+
+on:
+  schedule:
+    - cron: '0 * * * *'      # Every hour
+  workflow_dispatch:         # Manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: db-push
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migrations
+        run: python manage.py migrate --no-input
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
+      - name: Crawl all job sources
+        run: |
+          echo "========================================"
+          echo "  CRAWLING ALL JOB SOURCES"
+          echo "========================================"
+          timeout 900 python manage.py crawl_jobs 2>&1 || echo "[DONE] crawl completed"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_DEBUG: 'False'
+
+      - name: Re-categorize jobs
+        run: timeout 120 python manage.py recategorize_jobs --all 2>&1 || echo "[DONE]"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
+      - name: Crawl current affairs
+        run: timeout 120 python manage.py crawl_current_affairs --days 2 2>&1 || echo "[DONE] current affairs crawled"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Backfill Hindi titles
+        run: timeout 120 python manage.py backfill_hindi 2>&1 || echo "[DONE]"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
+      - name: Show crawl stats
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          python -c "
+          import django, os
+          os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+          django.setup()
+          from jobs.models import Job
+          from django.db.models import Count
+          total = Job.objects.count()
+          active = Job.objects.filter(is_active=True).count()
+          print(f'Total jobs: {total} | Active: {active}')
+          by_type = Job.objects.values('content_type').annotate(c=Count('id')).order_by('-c')
+          for t in by_type:
+              print(f'  {t[\"content_type\"]}: {t[\"c\"]}')
+          "
+
+      - name: Commit and push updated database
+        working-directory: .
+        run: |
+          git config user.name "abhay1verma5"
+          git config user.email "abhaykumarverma910@gmail.com"
+          git add backend/db.sqlite3 --force
+          if git diff --cached --quiet; then
+            echo "No new data to commit"
+          else
+            git commit -m "chore: update job database $(date -u +%Y-%m-%d)"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push attempt $i failed, retrying..."
+              sleep 5
+            done
+          fi
+
+      - name: Update GitHub Release DB
+        working-directory: backend
+        run: |
+          gzip -c db.sqlite3 > db.sqlite3.gz
+          gh release upload db-v1 db.sqlite3.gz --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger Render redeploy
+        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+

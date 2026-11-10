@@ -1,0 +1,26 @@
+{
+  "name": "SarkariAlert — Government Jobs India",
+  "short_name": "SarkariAlert",
+  "description": "India's most comprehensive government job portal — SSC, UPSC, Railway, Banking, Defence & more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f4ff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "categories": ["education", "news", "productivity"],
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

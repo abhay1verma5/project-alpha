@@ -1,0 +1,70 @@
+name: Telegram alerts
+
+# Daily at 08:30 IST (03:00 UTC): new notices to subscribers + "closing soon" reminders.
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: db-push
+  cancel-in-progress: false
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migrations
+        run: python manage.py migrate
+
+      - name: Fill last dates from notification PDFs
+        run: python manage.py extract_pdf_dates --apply --limit 60
+
+      - name: Channel alerts for new notices
+        run: python manage.py send_telegram_alerts
+
+      - name: Closing-soon reminders to subscribers
+        run: python manage.py send_deadline_reminders
+
+      - name: Commit database (alert log + dates)
+        working-directory: .
+        run: |
+          git config user.name "abhay1verma5"
+          git config user.email "abhaykumarverma910@gmail.com"
+          git add backend/db.sqlite3 --force
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "chore: telegram alerts + pdf dates $(date -u +%Y-%m-%d)"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              sleep 5
+            done
+          fi
+
+      - name: Trigger Render redeploy
+        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

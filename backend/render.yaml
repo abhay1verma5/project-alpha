@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: job-search-backend
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,sarkarialert.online"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://sarkarialert.online"
+      - key: API_LOG_TO_STDOUT
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.13.0"

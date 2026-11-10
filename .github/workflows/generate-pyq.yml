@@ -1,0 +1,193 @@
+name: PYQ Generator + Crawler
+
+on:
+  schedule:
+    - cron: '30 */2 * * *'  # Every 2 hours
+  workflow_dispatch:
+    inputs:
+      exam:
+        description: 'Specific exam (leave empty for auto-rotation)'
+        required: false
+        default: ''
+      count:
+        description: 'Questions per subject/year combo'
+        required: false
+        default: ''
+      crawl_only:
+        description: 'Only run crawlers, skip AI generation'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: db-push
+  cancel-in-progress: false
+
+jobs:
+  generate-and-crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-crawl.txt 2>/dev/null || true
+
+      - name: Run migrations
+        run: |
+          python manage.py makemigrations --no-input 2>/dev/null || true
+          python manage.py migrate --no-input
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
+      # ── Phase 1: Current Affairs (uses fewer API calls) ──
+      - name: Crawl + generate daily current affairs
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "========================================"
+          echo "  CURRENT AFFAIRS — CRAWL + AI"
+          echo "========================================"
+          timeout 180 python manage.py crawl_current_affairs --days 3 --force 2>&1 || echo "[DONE] crawl"
+          timeout 120 python manage.py generate_current_affairs --days 3 2>&1 || echo "[DONE] AI"
+
+      # ── Phase 2: Crawl ALL PYQ sources (no API calls needed) ──
+      - name: Crawl real PYQs from ALL websites
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "========================================"
+          echo "  CRAWLING ALL PYQ SOURCES"
+          echo "========================================"
+          SOURCES="examside indiabix sanfoundry geeksforgeeks embibe careers360 testbook ai_scraper pdf_extractor mega_sources github_importer"
+          for src in $SOURCES; do
+            echo "--- $src ---"
+            timeout 180 python manage.py crawl_pyq --source "$src" 2>&1 || echo "  [TIMEOUT/ERROR] $src"
+          done
+
+      # ── Phase 3: Seed questions from local bank (no API needed) ──
+      - name: Seed additional questions from local question bank
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          echo "========================================"
+          echo "  SEEDING FROM LOCAL QUESTION BANK"
+          echo "========================================"
+          python seed_questions.py 2>&1 || echo "[DONE] seed"
+
+      # ── Phase 4: AI Generate PYQ Questions (uses remaining quota) ──
+      - name: Generate PYQ questions (AI)
+        if: ${{ github.event.inputs.crawl_only != 'true' }}
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          EXAM="${{ github.event.inputs.exam }}"
+          COUNT="${{ github.event.inputs.count }}"
+
+          if [ -n "$EXAM" ]; then
+            ARGS="--exam $EXAM"
+            [ -n "$COUNT" ] && ARGS="$ARGS --count $COUNT"
+            timeout 600 python manage.py generate_pyq $ARGS 2>&1 || true
+          else
+            HOUR=$(date +%H)
+            BATCH=$((HOUR % 12))
+
+            case $BATCH in
+              0) EXAMS="jee_main jee_advanced neet gate_cse gate_ece" ;;
+              1) EXAMS="gate_me gate_ee gate_ce gate_ch gate_in gate_bt gate_pi gate_xe ese isro" ;;
+              2) EXAMS="ssc_cgl ssc_chsl ssc_mts ssc_gd ssc_cpo ssc_je ssc_steno" ;;
+              3) EXAMS="upsc_prelims upsc_mains nda cds afcat capf" ;;
+              4) EXAMS="rrb_ntpc rrb_group_d rrb_je rrb_alp rpf ibps_po ibps_clerk ibps_so" ;;
+              5) EXAMS="sbi_po sbi_clerk rbi_grade_b rbi_assistant nabard sebi lic_aao lic_ado" ;;
+              6) EXAMS="cbse_10 cbse_11 cbse_12 icse_10 isc_12 up_board_12_en up_board_12_hi up_board_10_en up_board_10_hi cuet olympiad ntse" ;;
+              7) EXAMS="ctet ugc_net kvs dsssb uptet supertet bihar_tet mptet reet htet" ;;
+              8) EXAMS="uppsc bpsc mppsc rpsc tnpsc wbpsc appsc hpsc jpsc ukpsc cgpsc gpsc opsc ppsc kpsc" ;;
+              9) EXAMS="up_police up_si bihar_police bihar_si mp_police raj_police haryana_police delhi_police" ;;
+              10) EXAMS="gnm anm bsc_nursing bpharm dpharm dmlt icar fci epfo" ;;
+              11) EXAMS="up_lekhpal mp_patwari raj_patwari up_vdo up_ro_aro mp_vyapam hssc jssc clat cat xat mat" ;;
+            esac
+
+            echo "=== AI Batch $BATCH: $EXAMS ==="
+            for exam in $EXAMS; do
+              echo "--- $exam ---"
+              timeout 120 python manage.py generate_pyq --exam "$exam" --skip-existing --count 10 2>&1 || echo "  [TIMEOUT] $exam"
+            done
+          fi
+
+      # ── Stats ──
+      - name: Show stats
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          python -c "
+          import django, os
+          os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+          django.setup()
+          from pyq.models import ExamQuestion
+          from django.db.models import Count
+          total = ExamQuestion.objects.count()
+          ai = ExamQuestion.objects.filter(source='ai_generated').count()
+          crawled = ExamQuestion.objects.filter(source='crawled').count()
+          exams = ExamQuestion.objects.values('exam_type').annotate(c=Count('id')).order_by('-c')
+          print(f'Total: {total} (AI: {ai}, Crawled: {crawled})')
+          print(f'Exams: {exams.count()}')
+          for e in exams:
+              print(f'  {e[\"exam_type\"]}: {e[\"c\"]}')
+          try:
+              from currentaffairs.models import DailyCurrentAffairs
+              ca = DailyCurrentAffairs.objects.count()
+              print(f'Current Affairs days: {ca}')
+          except: pass
+          "
+
+      # ── Commit and Push DB ──
+      - name: Commit and push updated database
+        working-directory: .
+        run: |
+          git config user.name "abhay1verma5"
+          git config user.email "abhaykumarverma910@gmail.com"
+          git add backend/db.sqlite3 --force
+          if git diff --cached --quiet; then
+            echo "No new data to commit"
+          else
+            TOTAL=$(DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} python backend/manage.py shell -c "
+          import django; from pyq.models import ExamQuestion; print(ExamQuestion.objects.count())
+          " 2>/dev/null || echo "?")
+            git commit -m "chore: update PYQ database — ${TOTAL} questions $(date -u +%Y-%m-%d_%H:%M)"
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "Push attempt $i failed, retrying..."
+              sleep 5
+            done
+          fi
+
+      - name: Update GitHub Release DB
+        working-directory: backend
+        run: |
+          gzip -c db.sqlite3 > db.sqlite3.gz
+          gh release upload db-v1 db.sqlite3.gz --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger Render redeploy
+        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"

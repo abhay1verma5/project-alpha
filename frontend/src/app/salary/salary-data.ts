@@ -1,0 +1,742 @@
+export interface PostSalary {
+  slug: string;
+  name: string;
+  name_hi: string;
+  exam: string;
+  category: 'ssc' | 'banking' | 'railway' | 'upsc' | 'defence' | 'police' | 'teaching';
+  payLevel: string;
+  basicPay: number;
+  gradePay?: number;
+  da: number;
+  hra: { x: number; y: number; z: number };
+  ta: number;
+  nps: number;
+  grossSalary: { metro: number; tier2: number; other: number };
+  inHandSalary: { metro: number; tier2: number; other: number };
+  perks: string[];
+  promotionPath: string;
+  promotionPath_hi: string;
+}
+
+function calc(basic: number, da: number, hra: { x: number; y: number; z: number }, ta: number, nps: number): { grossSalary: PostSalary['grossSalary']; inHandSalary: PostSalary['inHandSalary'] } {
+  const daAmt = Math.round(basic * da / 100);
+  const base = basic + daAmt;
+  const hraX = Math.round(basic * hra.x / 100);
+  const hraY = Math.round(basic * hra.y / 100);
+  const hraZ = Math.round(basic * hra.z / 100);
+  const npsDeduct = Math.round(basic * nps / 100);
+  return {
+    grossSalary: { metro: base + hraX + ta, tier2: base + hraY + ta, other: base + hraZ + ta },
+    inHandSalary: { metro: base + hraX + ta - npsDeduct, tier2: base + hraY + ta - npsDeduct, other: base + hraZ + ta - npsDeduct },
+  };
+}
+
+const DA = 56;
+const NPS = 10;
+
+export const SALARY_DATA: PostSalary[] = [
+  // ── SSC Posts ──
+  {
+    slug: 'tax-assistant', name: 'Tax Assistant', name_hi: 'कर सहायक',
+    exam: 'SSC CGL', category: 'ssc', payLevel: 'Level 4', basicPay: 25500, gradePay: 2400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'Transport Allowance'],
+    promotionPath: 'Tax Assistant → Senior Tax Assistant → Inspector → Assistant Commissioner',
+    promotionPath_hi: 'कर सहायक → वरिष्ठ कर सहायक → निरीक्षक → सहायक आयुक्त',
+  },
+  {
+    slug: 'auditor', name: 'Auditor', name_hi: 'लेखा परीक्षक',
+    exam: 'SSC CGL', category: 'ssc', payLevel: 'Level 5', basicPay: 29200, gradePay: 2800,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(29200, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'HRA'],
+    promotionPath: 'Auditor → Senior Auditor → Assistant Audit Officer → Deputy Accountant General',
+    promotionPath_hi: 'लेखा परीक्षक → वरिष्ठ लेखा परीक्षक → सहायक लेखा अधिकारी → उप महालेखाकार',
+  },
+  {
+    slug: 'inspector-cbdt', name: 'Inspector (CBDT)', name_hi: 'निरीक्षक (CBDT)',
+    exam: 'SSC CGL', category: 'ssc', payLevel: 'Level 7', basicPay: 44900, gradePay: 4600,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44900, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'HRA', 'Conveyance'],
+    promotionPath: 'Inspector → Assistant Commissioner → Deputy Commissioner → Joint Commissioner → Commissioner',
+    promotionPath_hi: 'निरीक्षक → सहायक आयुक्त → उपायुक्त → संयुक्त आयुक्त → आयुक्त',
+  },
+  {
+    slug: 'udc', name: 'Upper Division Clerk', name_hi: 'अपर डिवीजन क्लर्क',
+    exam: 'SSC CGL', category: 'ssc', payLevel: 'Level 4', basicPay: 25500, gradePay: 2400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance'],
+    promotionPath: 'UDC → Assistant → Section Officer → Under Secretary',
+    promotionPath_hi: 'UDC → सहायक → अनुभाग अधिकारी → अवर सचिव',
+  },
+  {
+    slug: 'ldc', name: 'Lower Division Clerk', name_hi: 'अवर श्रेणी लिपिक',
+    exam: 'SSC CHSL', category: 'ssc', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance'],
+    promotionPath: 'LDC → UDC → Assistant → Section Officer',
+    promotionPath_hi: 'LDC → UDC → सहायक → अनुभाग अधिकारी',
+  },
+  {
+    slug: 'deo', name: 'Data Entry Operator', name_hi: 'डाटा एंट्री ऑपरेटर',
+    exam: 'SSC CHSL', category: 'ssc', payLevel: 'Level 4', basicPay: 25500, gradePay: 2400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance'],
+    promotionPath: 'DEO → Senior DEO → Assistant → Section Officer',
+    promotionPath_hi: 'DEO → वरिष्ठ DEO → सहायक → अनुभाग अधिकारी',
+  },
+  {
+    slug: 'mts', name: 'Multi Tasking Staff', name_hi: 'मल्टी टास्किंग स्टाफ',
+    exam: 'SSC MTS', category: 'ssc', payLevel: 'Level 1', basicPay: 18000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(18000, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance'],
+    promotionPath: 'MTS → LDC → UDC → Assistant',
+    promotionPath_hi: 'MTS → LDC → UDC → सहायक',
+  },
+  {
+    slug: 'gd-constable', name: 'GD Constable', name_hi: 'GD कांस्टेबल',
+    exam: 'SSC GD', category: 'ssc', payLevel: 'Level 3', basicPay: 21700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(21700, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'Ration Allowance', 'Risk Allowance', 'Uniform Allowance', 'Free Housing'],
+    promotionPath: 'Constable → Head Constable → ASI → SI → Inspector',
+    promotionPath_hi: 'कांस्टेबल → हेड कांस्टेबल → ASI → SI → इंस्पेक्टर',
+  },
+  {
+    slug: 'si-cpo', name: 'Sub Inspector (CPO)', name_hi: 'दरोगा (CPO)',
+    exam: 'SSC CPO', category: 'ssc', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'Ration Allowance', 'Risk Allowance', 'Uniform Allowance', 'Free Housing'],
+    promotionPath: 'SI → Inspector → DSP → SP → DIG → IG',
+    promotionPath_hi: 'दरोगा → इंस्पेक्टर → DSP → SP → DIG → IG',
+  },
+
+  // ── Banking Posts ──
+  {
+    slug: 'ibps-po-officer', name: 'IBPS PO (Bank PO)', name_hi: 'IBPS PO (बैंक PO)',
+    exam: 'IBPS PO', category: 'banking', payLevel: 'JMGS-I', basicPay: 36000,
+    da: DA, hra: { x: 17, y: 15, z: 13 }, ta: 4200, nps: NPS,
+    ...calc(36000, DA, { x: 17, y: 15, z: 13 }, 4200, NPS),
+    perks: ['Medical', 'LTC', 'Petrol Allowance', 'Newspaper Allowance', 'Leased Housing', 'PF'],
+    promotionPath: 'PO → Branch Manager → Senior Manager → Chief Manager → AGM → DGM → GM',
+    promotionPath_hi: 'PO → शाखा प्रबंधक → वरिष्ठ प्रबंधक → मुख्य प्रबंधक → AGM → DGM → GM',
+  },
+  {
+    slug: 'ibps-clerk-officer', name: 'IBPS Clerk', name_hi: 'IBPS क्लर्क',
+    exam: 'IBPS Clerk', category: 'banking', payLevel: 'Clerical', basicPay: 19900,
+    da: DA, hra: { x: 17, y: 15, z: 13 }, ta: 4200, nps: NPS,
+    ...calc(19900, DA, { x: 17, y: 15, z: 13 }, 4200, NPS),
+    perks: ['Medical', 'LTC', 'Leased Housing', 'PF'],
+    promotionPath: 'Clerk → Single Window Operator → Officer (through internal exam)',
+    promotionPath_hi: 'क्लर्क → सिंगल विंडो ऑपरेटर → अधिकारी (आंतरिक परीक्षा से)',
+  },
+  {
+    slug: 'sbi-po-officer', name: 'SBI PO', name_hi: 'SBI PO',
+    exam: 'SBI PO', category: 'banking', payLevel: 'JMGS-I', basicPay: 41960,
+    da: DA, hra: { x: 17, y: 15, z: 13 }, ta: 4200, nps: NPS,
+    ...calc(41960, DA, { x: 17, y: 15, z: 13 }, 4200, NPS),
+    perks: ['Medical', 'LTC', 'Petrol Allowance', 'Newspaper Allowance', 'Leased Housing', 'PF', 'Phone Reimbursement'],
+    promotionPath: 'PO → Deputy Manager → Manager → Chief Manager → AGM → DGM → GM → CGM → MD',
+    promotionPath_hi: 'PO → उप प्रबंधक → प्रबंधक → मुख्य प्रबंधक → AGM → DGM → GM → CGM → MD',
+  },
+  {
+    slug: 'sbi-clerk-officer', name: 'SBI Clerk', name_hi: 'SBI क्लर्क',
+    exam: 'SBI Clerk', category: 'banking', payLevel: 'Clerical', basicPay: 22600,
+    da: DA, hra: { x: 17, y: 15, z: 13 }, ta: 4200, nps: NPS,
+    ...calc(22600, DA, { x: 17, y: 15, z: 13 }, 4200, NPS),
+    perks: ['Medical', 'LTC', 'Leased Housing', 'PF'],
+    promotionPath: 'Clerk → Special Assistant → Officer (through internal exam)',
+    promotionPath_hi: 'क्लर्क → विशेष सहायक → अधिकारी (आंतरिक परीक्षा से)',
+  },
+  {
+    slug: 'rbi-grade-b-officer', name: 'RBI Grade B Officer', name_hi: 'RBI ग्रेड B अधिकारी',
+    exam: 'RBI Grade B', category: 'banking', payLevel: 'Grade B', basicPay: 55200,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(55200, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Subsidized Housing', 'Vehicle Loan', 'Book Allowance', 'Pension'],
+    promotionPath: 'Grade B → Grade C (Manager) → Grade D (AGM) → Grade E (DGM) → Grade F (GM) → CGM → ED → Deputy Governor → Governor',
+    promotionPath_hi: 'ग्रेड B → ग्रेड C (प्रबंधक) → ग्रेड D (AGM) → ग्रेड E (DGM) → ग्रेड F (GM) → CGM → ED → उप गवर्नर → गवर्नर',
+  },
+
+  // ── Railway Posts ──
+  {
+    slug: 'station-master', name: 'Station Master', name_hi: 'स्टेशन मास्टर',
+    exam: 'RRB NTPC', category: 'railway', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Quarters', 'Education Allowance'],
+    promotionPath: 'Station Master → Station Superintendent → Chief Station Superintendent → Divisional Operations Manager',
+    promotionPath_hi: 'स्टेशन मास्टर → स्टेशन अधीक्षक → मुख्य स्टेशन अधीक्षक → मंडल परिचालन प्रबंधक',
+  },
+  {
+    slug: 'ticket-collector', name: 'Ticket Collector', name_hi: 'टिकट कलेक्टर',
+    exam: 'RRB NTPC', category: 'railway', payLevel: 'Level 5', basicPay: 29200,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(29200, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Quarters'],
+    promotionPath: 'TC → Chief TC → Travelling Inspector → Chief Travelling Inspector',
+    promotionPath_hi: 'TC → मुख्य TC → यात्रा निरीक्षक → मुख्य यात्रा निरीक्षक',
+  },
+  {
+    slug: 'alp', name: 'Assistant Loco Pilot', name_hi: 'सहायक लोको पायलट',
+    exam: 'RRB ALP', category: 'railway', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Running Allowance', 'Night Duty Allowance'],
+    promotionPath: 'ALP → Loco Pilot (Goods) → Loco Pilot (Mail/Express) → Sr. Loco Pilot → Power Controller',
+    promotionPath_hi: 'ALP → लोको पायलट (माल) → लोको पायलट (मेल/एक्सप्रेस) → वरिष्ठ लोको पायलट → पावर कंट्रोलर',
+  },
+  {
+    slug: 'railway-technician', name: 'Railway Technician', name_hi: 'रेलवे तकनीशियन',
+    exam: 'RRB ALP/Tech', category: 'railway', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Quarters'],
+    promotionPath: 'Technician → Senior Technician → Master Craftsman → Junior Engineer',
+    promotionPath_hi: 'तकनीशियन → वरिष्ठ तकनीशियन → मास्टर क्राफ्ट्समैन → जूनियर इंजीनियर',
+  },
+  {
+    slug: 'railway-group-d', name: 'Railway Group D', name_hi: 'रेलवे ग्रुप D',
+    exam: 'RRB Group D', category: 'railway', payLevel: 'Level 1', basicPay: 18000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(18000, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Quarters'],
+    promotionPath: 'Track Maintainer / Helper → Technician → Senior Technician → JE',
+    promotionPath_hi: 'ट्रैक मेंटेनर / हेल्पर → तकनीशियन → वरिष्ठ तकनीशियन → JE',
+  },
+
+  // ── UPSC Posts ──
+  {
+    slug: 'ias-officer', name: 'IAS Officer', name_hi: 'IAS अधिकारी',
+    exam: 'UPSC CSE', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'LTC', 'Government Bungalow', 'Official Vehicle', 'Domestic Help', 'Security'],
+    promotionPath: 'SDM → ADM → DM/DC → Divisional Commissioner → Principal Secretary → Chief Secretary → Cabinet Secretary',
+    promotionPath_hi: 'SDM → ADM → DM/DC → मंडलायुक्त → प्रमुख सचिव → मुख्य सचिव → कैबिनेट सचिव',
+  },
+  {
+    slug: 'ips-officer', name: 'IPS Officer', name_hi: 'IPS अधिकारी',
+    exam: 'UPSC CSE', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'LTC', 'Government Bungalow', 'Official Vehicle', 'Orderly', 'Security Cover'],
+    promotionPath: 'ASP → SP → DIG → IG → ADGP → DGP',
+    promotionPath_hi: 'ASP → SP → DIG → IG → ADGP → DGP',
+  },
+  {
+    slug: 'ifs-officer', name: 'IFS Officer', name_hi: 'IFS अधिकारी',
+    exam: 'UPSC CSE', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'LTC', 'Foreign Posting Allowance', 'Government Housing Abroad', 'Education Allowance for Children'],
+    promotionPath: 'Third Secretary → Second Secretary → First Secretary → Counselor → Minister → Ambassador / High Commissioner',
+    promotionPath_hi: 'तृतीय सचिव → द्वितीय सचिव → प्रथम सचिव → काउंसलर → मंत्री → राजदूत / उच्चायुक्त',
+  },
+  {
+    slug: 'irs-officer', name: 'IRS Officer', name_hi: 'IRS अधिकारी',
+    exam: 'UPSC CSE', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'LTC', 'Government Housing', 'Vehicle Loan', 'Phone Reimbursement'],
+    promotionPath: 'Assistant Commissioner → Deputy Commissioner → Joint Commissioner → Additional Commissioner → Commissioner → Principal Commissioner → Chief Commissioner',
+    promotionPath_hi: 'सहायक आयुक्त → उपायुक्त → संयुक्त आयुक्त → अतिरिक्त आयुक्त → आयुक्त → प्रमुख आयुक्त → मुख्य आयुक्त',
+  },
+
+  // ── Defence ──
+  {
+    slug: 'lieutenant', name: 'Lieutenant (Army)', name_hi: 'लेफ्टिनेंट (सेना)',
+    exam: 'UPSC CDS / NDA', category: 'defence', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'Canteen Facilities', 'Subsidized Housing', 'Mess Allowance', 'Field Area Allowance', 'Ration'],
+    promotionPath: 'Lieutenant → Captain → Major → Lt. Colonel → Colonel → Brigadier → Major General → Lt. General → General',
+    promotionPath_hi: 'लेफ्टिनेंट → कैप्टन → मेजर → लेफ्टिनेंट कर्नल → कर्नल → ब्रिगेडियर → मेजर जनरल → लेफ्टिनेंट जनरल → जनरल',
+  },
+  {
+    slug: 'agniveer-soldier', name: 'Agniveer', name_hi: 'अग्निवीर',
+    exam: 'Agniveer Rally', category: 'defence', payLevel: 'Special Package', basicPay: 30000,
+    da: 0, hra: { x: 0, y: 0, z: 0 }, ta: 0, nps: 0,
+    grossSalary: { metro: 30000, tier2: 30000, other: 30000 },
+    inHandSalary: { metro: 21000, tier2: 21000, other: 21000 },
+    perks: ['Free Food', 'Free Accommodation', 'Medical', 'Seva Nidhi (₹11.71L after 4 years)', 'Risk Insurance ₹48L'],
+    promotionPath: 'Agniveer (4 years) → 25% retained as regular soldier → Sepoy → Naik → Havildar → Naib Subedar → Subedar → Subedar Major',
+    promotionPath_hi: 'अग्निवीर (4 वर्ष) → 25% स्थायी सैनिक → सिपाही → नायक → हवलदार → नायब सूबेदार → सूबेदार → सूबेदार मेजर',
+  },
+
+  // ── Police ──
+  {
+    slug: 'police-constable', name: 'Police Constable', name_hi: 'पुलिस कांस्टेबल',
+    exam: 'State Police', category: 'police', payLevel: 'Level 3', basicPay: 21700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(21700, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'Uniform Allowance', 'Ration', 'Free Housing (Barracks)'],
+    promotionPath: 'Constable → Head Constable → ASI → SI → Inspector → DSP',
+    promotionPath_hi: 'कांस्टेबल → हेड कांस्टेबल → ASI → दरोगा → इंस्पेक्टर → DSP',
+  },
+  {
+    slug: 'police-si', name: 'Sub Inspector (SI)', name_hi: 'दरोगा (SI)',
+    exam: 'State Police / SSC CPO', category: 'police', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'Uniform Allowance', 'Vehicle Allowance', 'Government Quarters'],
+    promotionPath: 'SI → Inspector → DSP → SP → DIG → IG',
+    promotionPath_hi: 'दरोगा → इंस्पेक्टर → DSP → SP → DIG → IG',
+  },
+  {
+    slug: 'dsp-officer', name: 'DSP / Dy. SP', name_hi: 'DSP / उप पुलिस अधीक्षक',
+    exam: 'State PCS / UPSC CAPF', category: 'police', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 7200, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 7200, NPS),
+    perks: ['Medical', 'Official Vehicle', 'Government Bungalow', 'Orderly', 'Phone Reimbursement'],
+    promotionPath: 'DSP → SP → DIG → IG → ADGP → DGP',
+    promotionPath_hi: 'DSP → SP → DIG → IG → ADGP → DGP',
+  },
+
+  // ── Teaching ──
+  {
+    slug: 'tgt-teacher', name: 'TGT (Trained Graduate Teacher)', name_hi: 'TGT (प्रशिक्षित स्नातक शिक्षक)',
+    exam: 'KVS / State TET', category: 'teaching', payLevel: 'Level 7', basicPay: 44900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(44900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'Summer/Winter Vacation'],
+    promotionPath: 'TGT → PGT → Vice Principal → Principal',
+    promotionPath_hi: 'TGT → PGT → उप प्रधानाचार्य → प्रधानाचार्य',
+  },
+  {
+    slug: 'pgt-teacher', name: 'PGT (Post Graduate Teacher)', name_hi: 'PGT (स्नातकोत्तर शिक्षक)',
+    exam: 'KVS / DSSSB', category: 'teaching', payLevel: 'Level 8', basicPay: 47600,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(47600, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'Summer/Winter Vacation'],
+    promotionPath: 'PGT → Vice Principal → Principal',
+    promotionPath_hi: 'PGT → उप प्रधानाचार्य → प्रधानाचार्य',
+  },
+  {
+    slug: 'primary-teacher', name: 'Primary Teacher', name_hi: 'प्राथमिक शिक्षक',
+    exam: 'CTET / State TET', category: 'teaching', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'Summer/Winter Vacation'],
+    promotionPath: 'Primary Teacher → Assistant Teacher → Head Teacher → Principal',
+    promotionPath_hi: 'प्राथमिक शिक्षक → सहायक शिक्षक → प्रधान शिक्षक → प्रधानाचार्य',
+  },
+
+  // ── Additional SSC Posts ──
+  {
+    slug: 'ssc-je', name: 'Junior Engineer (SSC JE)', name_hi: 'जूनियर इंजीनियर (SSC JE)',
+    exam: 'SSC JE', category: 'ssc', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Children Education Allowance'],
+    promotionPath: 'JE → AE → EE → SE → CE',
+    promotionPath_hi: 'JE → सहायक इंजीनियर → कार्यकारी इंजीनियर → अधीक्षण इंजीनियर → मुख्य इंजीनियर',
+  },
+  {
+    slug: 'ssc-steno', name: 'Stenographer Grade C/D', name_hi: 'स्टेनोग्राफर ग्रेड C/D',
+    exam: 'SSC Stenographer', category: 'ssc', payLevel: 'Level 4', basicPay: 25500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'TA', 'Children Education Allowance'],
+    promotionPath: 'Steno Grade D → Grade C → PA → PS → Sr. PS',
+    promotionPath_hi: 'स्टेनो ग्रेड D → ग्रेड C → PA → PS → वरिष्ठ PS',
+  },
+
+  // ── Additional Banking Posts ──
+  {
+    slug: 'rbi-assistant', name: 'RBI Assistant', name_hi: 'RBI सहायक',
+    exam: 'RBI Assistant', category: 'banking', payLevel: 'RBI Scale', basicPay: 20700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1500, nps: NPS,
+    ...calc(20700, DA, { x: 27, y: 18, z: 9 }, 1500, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Festival Bonus', 'Pension Fund'],
+    promotionPath: 'Assistant → Clerk Grade II → Officer Grade A → Grade B',
+    promotionPath_hi: 'सहायक → क्लर्क ग्रेड II → अधिकारी ग्रेड A → ग्रेड B',
+  },
+  {
+    slug: 'nabard-grade-a', name: 'NABARD Grade A Officer', name_hi: 'NABARD ग्रेड A अधिकारी',
+    exam: 'NABARD Grade A', category: 'banking', payLevel: 'NABARD Scale', basicPay: 44500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(44500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Vehicle Loan', 'Festival Advance', 'Superannuation Fund'],
+    promotionPath: 'Grade A → Grade B → Grade C → GM → CGM → DMD → MD',
+    promotionPath_hi: 'ग्रेड A → ग्रेड B → ग्रेड C → GM → CGM → DMD → MD',
+  },
+  {
+    slug: 'lic-aao', name: 'LIC AAO', name_hi: 'LIC AAO (सहायक प्रशासनिक अधिकारी)',
+    exam: 'LIC AAO', category: 'banking', payLevel: 'LIC Scale', basicPay: 32795,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(32795, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Pension', 'Festival Bonus', 'Gratuity'],
+    promotionPath: 'AAO → AO → ADM → DM → ZM → ED → MD',
+    promotionPath_hi: 'AAO → AO → ADM → DM → ZM → ED → MD',
+  },
+
+  // ── Additional Railway Posts ──
+  {
+    slug: 'rpf-constable', name: 'RPF Constable', name_hi: 'RPF कांस्टेबल',
+    exam: 'RPF Recruitment', category: 'railway', payLevel: 'Level 3', basicPay: 21700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(21700, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'Free Rail Pass', 'Uniform Allowance', 'Risk Allowance', 'Ration Money'],
+    promotionPath: 'Constable → Head Constable → ASI → SI → Inspector → DSP',
+    promotionPath_hi: 'कांस्टेबल → हेड कांस्टेबल → ASI → SI → निरीक्षक → DSP',
+  },
+  {
+    slug: 'railway-je', name: 'Railway Junior Engineer', name_hi: 'रेलवे जूनियर इंजीनियर',
+    exam: 'RRB JE', category: 'railway', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'Free Rail Pass', 'Housing', 'LTC', 'Children Education Allowance'],
+    promotionPath: 'JE → SSE → DMS → ADME → DME → CDMS',
+    promotionPath_hi: 'JE → SSE → DMS → ADME → DME → CDMS',
+  },
+
+  // ── State Level Posts ──
+  {
+    slug: 'patwari', name: 'Patwari / Lekhpal', name_hi: 'पटवारी / लेखपाल',
+    exam: 'State Recruitment', category: 'ssc', payLevel: 'Level 5', basicPay: 29200,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(29200, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'TA/DA', 'Vehicle Allowance', 'GPF'],
+    promotionPath: 'Patwari → Naib Tehsildar → Tehsildar → SDM → DM',
+    promotionPath_hi: 'पटवारी → नायब तहसीलदार → तहसीलदार → SDM → DM',
+  },
+  {
+    slug: 'gram-panchayat-secretary', name: 'Gram Panchayat Secretary / VDO', name_hi: 'ग्राम पंचायत सचिव / VDO',
+    exam: 'State Recruitment', category: 'ssc', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'TA/DA', 'GPF'],
+    promotionPath: 'VDO → BDO → SDO → CDO → ADM',
+    promotionPath_hi: 'VDO → BDO → SDO → CDO → ADM',
+  },
+
+  // ── UPSC Additional ──
+  {
+    slug: 'epfo-apfc', name: 'EPFO APFC (Asst. PF Commissioner)', name_hi: 'EPFO APFC (सहायक भविष्य निधि आयुक्त)',
+    exam: 'UPSC EPFO', category: 'upsc', payLevel: 'Level 8', basicPay: 47600,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(47600, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Transport Allowance', 'Children Education Allowance'],
+    promotionPath: 'APFC → RPFC-II → RPFC-I → ACC → CPFC',
+    promotionPath_hi: 'APFC → RPFC-II → RPFC-I → ACC → CPFC',
+  },
+
+  // ── Insurance & Finance ──
+  {
+    slug: 'lic-ado', name: 'LIC ADO (Apprentice Development Officer)', name_hi: 'LIC ADO (अपरेंटिस विकास अधिकारी)',
+    exam: 'LIC ADO', category: 'banking', payLevel: 'LIC Scale', basicPay: 23000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(23000, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Gratuity', 'Incentive Bonus', 'Petrol Allowance'],
+    promotionPath: 'ADO → Development Officer → Senior DO → Chief DO → Branch Manager',
+    promotionPath_hi: 'ADO → विकास अधिकारी → वरिष्ठ DO → मुख्य DO → शाखा प्रबंधक',
+  },
+  {
+    slug: 'sebi-grade-a', name: 'SEBI Grade A Officer', name_hi: 'SEBI ग्रेड A अधिकारी',
+    exam: 'SEBI Grade A', category: 'banking', payLevel: 'SEBI Scale', basicPay: 44500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44500, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Car Allowance', 'Performance Bonus', 'Children Education'],
+    promotionPath: 'Grade A → Grade B → Grade C → Grade D → Executive Director → Chairman',
+    promotionPath_hi: 'ग्रेड A → ग्रेड B → ग्रेड C → ग्रेड D → कार्यकारी निदेशक → अध्यक्ष',
+  },
+  {
+    slug: 'niacl-ao', name: 'NIACL AO (Administrative Officer)', name_hi: 'NIACL AO (प्रशासनिक अधिकारी)',
+    exam: 'NIACL AO', category: 'banking', payLevel: 'Insurance Scale I', basicPay: 32795,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(32795, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Gratuity', 'Performance Linked Incentive'],
+    promotionPath: 'AO → Senior AO → Chief AO → Deputy Manager → Manager → Regional Manager',
+    promotionPath_hi: 'AO → वरिष्ठ AO → मुख्य AO → उप प्रबंधक → प्रबंधक → क्षेत्रीय प्रबंधक',
+  },
+  {
+    slug: 'fci-ag3', name: 'FCI AG-III (Assistant Grade III)', name_hi: 'FCI AG-III (सहायक ग्रेड III)',
+    exam: 'FCI Recruitment', category: 'ssc', payLevel: 'Level 4', basicPay: 25500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education', 'Subsidized Food', 'Quarters'],
+    promotionPath: 'AG-III → AG-II → AG-I → Manager → DGM → GM',
+    promotionPath_hi: 'AG-III → AG-II → AG-I → प्रबंधक → DGM → GM',
+  },
+  {
+    slug: 'section-officer', name: 'Section Officer (CSS)', name_hi: 'अनुभाग अधिकारी (CSS)',
+    exam: 'SSC CGL / LDCE', category: 'ssc', payLevel: 'Level 8', basicPay: 47600,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(47600, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Transport Allowance', 'Children Education'],
+    promotionPath: 'Section Officer → Under Secretary → Deputy Secretary → Director → Joint Secretary',
+    promotionPath_hi: 'अनुभाग अधिकारी → अवर सचिव → उपसचिव → निदेशक → संयुक्त सचिव',
+  },
+  {
+    slug: 'ibps-rrb-po', name: 'IBPS RRB PO (Officer Scale I)', name_hi: 'IBPS RRB PO (अधिकारी स्केल I)',
+    exam: 'IBPS RRB PO', category: 'banking', payLevel: 'RRB Scale I', basicPay: 36000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(36000, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Leased Housing', 'Pension / NPS'],
+    promotionPath: 'Officer Scale I → Scale II → Scale III → Chairman',
+    promotionPath_hi: 'अधिकारी स्केल I → स्केल II → स्केल III → अध्यक्ष',
+  },
+  {
+    slug: 'ibps-rrb-clerk', name: 'IBPS RRB Clerk (Office Assistant)', name_hi: 'IBPS RRB क्लर्क (कार्यालय सहायक)',
+    exam: 'IBPS RRB Clerk', category: 'banking', payLevel: 'RRB Clerical', basicPay: 15000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(15000, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'Pension / NPS', 'Bonus'],
+    promotionPath: 'Office Assistant → Officer Scale I → Scale II → Scale III',
+    promotionPath_hi: 'कार्यालय सहायक → अधिकारी स्केल I → स्केल II → स्केल III',
+  },
+  {
+    slug: 'kvs-tgt', name: 'KVS TGT (Trained Graduate Teacher)', name_hi: 'KVS TGT (प्रशिक्षित स्नातक शिक्षक)',
+    exam: 'KVS Recruitment', category: 'teaching', payLevel: 'Level 7', basicPay: 44900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(44900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education (fee reimbursement)', 'Quarters', 'Transfer Allowance'],
+    promotionPath: 'TGT → PGT → Vice Principal → Principal',
+    promotionPath_hi: 'TGT → PGT → उप प्रधानाचार्य → प्रधानाचार्य',
+  },
+  {
+    slug: 'kvs-pgt', name: 'KVS PGT (Post Graduate Teacher)', name_hi: 'KVS PGT (स्नातकोत्तर शिक्षक)',
+    exam: 'KVS Recruitment', category: 'teaching', payLevel: 'Level 8', basicPay: 47600,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(47600, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education', 'Quarters', 'Transfer Allowance'],
+    promotionPath: 'PGT → Vice Principal → Principal → Deputy Commissioner (KVS)',
+    promotionPath_hi: 'PGT → उप प्रधानाचार्य → प्रधानाचार्य → उपायुक्त (KVS)',
+  },
+
+  // ── State Level ──
+  {
+    slug: 'state-pcs-sdm', name: 'SDM (Sub Divisional Magistrate)', name_hi: 'SDM (उपखंड अधिकारी)',
+    exam: 'State PCS', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Government Bungalow', 'Vehicle', 'Staff'],
+    promotionPath: 'SDM → ADM → CDO → DM / District Magistrate',
+    promotionPath_hi: 'SDM → ADM → CDO → DM / जिलाधिकारी',
+  },
+  {
+    slug: 'state-police-dsp', name: 'DSP (Deputy SP via State PCS)', name_hi: 'DSP (उप पुलिस अधीक्षक)',
+    exam: 'State PCS', category: 'police', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Government Quarters', 'Vehicle', 'Orderly'],
+    promotionPath: 'DSP → ASP → SP → DIG → IG → ADG → DGP',
+    promotionPath_hi: 'DSP → ASP → SP → DIG → IG → ADG → DGP',
+  },
+  {
+    slug: 'afcat-flying-officer', name: 'Flying Officer (IAF via AFCAT)', name_hi: 'फ्लाइंग ऑफिसर (AFCAT)',
+    exam: 'AFCAT', category: 'defence', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'Ration', 'Canteen', 'Transport Allowance', 'Kit Maintenance', 'Flying Allowance'],
+    promotionPath: 'Flying Officer → Flight Lieutenant → Squadron Leader → Wing Commander → Group Captain',
+    promotionPath_hi: 'फ्लाइंग ऑफिसर → फ्लाइट लेफ्टिनेंट → स्क्वाड्रन लीडर → विंग कमांडर → ग्रुप कैप्टन',
+  },
+  {
+    slug: 'ntpc-executive', name: 'Executive (NTPC via GATE)', name_hi: 'एक्जीक्यूटिव (NTPC)',
+    exam: 'GATE + NTPC', category: 'ssc', payLevel: 'E2 (₹50,000-1,60,000)', basicPay: 50000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 4500, nps: NPS,
+    ...calc(50000, DA, { x: 27, y: 18, z: 9 }, 4500, NPS),
+    perks: ['Medical', 'LTC', 'Housing/HRA', 'Performance Bonus', 'Superannuation Benefits', 'Power Subsidy'],
+    promotionPath: 'Executive (E2) → Sr Executive (E3) → Manager (E4) → Sr Manager (E5) → DGM → GM → ED',
+    promotionPath_hi: 'एक्जीक्यूटिव → सीनियर एक्जीक्यूटिव → मैनेजर → सीनियर मैनेजर → DGM → GM → ED',
+  },
+  {
+    slug: 'ongc-graduate-trainee', name: 'Graduate Trainee (ONGC via GATE)', name_hi: 'ग्रेजुएट ट्रेनी (ONGC)',
+    exam: 'GATE + ONGC', category: 'ssc', payLevel: 'E1 (₹60,000-1,80,000)', basicPay: 60000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 4500, nps: NPS,
+    ...calc(60000, DA, { x: 27, y: 18, z: 9 }, 4500, NPS),
+    perks: ['Medical', 'LTC', 'Housing/HRA', 'Performance Bonus', 'Post-Retirement Benefits', 'Field Allowance'],
+    promotionPath: 'E1 → E2 → E3 (Manager) → E4 (Sr Manager) → E5 (DGM) → E6 (GM) → E7 (ED)',
+    promotionPath_hi: 'E1 → E2 → E3 (मैनेजर) → E4 (सीनियर मैनेजर) → E5 (DGM) → E6 (GM) → E7 (ED)',
+  },
+  {
+    slug: 'ibps-so-officer', name: 'Specialist Officer (IBPS SO)', name_hi: 'स्पेशलिस्ट ऑफिसर (IBPS SO)',
+    exam: 'IBPS SO', category: 'banking', payLevel: 'JMG Scale-I', basicPay: 36000,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 4500, nps: NPS,
+    ...calc(36000, DA, { x: 27, y: 18, z: 9 }, 4500, NPS),
+    perks: ['Medical', 'LTC', 'Pension/NPS', 'Housing Loan', 'Vehicle Loan'],
+    promotionPath: 'SO (Scale-I) → Sr Officer (Scale-II) → Chief Manager (Scale-III) → AGM → DGM → GM',
+    promotionPath_hi: 'SO → सीनियर ऑफिसर → चीफ मैनेजर → AGM → DGM → GM',
+  },
+  {
+    slug: 'forest-ranger', name: 'Forest Range Officer (IFS/State)', name_hi: 'वन क्षेत्राधिकारी',
+    exam: 'UPSC IFS / State Forest Service', category: 'upsc', payLevel: 'Level 10', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Government Quarters', 'Uniform Allowance', 'Field Allowance'],
+    promotionPath: 'Range Officer → ACF → DCF → CF → CCF → PCCF → Head of Forest Force',
+    promotionPath_hi: 'रेंज ऑफिसर → ACF → DCF → CF → CCF → PCCF → वन बल प्रमुख',
+  },
+  {
+    slug: 'ssc-selection-post', name: 'SSC Selection Post (Various)', name_hi: 'SSC सेलेक्शन पोस्ट',
+    exam: 'SSC Selection Post', category: 'ssc', payLevel: 'Level 4-6', basicPay: 25500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'TA', 'DA'],
+    promotionPath: 'Phase-I Post → Promoted Post (as per department rules)',
+    promotionPath_hi: 'फेज-I पद → पदोन्नत पद (विभाग नियमानुसार)',
+  },
+  {
+    slug: 'customs-inspector', name: 'Inspector (Customs/Central Excise)', name_hi: 'इंस्पेक्टर (सीमा शुल्क)',
+    exam: 'SSC CGL', category: 'ssc', payLevel: 'Level 7', basicPay: 44900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44900, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'TA', 'Washing Allowance', 'Risk Allowance'],
+    promotionPath: 'Inspector → Superintendent → Assistant Commissioner → Deputy Commissioner → Commissioner',
+    promotionPath_hi: 'इंस्पेक्टर → अधीक्षक → सहायक आयुक्त → उप आयुक्त → आयुक्त',
+  },
+  {
+    slug: 'navodaya-tgt', name: 'Navodaya TGT Teacher', name_hi: 'नवोदय TGT शिक्षक',
+    exam: 'NVS TGT', category: 'teaching', payLevel: 'Level 7', basicPay: 44900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44900, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Free Accommodation', 'Mess Facility', 'Children Education Allowance'],
+    promotionPath: 'TGT → PGT → Vice Principal → Principal',
+    promotionPath_hi: 'TGT → PGT → उप प्राचार्य → प्राचार्य',
+  },
+  {
+    slug: 'epfo-ssa', name: 'EPFO SSA', name_hi: 'EPFO सामाजिक सुरक्षा सहायक',
+    exam: 'EPFO SSA', category: 'ssc', payLevel: 'Level 5', basicPay: 29200,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(29200, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Children Education Allowance', 'PF Benefits'],
+    promotionPath: 'SSA → Section Supervisor → APFC → RPFC → CPFC',
+    promotionPath_hi: 'SSA → अनुभाग पर्यवेक्षक → APFC → RPFC → CPFC',
+  },
+  {
+    slug: 'fci-ag3-general', name: 'FCI AG-III (General)', name_hi: 'FCI AG-III (सामान्य)',
+    exam: 'FCI AG-III', category: 'ssc', payLevel: 'Level 4', basicPay: 25500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Food Grain Facility', 'Transport Allowance'],
+    promotionPath: 'AG-III → AG-II → AG-I → Manager → GM',
+    promotionPath_hi: 'AG-III → AG-II → AG-I → प्रबंधक → महाप्रबंधक',
+  },
+  {
+    slug: 'sebi-grade-a', name: 'SEBI Grade A Officer', name_hi: 'SEBI ग्रेड A अधिकारी',
+    exam: 'SEBI Grade A', category: 'banking', payLevel: 'Grade A (RBI Scale)', basicPay: 44500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44500, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Vehicle Loan', 'Performance Bonus', 'Superannuation Fund'],
+    promotionPath: 'Grade A → Grade B → Grade C → Grade D → ED → Chairman',
+    promotionPath_hi: 'ग्रेड A → ग्रेड B → ग्रेड C → ग्रेड D → ED → अध्यक्ष',
+  },
+  {
+    slug: 'nabard-grade-a', name: 'NABARD Grade A Officer', name_hi: 'NABARD ग्रेड A अधिकारी',
+    exam: 'NABARD Grade A', category: 'banking', payLevel: 'Grade A (RBI Scale)', basicPay: 44500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(44500, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Housing', 'Vehicle Loan', 'Provident Fund', 'Gratuity'],
+    promotionPath: 'Grade A → Grade B → Grade C → Grade D → CGM → Chairman',
+    promotionPath_hi: 'ग्रेड A → ग्रेड B → ग्रेड C → ग्रेड D → CGM → अध्यक्ष',
+  },
+  {
+    slug: 'rrb-alp', name: 'Assistant Loco Pilot', name_hi: 'सहायक लोको पायलट',
+    exam: 'RRB ALP', category: 'railway', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Railway Pass', 'Running Allowance', 'Night Duty Allowance'],
+    promotionPath: 'ALP → Loco Pilot → Sr Loco Pilot → Power Controller',
+    promotionPath_hi: 'ALP → लोको पायलट → वरिष्ठ लोको पायलट → पॉवर कंट्रोलर',
+  },
+  {
+    slug: 'dsssb-ldc', name: 'DSSSB LDC/Clerk', name_hi: 'DSSSB LDC/लिपिक',
+    exam: 'DSSSB', category: 'ssc', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Delhi Posting', 'Children Education Allowance'],
+    promotionPath: 'LDC → UDC → Head Clerk → Office Superintendent → Admin Officer',
+    promotionPath_hi: 'LDC → UDC → प्रधान लिपिक → कार्यालय अधीक्षक → प्रशासनिक अधिकारी',
+  },
+  {
+    slug: 'kvs-prt', name: 'KVS PRT Teacher', name_hi: 'KVS PRT शिक्षक',
+    exam: 'KVS PRT', category: 'teaching', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Quarter', 'Children Education Allowance', 'Transfer Facility'],
+    promotionPath: 'PRT → TGT → PGT → Vice Principal → Principal',
+    promotionPath_hi: 'PRT → TGT → PGT → उप प्राचार्य → प्राचार्य',
+  },
+  {
+    slug: 'capf-ac', name: 'CAPF Assistant Commandant', name_hi: 'CAPF सहायक कमांडेंट',
+    exam: 'UPSC CAPF', category: 'defence', payLevel: 'Level 8', basicPay: 56100,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 5400, nps: NPS,
+    ...calc(56100, DA, { x: 27, y: 18, z: 9 }, 5400, NPS),
+    perks: ['Medical', 'LTC', 'Ration Money', 'Kit Maintenance', 'Risk Allowance', 'Free Accommodation'],
+    promotionPath: 'AC → DC → Commandant → DIG → IG → ADG → DG',
+    promotionPath_hi: 'AC → DC → कमांडेंट → DIG → IG → ADG → DG',
+  },
+
+  // ── State Police ──
+  {
+    slug: 'up-police-constable', name: 'UP Police Constable', name_hi: 'UP पुलिस कांस्टेबल',
+    exam: 'UP Police Recruitment', category: 'police', payLevel: 'Level 3', basicPay: 21700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(21700, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'Uniform Allowance', 'Ration Money', 'Free Barracks', 'Risk Allowance'],
+    promotionPath: 'Constable → Head Constable → ASI → SI → Inspector → DSP',
+    promotionPath_hi: 'कांस्टेबल → हेड कांस्टेबल → ASI → दरोगा → इंस्पेक्टर → DSP',
+  },
+  {
+    slug: 'rajasthan-police-constable', name: 'Rajasthan Police Constable', name_hi: 'राजस्थान पुलिस कांस्टेबल',
+    exam: 'Rajasthan Police Recruitment', category: 'police', payLevel: 'Level 3', basicPay: 21700,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(21700, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'Uniform Allowance', 'Ration Money', 'Free Housing (Barracks)', 'Desert Allowance'],
+    promotionPath: 'Constable → Head Constable → ASI → SI → Inspector → DSP',
+    promotionPath_hi: 'कांस्टेबल → हेड कांस्टेबल → ASI → दरोगा → इंस्पेक्टर → DSP',
+  },
+
+  // ── State Level Additional ──
+  {
+    slug: 'tnpsc-group-4-clerk', name: 'TNPSC Group 4 Clerk', name_hi: 'TNPSC ग्रुप 4 क्लर्क',
+    exam: 'TNPSC Group 4', category: 'ssc', payLevel: 'Level 2', basicPay: 19900,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 1800, nps: NPS,
+    ...calc(19900, DA, { x: 27, y: 18, z: 9 }, 1800, NPS),
+    perks: ['Medical', 'LTC', 'TA/DA', 'GPF', 'Festival Advance'],
+    promotionPath: 'Junior Assistant → Assistant → Superintendent → Administrative Officer',
+    promotionPath_hi: 'कनिष्ठ सहायक → सहायक → अधीक्षक → प्रशासनिक अधिकारी',
+  },
+  {
+    slug: 'supreme-court-jca', name: 'Supreme Court Junior Court Assistant', name_hi: 'सुप्रीम कोर्ट जूनियर कोर्ट असिस्टेंट',
+    exam: 'Supreme Court Recruitment', category: 'ssc', payLevel: 'Level 4', basicPay: 25500,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(25500, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Delhi Posting', 'Transport Allowance', 'Children Education Allowance', 'Canteen Subsidy'],
+    promotionPath: 'Junior Court Assistant → Senior Court Assistant → Court Master → Assistant Registrar',
+    promotionPath_hi: 'जूनियर कोर्ट असिस्टेंट → सीनियर कोर्ट असिस्टेंट → कोर्ट मास्टर → सहायक रजिस्ट्रार',
+  },
+  {
+    slug: 'station-master-rrb', name: 'Railway Station Master (RRB NTPC)', name_hi: 'रेलवे स्टेशन मास्टर (RRB NTPC)',
+    exam: 'RRB NTPC', category: 'railway', payLevel: 'Level 6', basicPay: 35400,
+    da: DA, hra: { x: 27, y: 18, z: 9 }, ta: 3600, nps: NPS,
+    ...calc(35400, DA, { x: 27, y: 18, z: 9 }, 3600, NPS),
+    perks: ['Medical', 'LTC', 'Free Rail Pass', 'Government Quarters', 'Education Allowance', 'Night Duty Allowance'],
+    promotionPath: 'Station Master → Station Superintendent → Chief Station Superintendent → DOM → ADRM',
+    promotionPath_hi: 'स्टेशन मास्टर → स्टेशन अधीक्षक → मुख्य स्टेशन अधीक्षक → DOM → ADRM',
+  },
+];
+
+export const SALARY_CATEGORIES = [
+  { key: 'all', label: 'All', hi: 'सभी' },
+  { key: 'ssc', label: 'SSC', hi: 'SSC' },
+  { key: 'banking', label: 'Banking', hi: 'बैंकिंग' },
+  { key: 'railway', label: 'Railway', hi: 'रेलवे' },
+  { key: 'upsc', label: 'UPSC', hi: 'UPSC' },
+  { key: 'defence', label: 'Defence', hi: 'रक्षा' },
+  { key: 'police', label: 'Police', hi: 'पुलिस' },
+  { key: 'teaching', label: 'Teaching', hi: 'शिक्षण' },
+] as const;
+
+export function getSalaryBySlug(slug: string): PostSalary | undefined {
+  return SALARY_DATA.find((p) => p.slug === slug);
+}

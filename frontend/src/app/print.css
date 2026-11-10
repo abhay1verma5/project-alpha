@@ -1,0 +1,178 @@
+/* Print-specific styles for PDF generation via window.print() */
+@media print {
+  /* ===== Hide non-essential UI elements ===== */
+  header,
+  footer,
+  nav,
+  .bottom-nav,
+  [data-print-hide],
+  .sticky-apply-bar,
+  .back-to-top {
+    display: none !important;
+  }
+
+  /* Hide all buttons except inside the printable area */
+  button,
+  a[role="button"],
+  [class*="fixed"],
+  [class*="sticky"] {
+    display: none !important;
+  }
+
+  /* ===== Page setup ===== */
+  @page {
+    margin: 1.5cm 2cm;
+    size: A4;
+  }
+
+  html, body {
+    background: white !important;
+    color: #1a1a1a !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Reset dark mode variables for print */
+  .dark {
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+    --surface: #ffffff;
+    --surface-hover: #f5f5f5;
+    --border-color: #d1d5db;
+    --muted: #4b5563;
+  }
+
+  /* ===== Layout ===== */
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .max-w-4xl,
+  .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* ===== Cards and containers ===== */
+  .rounded-2xl,
+  .rounded-xl {
+    border-radius: 4px !important;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* ===== Gradient header - make it print-friendly ===== */
+  .bg-gradient-to-r,
+  .bg-gradient-to-br,
+  [class*="from-[#0d2137]"] {
+    background: #1a3a5c !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ===== Typography ===== */
+  h1 {
+    font-size: 18pt !important;
+    color: white !important;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 14pt !important;
+    color: #1a3a5c !important;
+    page-break-after: avoid;
+    margin-top: 12pt;
+  }
+
+  p, li, td, th {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* ===== Links - show URLs ===== */
+  a[href^="http"]:not([class*="bg-gradient"])::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* ===== Detail grid items ===== */
+  .bg-gray-50,
+  .dark .bg-gray-800\/50 {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+  }
+
+  .bg-blue-100,
+  .dark .bg-blue-900\/30 {
+    background: #dbeafe !important;
+  }
+
+  /* ===== Dark mode text overrides ===== */
+  .dark .text-white,
+  .text-white {
+    color: white !important;
+  }
+
+  .dark .text-gray-200,
+  .dark .text-gray-300,
+  .dark .text-gray-400 {
+    color: #4b5563 !important;
+  }
+
+  /* Ensure detail label text is visible */
+  .text-gray-500,
+  .text-gray-400 {
+    color: #6b7280 !important;
+  }
+
+  .text-gray-900,
+  .text-gray-700 {
+    color: #1a1a1a !important;
+  }
+
+  /* ===== Images ===== */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* ===== Page breaks ===== */
+  .bg-white,
+  .dark .bg-gray-900 {
+    background: white !important;
+    page-break-inside: avoid;
+  }
+
+  /* ===== Print branding footer ===== */
+  [data-print-footer] {
+    display: block !important;
+    text-align: center;
+    font-size: 9pt;
+    color: #9ca3af;
+    margin-top: 24pt;
+    padding-top: 12pt;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  /* ===== Badges - ensure colors print ===== */
+  [class*="bg-emerald"],
+  [class*="bg-amber"],
+  [class*="bg-red"] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ===== Border styling ===== */
+  .border,
+  [class*="border-gray"] {
+    border-color: #e5e7eb !important;
+  }
+}
