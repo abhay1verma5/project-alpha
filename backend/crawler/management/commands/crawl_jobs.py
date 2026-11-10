@@ -169,14 +169,22 @@ class Command(BaseCommand):
 
             time.sleep(2)
 
-        # Expired listings stay in the DB (results/admit cards still link to them)
-        # but are hidden from active lists and the sitemap.
+        # Deactivate expired listings (all content types with past last_date)
         if not dry_run:
             expired = Job.objects.filter(
-                is_active=True, content_type="job", last_date__lt=date.today()
+                is_active=True, last_date__lt=date.today()
             ).update(is_active=False)
             if expired:
-                self.stdout.write(f"Deactivated {expired} expired jobs")
+                self.stdout.write(f"Deactivated {expired} expired listings")
+
+            # Also deactivate very old listings with no last_date (>90 days old)
+            from datetime import timedelta
+            cutoff = date.today() - timedelta(days=90)
+            stale = Job.objects.filter(
+                is_active=True, last_date__isnull=True, posted_date__lt=cutoff
+            ).update(is_active=False)
+            if stale:
+                self.stdout.write(f"Deactivated {stale} stale listings (>90 days, no deadline)")
 
         # Ping IndexNow with new job URLs for instant Bing/Yandex indexing
         if total_new > 0 and not dry_run:
