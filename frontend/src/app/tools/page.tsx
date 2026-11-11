@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Camera, Calculator, IndianRupee, FileText, Combine, Wrench, ChevronRight, CheckCircle2, ClipboardCheck, Activity, PercentCircle, Keyboard, FileDown, Dumbbell, Scale, Hash } from 'lucide-react';
+import { Camera, Calculator, IndianRupee, FileText, Combine, Wrench, ChevronRight, CheckCircle2, ClipboardCheck, Activity, PercentCircle, Keyboard, FileDown, Dumbbell, Scale, Hash, GitCompare, BarChart3, Target, Route, Compass } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free Tools for Government Job Aspirants — SarkariAlert',
@@ -125,6 +125,51 @@ const TOOLS = [
     badge: 'Police / Army / CAPF Standards',
     features: ['Height & chest requirements', 'Running time targets', 'Category-wise relaxation', 'State police standards'],
   },
+  {
+    href: '/tools/exam-similarity',
+    icon: GitCompare,
+    title: 'Exam Similarity Finder',
+    description: 'Find which exams share syllabus overlap. Preparing for SSC CGL? See CHSL, CPO, MTS have 70-80% common syllabus. Apply to more exams with same preparation.',
+    color: 'bg-violet-600',
+    badge: '30+ Exams — Overlap Analysis',
+    features: ['Syllabus overlap percentage', 'Common subjects highlighted', 'Difficulty comparison', 'Salary range comparison'],
+  },
+  {
+    href: '/tools/score-normalizer',
+    icon: BarChart3,
+    title: 'Score Normalization Calculator',
+    description: 'Calculate normalized score for SSC & Railway multi-shift exams. Enter raw marks, shift details — get your normalized score instantly.',
+    color: 'bg-sky-600',
+    badge: 'SSC / Railway — Official Formula',
+    features: ['SSC normalization formula', 'Railway CBT normalization', 'Percentile estimation', 'Step-by-step breakdown'],
+  },
+  {
+    href: '/tools/rank-predictor',
+    icon: Target,
+    title: 'Rank Predictor',
+    description: 'Enter your exam marks and category — predict your rank and selection probability. Based on historical cutoff data for SSC, UPSC, Banking, Railway.',
+    color: 'bg-fuchsia-600',
+    badge: 'Historical Data — Category-wise',
+    features: ['Estimated rank range', 'Selection probability %', 'Category-wise cutoff comparison', 'Marks needed for safe zone'],
+  },
+  {
+    href: '/tools/career-path',
+    icon: Route,
+    title: 'Career Path Finder',
+    description: 'Select your qualification — see ALL government job options with salary, difficulty, and preparation timeline. Interactive career tree visualization.',
+    color: 'bg-lime-600',
+    badge: '8th to Post-Grad — All Options',
+    features: ['Qualification-based filtering', 'Salary & difficulty comparison', 'Preparation timeline', 'Sector-wise grouping'],
+  },
+  {
+    href: '/tools/exam-recommender',
+    icon: Compass,
+    title: 'AI Exam Recommender',
+    description: '5-minute quiz to find your ideal government exam. Enter age, qualification, preferences — get personalized exam recommendations with match scores.',
+    color: 'bg-yellow-600',
+    badge: 'AI-Powered — Personalized',
+    features: ['7-step assessment quiz', 'Top 5 exam matches', 'Match score percentage', 'Shareable result card'],
+  },
 ];
 
 export default function ToolsPage() {
@@ -184,7 +229,7 @@ export default function ToolsPage() {
       {/* More tools */}
       <div className="mt-8 p-6 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-center">
         <p className="text-sm font-bold text-gray-600 dark:text-gray-400">
-          13 Free Tools — No signup, no ads, works on mobile. New tools added regularly.
+          {TOOLS.length} Free Tools — No signup, no ads, works on mobile. New tools added regularly.
         </p>
       </div>
     </div>
