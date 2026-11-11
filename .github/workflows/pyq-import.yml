@@ -25,8 +25,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          lfs: true
+
+      - name: Download latest DB from GitHub Release
+        working-directory: backend
+        run: |
+          curl -fL -o db.sqlite3.gz "https://github.com/abhay1verma5/project-alpha/releases/download/db-v1/db.sqlite3.gz" || true
+          [ -f db.sqlite3.gz ] && gunzip -f db.sqlite3.gz || echo "No release DB found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-python@v5
         with:
@@ -46,29 +52,28 @@ jobs:
       - name: Import GATE official papers (latest year; dedupes on re-run)
         run: python manage.py import_gate_pdfs
 
-      - name: Commit database
-        working-directory: .
-        run: |
-          git config user.name "abhay1verma5"
-          git config user.email "abhaykumarverma910@gmail.com"
-          git add backend/db.sqlite3 --force
-          if git diff --cached --quiet; then
-            echo "No new questions"
-          else
-            git commit -m "chore: import PYQs $(date -u +%Y-%m-%d)"
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break
-              sleep 5
-            done
-          fi
-
-      - name: Update GitHub Release DB
+      - name: Validate and upload DB to GitHub Release
         working-directory: backend
         run: |
-          gzip -c db.sqlite3 > db.sqlite3.gz
-          gh release upload db-v1 db.sqlite3.gz --clobber
+          TOTAL=$(python -c "
+          import django, os
+          os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+          django.setup()
+          from pyq.models import ExamQuestion
+          print(ExamQuestion.objects.count())
+          " 2>/dev/null || echo "0")
+          echo "PYQ questions in DB: $TOTAL"
+          if [ "$TOTAL" -gt 0 ]; then
+            gzip -c db.sqlite3 > db.sqlite3.gz
+            gh release upload db-v1 db.sqlite3.gz --clobber
+            echo "✅ Uploaded DB with $TOTAL PYQ questions"
+          else
+            echo "⚠️ DB has 0 questions — skipping upload to protect existing release"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
       - name: Trigger Render redeploy
+        if: success()
         run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
