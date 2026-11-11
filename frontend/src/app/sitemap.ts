@@ -6,6 +6,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 import { articles } from '@/lib/blog-articles';
 import { EXAM_PATTERNS } from '@/lib/exam-patterns';
 import { EXAM_CATEGORIES } from '@/lib/pyq-types';
+import { STATES } from '@/lib/districts';
 
 const JOBS_FOR_LEVELS = ['10th-pass', '12th-pass', 'iti', 'diploma', 'graduate', 'nursing', 'engineering', 'teacher'];
 const TIMELINE_EXAMS = ['SSC CGL', 'SSC CHSL', 'SSC GD', 'SSC MTS', 'UPSC Civil Services', 'RRB NTPC', 'RRB Group D', 'IBPS PO', 'SBI PO', 'UP Police', 'Bihar Police', 'CTET', 'NEET', 'JEE Main'];
@@ -184,6 +185,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/tools/hindi-typing-test`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/tools/pdf-compressor`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/tools/eligibility-checker`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/exam-similarity`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/score-normalizer`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/rank-predictor`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/career-path`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/exam-recommender`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     // Legal
     { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
   ];
@@ -206,6 +212,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const states = ['all_india', 'uttar_pradesh', 'bihar', 'rajasthan', 'madhya_pradesh', 'maharashtra', 'delhi', 'haryana', 'punjab', 'tamil_nadu', 'karnataka', 'west_bengal', 'gujarat', 'kerala', 'andhra_pradesh', 'telangana', 'odisha', 'jharkhand', 'chhattisgarh', 'assam', 'uttarakhand', 'himachal_pradesh', 'goa', 'jammu_kashmir'];
   for (const state of states) {
     entries.push({ url: `${BASE_URL}/state/${state}`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.7 });
+  }
+
+  // District-wise government job pages (programmatic SEO)
+  for (const state of STATES) {
+    entries.push({ url: `${BASE_URL}/government-jobs/${state.slug}`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 });
+    for (const district of state.districts) {
+      entries.push({ url: `${BASE_URL}/government-jobs/${state.slug}/${district.slug}`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 });
+    }
   }
 
   // ALL dynamic job pages via lightweight slug endpoint

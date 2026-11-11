@@ -10,7 +10,8 @@ import {
   type Job, type Stats,
 } from '@/lib/api';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Newspaper, GraduationCap, FileText, ExternalLink, Wrench, Camera, FileImage, Combine } from 'lucide-react';
+import { ArrowRight, Sparkles, Newspaper, GraduationCap, FileText, ExternalLink, Wrench, Camera, FileImage, Combine, MapPin } from 'lucide-react';
+import { STATES } from '@/lib/districts';
 
 export default async function HomePage() {
   let stats: Stats | null = null;
@@ -309,6 +310,80 @@ export default async function HomePage() {
                 Open Tool <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Browse by State — internal links for district SEO pages */}
+      <div className="bg-gradient-to-b from-white to-blue-50/30 dark:from-gray-950 dark:to-blue-950/10 py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Jobs by State / राज्य अनुसार नौकरी</h2>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Find district-wise government jobs near you</p>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+            {STATES.map((s) => (
+              <Link
+                key={s.slug}
+                href={`/government-jobs/${s.slug}`}
+                className="group flex items-center gap-2 p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md"
+              >
+                <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors truncate">{s.name}</p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400">{s.districts.length} districts</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Free Tools Section — internal links */}
+      <div className="bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/10 dark:to-gray-950 py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#ff6f00] flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Free Tools / मुफ्त टूल्स</h2>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Essential tools for exam preparation</p>
+              </div>
+            </div>
+            <Link href="/tools" className="flex items-center gap-1 text-sm font-semibold text-[#ff6f00] hover:text-orange-700 transition-colors">
+              All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {[
+              { href: '/tools/exam-recommender', label: 'AI Exam Recommender', hi: 'परीक्षा सुझाव', desc: 'Find your ideal exam' },
+              { href: '/tools/career-path', label: 'Career Path Finder', hi: 'करियर पथ', desc: 'All options by qualification' },
+              { href: '/tools/rank-predictor', label: 'Rank Predictor', hi: 'रैंक प्रेडिक्टर', desc: 'Predict rank from marks' },
+              { href: '/tools/exam-similarity', label: 'Exam Similarity', hi: 'परीक्षा समानता', desc: 'Overlap between exams' },
+              { href: '/tools/score-normalizer', label: 'Score Normalizer', hi: 'स्कोर नॉर्मलाइज़र', desc: 'SSC/Railway normalization' },
+              { href: '/tools/eligibility-checker', label: 'Eligibility Checker', hi: 'पात्रता जांच', desc: 'Check 60+ exams' },
+              { href: '/tools/photo-resizer', label: 'Photo Resizer', hi: 'फोटो रिसाइज़र', desc: 'Resize for exam forms' },
+              { href: '/tools/age-calculator', label: 'Age Calculator', hi: 'आयु कैलकुलेटर', desc: 'Check age eligibility' },
+            ].map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="group p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-[#ff6f00] dark:hover:border-[#ff6f00] transition-all hover:shadow-md"
+              >
+                <h3 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#ff6f00] transition-colors">{t.label}</h3>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400">{t.hi}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t.desc}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
