@@ -264,13 +264,13 @@ export const AGE_LIMIT_DATA: ExamAgeLimit[] = [
   },
   {
     slug: 'delhi-police-constable', name: 'Delhi Police Constable', name_hi: 'दिल्ली पुलिस कांस्टेबल',
-    organization: 'Staff Selection Commission', category: 'police',
+    organization: 'SSC (for Delhi Police)', category: 'police',
     minAge: 18, maxAge: 25,
-    relaxation: { obc: 3, sc_st: 5, pwdGen: 0, pwdObc: 0, pwdScSt: 0, exServicemen: 5, female: 0 },
+    relaxation: { obc: 3, sc_st: 5, pwdGen: 10, pwdObc: 13, pwdScSt: 15, exServicemen: 5, female: 0 },
     cutoffDate: '01-01-2027', attempts: { gen: 'unlimited', obc: 'unlimited', sc_st: 'unlimited' },
     qualification: '12th pass from recognized board',
-    note: 'Conducted by SSC. Computer-based test + Physical Endurance & Measurement Test.',
-    note_hi: 'SSC द्वारा आयोजित। कंप्यूटर आधारित परीक्षा + शारीरिक सहनशक्ति एवं माप परीक्षा।',
+    note: 'Delhi Police Constable recruited by SSC. Physical standards: Height 170cm (Male)/157cm (Female). Running 1600m in 6.5 min.',
+    note_hi: 'दिल्ली पुलिस कांस्टेबल SSC द्वारा भर्ती। ऊंचाई: 170cm (पुरुष)/157cm (महिला)। दौड़ 1600m 6.5 मिनट में।',
   },
 
   // ── Teaching ──
@@ -662,37 +662,6 @@ export const AGE_LIMIT_DATA: ExamAgeLimit[] = [
     note: 'No age limit for CLAT UG. For 22 NLUs across India. Score-based admission. Minimum 45% in 12th (Gen), 40% (SC/ST/OBC).',
     note_hi: 'CLAT UG में कोई आयु सीमा नहीं। 22 NLU में प्रवेश। 12वीं में न्यूनतम 45% (सामान्य)।',
   },
-  {
-    slug: 'delhi-police-constable', name: 'Delhi Police Constable', name_hi: 'दिल्ली पुलिस कांस्टेबल',
-    organization: 'SSC (for Delhi Police)', category: 'police',
-    minAge: 18, maxAge: 25,
-    relaxation: { obc: 3, sc_st: 5, pwdGen: 10, pwdObc: 13, pwdScSt: 15, exServicemen: 5, female: 0 },
-    cutoffDate: '01-01-2027', attempts: { gen: 'unlimited', obc: 'unlimited', sc_st: 'unlimited' },
-    qualification: '12th pass from recognized board',
-    note: 'Delhi Police Constable recruited by SSC. Physical standards: Height 170cm (Male)/157cm (Female). Running 1600m in 6.5 min.',
-    note_hi: 'दिल्ली पुलिस कांस्टेबल SSC द्वारा भर्ती। ऊंचाई: 170cm (पुरुष)/157cm (महिला)। दौड़ 1600m 6.5 मिनट में।',
-  },
-  {
-    slug: 'up-police-si', name: 'UP Police SI', name_hi: 'UP पुलिस SI',
-    organization: 'UP Police Recruitment Board', category: 'police',
-    minAge: 21, maxAge: 28,
-    relaxation: { obc: 3, sc_st: 5, pwdGen: 15, pwdObc: 18, pwdScSt: 20, exServicemen: 5, female: 3 },
-    cutoffDate: '01-07-2027', attempts: { gen: 'unlimited', obc: 'unlimited', sc_st: 'unlimited' },
-    qualification: 'Graduation from recognized university',
-    note: 'UP Police SI exam has Written + Physical + Document Verification. Height: 168cm (Male, Gen), 160cm (Female). Chest: 79-84cm.',
-    note_hi: 'UP पुलिस SI लिखित + शारीरिक + दस्तावेज सत्यापन। ऊंचाई: 168cm (पुरुष), 160cm (महिला)।',
-  },
-  {
-    slug: 'kvs-tgt-pgt', name: 'KVS TGT/PGT', name_hi: 'KVS TGT/PGT',
-    organization: 'Kendriya Vidyalaya Sangathan', category: 'teaching',
-    minAge: 0, maxAge: 35,
-    relaxation: { obc: 3, sc_st: 5, pwdGen: 10, pwdObc: 13, pwdScSt: 15, exServicemen: 5, female: 0 },
-    cutoffDate: '01-01-2027', attempts: { gen: 'unlimited', obc: 'unlimited', sc_st: 'unlimited' },
-    qualification: 'B.Ed + Subject-specific degree (PG for PGT)',
-    note: 'KVS recruits TGT (Level 7) and PGT (Level 8). B.Ed mandatory. Free quarter, transfer facility across India.',
-    note_hi: 'KVS TGT (लेवल 7) और PGT (लेवल 8)। B.Ed अनिवार्य। मुफ्त क्वार्टर, भारत भर में ट्रांसफर।',
-  },
-
   // ── State Police Additional ──
   {
     slug: 'up-police-constable-new', name: 'UP Police Constable (Civil Police)', name_hi: 'UP पुलिस कांस्टेबल (नागरिक पुलिस)',
