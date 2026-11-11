@@ -63,7 +63,7 @@ export interface Stats {
 
 async function fetchAPI<T>(path: string): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
-    next: { revalidate: 300 },
+    next: { revalidate: 3600 },
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
