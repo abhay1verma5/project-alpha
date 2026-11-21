@@ -18,6 +18,7 @@ _BAD_TITLE_RE = re.compile(
 
 from crawler.parsers.ssc import SSCParser
 from crawler.parsers.upsc import UPSCParser
+from crawler.staleness import is_dead
 from crawler.parsers.railway import RailwayParser
 from crawler.parsers.ncs import NCSParser
 from crawler.parsers.ibps import IBPSParser
@@ -134,6 +135,10 @@ class Command(BaseCommand):
                     if Job.objects.filter(slug=slug).exists():
                         continue
 
+                    # Don't add listings that are already over (e.g. "Answer Key 2024").
+                    if is_dead(title, job_data.get("content_type", "job")):
+                        continue
+
                     if dry_run:
                         self.stdout.write(f"  [NEW] {title}")
                         new_count += 1
@@ -199,6 +204,19 @@ class Command(BaseCommand):
             ).update(is_active=False)
             if stale:
                 self.stdout.write(f"Deactivated {stale} stale listings (>90 days, no deadline)")
+
+            # Title-based: most listings have no last_date and posted_date is reset
+            # when the DB is rebuilt, so the two rules above miss them.
+            dead_ids = [
+                pk
+                for pk, title, ct in Job.objects.filter(is_active=True).values_list(
+                    "id", "title", "content_type"
+                )
+                if is_dead(title, ct)
+            ]
+            if dead_ids:
+                Job.objects.filter(id__in=dead_ids).update(is_active=False)
+                self.stdout.write(f"Deactivated {len(dead_ids)} dead listings (title shows a past year/date)")
 
         # Ping IndexNow with new job URLs for instant Bing/Yandex indexing
         if total_new > 0 and not dry_run:
