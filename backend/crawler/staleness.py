@@ -13,8 +13,12 @@ _YEAR = re.compile(r"(?<!\d)(20\d{2})(?:\s*[-–/]\s*(\d{2,4}))?(?!\d)")
 # 07.05.2025, 7-5-2025, 07/05/2025
 _DATE = re.compile(r"(?<!\d)(\d{1,2})[./-](\d{1,2})[./-](20\d{2})(?!\d)")
 
-# Types that are only useful around one event (exam, result, key...).
-EVENT_TYPES = {"admit_card", "answer_key", "result", "exam_date", "notice"}
+# Only these types are ever cleaned up. Results and syllabus stay: people
+# still look up old results and syllabus pages stay useful.
+CLEANUP_TYPES = {"job", "admission", "admit_card", "answer_key", "notice", "exam_date"}
+
+# Types that are only useful around one event (exam, key, counselling...).
+EVENT_TYPES = {"admission", "admit_card", "answer_key", "exam_date", "notice"}
 
 # A dated title older than this is over (exam held, window closed).
 DATED_TITLE_MAX_AGE = timedelta(days=120)
@@ -43,6 +47,8 @@ def latest_date(title):
 
 def is_dead(title, content_type, today=None):
     """True when the title shows the listing belongs to the past."""
+    if content_type not in CLEANUP_TYPES:
+        return False
     today = today or date.today()
     year = latest_year(title)
     if year is not None and year <= today.year - 2:
