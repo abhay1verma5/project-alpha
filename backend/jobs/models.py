@@ -27,6 +27,8 @@ class ContentType(models.TextChoices):
     ANSWER_KEY = "answer_key", "Answer Key"
     ADMISSION = "admission", "Admission / Counseling"
     SYLLABUS = "syllabus", "Syllabus"
+    NOTICE = "notice", "Notice / Update"
+    EXAM_DATE = "exam_date", "Exam Date / Schedule"
 
 
 INDIAN_STATES = [

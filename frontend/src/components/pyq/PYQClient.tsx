@@ -282,9 +282,16 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
           <div className="w-10 h-10 rounded-xl bg-gov-saffron flex items-center justify-center shadow-lg shadow-orange-500/20">
             <BookOpen className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-2xl font-extrabold text-foreground">
-            {hi ? 'PYQ अभ्यास' : 'PYQ Practice'}
-          </h1>
+          {/* Exam pages render their own server-side <h1>; keep one H1 per page. */}
+          {initialExam ? (
+            <h2 className="text-2xl font-extrabold text-foreground">
+              {hi ? 'PYQ अभ्यास' : 'PYQ Practice'}
+            </h2>
+          ) : (
+            <h1 className="text-2xl font-extrabold text-foreground">
+              {hi ? 'PYQ अभ्यास' : 'PYQ Practice'}
+            </h1>
+          )}
         </div>
         <p className="text-sm text-muted mb-5">
           {hi ? 'पिछले वर्षों के प्रश्नपत्र — वर्ष, विषय चुनें और अभ्यास करें' : 'Previous Year Questions — select exam, year, subject and practice'}

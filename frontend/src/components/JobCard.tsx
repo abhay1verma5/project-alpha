@@ -89,6 +89,8 @@ export function JobCard({ job }: { job: Job; index?: number }) {
       answer_key: tr('job.answerKey', lang),
       admission: tr('job.admission', lang),
       syllabus: tr('job.syllabusLabel', lang),
+      notice: tr('job.noticeLabel', lang),
+      exam_date: tr('job.examDateLabel', lang),
     };
     return map[ct] || ct;
   };

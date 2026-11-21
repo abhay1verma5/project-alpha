@@ -63,12 +63,10 @@ export const metadata: Metadata = {
       'India\'s most comprehensive government job portal. Find latest sarkari naukri notifications, results, admit cards and answer keys from SSC, UPSC, Railway, Banking, Defence, State PSC.',
     images: ['/opengraph-image'],
   },
+  // No site-wide canonical here: child pages inherit it, and a homepage canonical on
+  // every page tells Google that PYQ/tool pages are copies of the homepage.
+  // Each page sets its own `alternates.canonical` (or none, so Google self-canonicalizes).
   alternates: {
-    canonical: 'https://sarkarialert.online',
-    languages: {
-      'en-IN': 'https://sarkarialert.online',
-      'hi-IN': 'https://sarkarialert.online',
-    },
     types: {
       'application/rss+xml': '/feed.xml',
     },

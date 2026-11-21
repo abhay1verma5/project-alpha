@@ -30,6 +30,7 @@ jobs:
         run: |
           curl -fL -o db.sqlite3.gz "https://github.com/abhay1verma5/project-alpha/releases/download/db-v1/db.sqlite3.gz" || true
           [ -f db.sqlite3.gz ] && gunzip -f db.sqlite3.gz || echo "No release DB found, starting fresh"
+          python3 scripts/db_fingerprint.py db.sqlite3 > /tmp/db_before.fp; echo "fingerprint before: $(cat /tmp/db_before.fp)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -91,29 +92,12 @@ jobs:
               print(f'  {t[\"content_type\"]}: {t[\"c\"]}')
           "
 
-      - name: Validate and upload DB to GitHub Release
+
+      # Upload + Render redeploy ONLY if this run changed data (see .github/scripts/publish_db.sh)
+      - name: Publish DB if changed
+        if: always()
         working-directory: backend
-        run: |
-          JOBS=$(python -c "
-          import django, os
-          os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-          django.setup()
-          from jobs.models import Job
-          print(Job.objects.count())
-          " 2>/dev/null || echo "0")
-          echo "Jobs in DB: $JOBS"
-          if [ "$JOBS" -gt 0 ]; then
-            gzip -c db.sqlite3 > db.sqlite3.gz
-            gh release upload db-v1 db.sqlite3.gz --clobber
-            echo "✅ Uploaded DB with $JOBS jobs"
-          else
-            echo "⚠️ DB has 0 jobs — skipping upload to protect existing release"
-          fi
+        run: bash ../.github/scripts/publish_db.sh jobs_job 100
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-
-      - name: Trigger Render redeploy
-        if: success()
-        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
-
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

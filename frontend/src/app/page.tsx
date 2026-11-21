@@ -14,6 +14,12 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles, Newspaper, GraduationCap, FileText, ExternalLink, Wrench, Camera, FileImage, Combine, MapPin } from 'lucide-react';
 import { STATES } from '@/lib/districts';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
+
 /* ---------- Async server components for streaming ---------- */
 
 async function StatsSection() {

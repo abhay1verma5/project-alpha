@@ -80,6 +80,8 @@ const T: Record<string, TranslationEntry> = {
   'job.answerKey': { en: 'Answer Key', hi: 'आंसर की' },
   'job.admission': { en: 'Admission', hi: 'एडमिशन' },
   'job.syllabusLabel': { en: 'Syllabus', hi: 'सिलेबस' },
+  'job.noticeLabel': { en: 'Notice', hi: 'सूचना' },
+  'job.examDateLabel': { en: 'Exam Date', hi: 'परीक्षा तिथि' },
   'job.eligibility': { en: 'Eligibility', hi: 'पात्रता' },
   'job.qualification': { en: 'Qualification', hi: 'योग्यता' },
   'job.qualificationNA': { en: 'Qualification N/A', hi: 'योग्यता उपलब्ध नहीं' },

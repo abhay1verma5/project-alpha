@@ -954,13 +954,14 @@ class RojgarResultParser(BaseParser):
     Deep-scrapes detail pages to extract real government apply links.
     """
     name = "RojgarResult.com"
-    base_url = "https://www.rojgarresult.com"
+    base_url = "https://rojgarresult.com"
     category = "other"
     state = "all_india"
 
+    # Site renamed its sections (Nov 2026): /sarkari-naukri/ and /sarkari-result/ are 404.
     PAGES = [
-        ("/sarkari-naukri/", "job"),
-        ("/sarkari-result/", "result"),
+        ("/recruitments/", "job"),
+        ("/result/", "result"),
         ("/admit-card/", "admit_card"),
         ("/answer-key/", "answer_key"),
         ("/admission/", "admission"),

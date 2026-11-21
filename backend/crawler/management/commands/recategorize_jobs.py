@@ -13,17 +13,45 @@ from crawler.parsers.aggregator import guess_category, guess_state, guess_qualif
 CONTENT_TYPE_PATTERNS = [
     (re.compile(r'\b(result|merit\s*list|cut\s*off|score\s*card|final\s*result|marks)\b', re.I), 'result'),
     (re.compile(r'\b(admit\s*card|hall\s*ticket|call\s*letter|e[\-\s]?admit)\b', re.I), 'admit_card'),
-    (re.compile(r'\b(answer\s*key|response\s*sheet|objection|key\s*paper)\b', re.I), 'answer_key'),
+    (re.compile(r'\b(answer\s*key|response\s*sheet|objection|key\s*paper|key\s*challenge|omr\s*(sheet|images?))\b', re.I), 'answer_key'),
     (re.compile(r'\b(admission|counselling|counseling|seat\s*allotment)\b', re.I), 'admission'),
-    (re.compile(r'\b(syllabus|exam\s*pattern|exam\s*scheme)\b', re.I), 'syllabus'),
+    (re.compile(r'\b(syllabus|exam\s*pattern|exam\s*scheme|scheme\s*(and|&)?\s*pattern|pattern\s+of\s+(the\s+)?exam(ination)?|scheme\s+of\s+(the\s+)?exam(ination)?)\b', re.I), 'syllabus'),
+]
+
+
+# A real vacancy. If the title says this, never downgrade it to notice/exam_date.
+RECRUITMENT_RE = re.compile(
+    r'\b(recruitment|vacanc(y|ies)|apply\s*online|applications?\s+(are\s+)?invited|'
+    r'applications?\s+for\s+the\s+posts?|engagement\s+of|walk[\-\s]?in|posts?\s+of|'
+    r'bharti|bharati|hiring|advt\.?\s*no)\b',
+    re.I,
+)
+
+# Checked only when the title has no recruitment signal.
+UPDATE_PATTERNS = [
+    (re.compile(r'\b(exam(ination)?\s*(date|schedule|calendar|time\s*-?\s*table|city)|'
+                r'date\s+of\s+(exam|interview|test)|time\s*-?\s*table|date\s*sheet|'
+                r'postpone(d|ment)?|re-?schedul(ed|e)|programme\s+of\s+(exam|interview))\b', re.I), 'exam_date'),
+    (re.compile(r'\b(notice|corrigendum|addendum|regarding|exemption|interview|document\s*verification|'
+                r'extension|extended|instructions?|press\s*(note|release)|circular|clarification|'
+                r'cancel(l)?ed|cancellation|withdrawn|important\s+information)\b', re.I), 'notice'),
 ]
 
 
 def guess_content_type(title):
-    """Guess content_type from title keywords."""
+    """Guess content_type from title keywords.
+
+    Returns one of: result, admit_card, answer_key, admission, syllabus,
+    exam_date, notice, job. Recruitment wording always wins over the
+    notice/exam_date patterns, so "Walk-in interview for ..." stays a job.
+    """
     for pattern, ct in CONTENT_TYPE_PATTERNS:
         if pattern.search(title):
             return ct
+    if not RECRUITMENT_RE.search(title):
+        for pattern, ct in UPDATE_PATTERNS:
+            if pattern.search(title):
+                return ct
     return 'job'
 
 

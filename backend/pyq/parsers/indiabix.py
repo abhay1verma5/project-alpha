@@ -36,7 +36,7 @@ SECTIONS = {
     ],
     "ibps_po": [
         ("Quantitative Aptitude", "https://www.indiabix.com/aptitude/problems-on-ages/"),
-        ("Quantitative Aptitude", "https://www.indiabix.com/aptitude/averages/"),
+        ("Quantitative Aptitude", "https://www.indiabix.com/aptitude/average/"),
         ("Quantitative Aptitude", "https://www.indiabix.com/aptitude/probability/"),
         ("Quantitative Aptitude", "https://www.indiabix.com/aptitude/permutation-and-combination/"),
         ("Reasoning", "https://www.indiabix.com/verbal-reasoning/blood-relation-test/"),
@@ -50,8 +50,6 @@ SECTIONS = {
         ("Mathematics", "https://www.indiabix.com/aptitude/area/"),
         ("Mathematics", "https://www.indiabix.com/aptitude/volume-and-surface-area/"),
         ("Mathematics", "https://www.indiabix.com/aptitude/boats-and-streams/"),
-        ("Reasoning", "https://www.indiabix.com/verbal-reasoning/number-series/"),
-        ("Reasoning", "https://www.indiabix.com/verbal-reasoning/coding-decoding/"),
         ("General Awareness", "https://www.indiabix.com/general-knowledge/world-geography/"),
         ("General Awareness", "https://www.indiabix.com/general-knowledge/physics/"),
         ("General Awareness", "https://www.indiabix.com/general-knowledge/chemistry/"),

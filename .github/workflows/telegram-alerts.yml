@@ -16,6 +16,7 @@ concurrency:
 jobs:
   alerts:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: backend
@@ -26,8 +27,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          lfs: true
+
+      # This workflow used to run on an EMPTY database (it never downloaded the
+      # release DB), so PDF last-date extraction and alerts did nothing.
+      - name: Download latest DB from GitHub Release
+        run: |
+          curl -fL -o db.sqlite3.gz "https://github.com/abhay1verma5/project-alpha/releases/download/db-v1/db.sqlite3.gz"
+          gunzip -f db.sqlite3.gz
+          python3 scripts/db_fingerprint.py db.sqlite3 > /tmp/db_before.fp; echo "fingerprint before: $(cat /tmp/db_before.fp)"
 
       - uses: actions/setup-python@v5
         with:
@@ -42,32 +49,24 @@ jobs:
         run: python manage.py migrate
 
       - name: Fill last dates from notification PDFs
-        run: python manage.py extract_pdf_dates --apply --limit 60
+        run: timeout 1200 python manage.py extract_pdf_dates --apply --limit 60 2>&1 || echo "[DONE]"
 
       - name: Re-categorize and backfill qualification
         run: timeout 120 python manage.py recategorize_jobs --all 2>&1 || echo "[DONE]"
 
       - name: Channel alerts for new notices
+        if: env.TELEGRAM_BOT_TOKEN != ''
         run: python manage.py send_telegram_alerts
 
       - name: Closing-soon reminders to subscribers
+        if: env.TELEGRAM_BOT_TOKEN != ''
         run: python manage.py send_deadline_reminders
 
-      - name: Commit database (alert log + dates)
-        working-directory: .
-        run: |
-          git config user.name "abhay1verma5"
-          git config user.email "abhaykumarverma910@gmail.com"
-          git add backend/db.sqlite3 --force
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "chore: telegram alerts + pdf dates $(date -u +%Y-%m-%d)"
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break
-              sleep 5
-            done
-          fi
-
-      - name: Trigger Render redeploy
-        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+      # Upload + Render redeploy ONLY if this run changed data (see .github/scripts/publish_db.sh)
+      - name: Publish DB if changed
+        if: always()
+        working-directory: backend
+        run: bash ../.github/scripts/publish_db.sh jobs_job 100
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

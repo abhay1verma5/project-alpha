@@ -27,7 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const job = await getJob(slug);
-    const desc = `${job.organization} — ${job.qualification || 'Various qualifications'}. ${job.vacancies ? formatNumber(job.vacancies) + ' vacancies.' : ''} Apply before ${formatDate(job.last_date)}.`;
+    // Only real vacancies get "Apply before"; notices/results etc. never show "Apply before N/A".
+    const desc = job.content_type === 'job'
+      ? `${job.organization} — ${job.qualification || 'Various qualifications'}. ${job.vacancies ? formatNumber(job.vacancies) + ' vacancies. ' : ''}${job.last_date ? `Apply before ${formatDate(job.last_date)}.` : 'See the official notification for dates.'}`
+      : `${job.organization}: ${job.title}. Read the official update, dates and links on SarkariAlert.`;
     const stateLabel = STATE_LABELS[job.state] || job.state;
     const categoryLabel = CATEGORY_LABELS[job.category] || job.category;
     const url = `https://sarkarialert.online/jobs/${slug}`;
@@ -146,7 +149,9 @@ export default async function JobDetailPage({ params }: Props) {
     { icon: UserCheck, label: 'Age Limit / आयु सीमा', value: job.age_limit || 'See notification / नोटिफिकेशन देखें' },
   ] as { icon: typeof Building2; label: string; value: string; highlight?: boolean }[];
 
-  // JobPosting JSON-LD structured data for SEO
+  // JobPosting JSON-LD only for real vacancies. Google's guidelines forbid JobPosting
+  // markup on pages that are not job openings (notices, results, exam dates...).
+  const isVacancy = job.content_type === 'job';
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
@@ -189,7 +194,9 @@ export default async function JobDetailPage({ params }: Props) {
 
   return (
     <div id="job-detail-content" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {isVacancy && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       {/* Breadcrumbs with JSON-LD */}
       <Breadcrumbs

@@ -1,4 +1,7 @@
-from django.db.models import Count
+import random
+
+from django.core.cache import cache
+from django.db.models import Count, Max, Min
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -21,6 +24,36 @@ def _limit(request, default, maximum):
         return default
 
 
+def _random_sample(queryset, n):
+    """Return up to n random rows from queryset without ORDER BY RANDOM().
+
+    ORDER BY RANDOM() makes SQLite read and sort every matching row; over the
+    whole bank (600K+ questions) that took minutes on Render. Instead:
+    - no filters: probe random ids between MIN(id) and MAX(id) (ids are dense);
+    - with filters: read only the matching ids (index scan), sample n of them.
+    """
+    if not queryset.query.where:
+        bounds = queryset.aggregate(lo=Min("id"), hi=Max("id"))
+        lo, hi = bounds["lo"], bounds["hi"]
+        if lo is None:
+            return []
+        rows, seen = [], set()
+        for _ in range(4):
+            want = min(hi - lo + 1, (n - len(rows)) * 3)
+            probe = set(random.sample(range(lo, hi + 1), want)) - seen
+            seen |= probe
+            rows.extend(queryset.filter(id__in=probe)[: n - len(rows)])
+            if len(rows) >= n:
+                break
+        random.shuffle(rows)
+        return rows[:n]
+    ids = list(queryset.values_list("id", flat=True))
+    chosen = random.sample(ids, min(n, len(ids)))
+    rows = list(queryset.model.objects.filter(id__in=chosen))
+    random.shuffle(rows)
+    return rows
+
+
 class PYQListView(generics.ListAPIView):
     """GET /api/pyq/ — List questions with answers (practice mode)."""
 
@@ -36,7 +69,7 @@ class PYQListView(generics.ListAPIView):
         # Limit at the database level: a practice set is 10-200 questions, never
         # the whole bank. Random order so repeat visits see different questions.
         queryset = super().filter_queryset(queryset)
-        return queryset.order_by("?")[: _limit(self.request, default=50, maximum=1000)]
+        return _random_sample(queryset, _limit(self.request, default=50, maximum=1000))
 
 
 class PYQMockView(generics.ListAPIView):
@@ -52,7 +85,7 @@ class PYQMockView(generics.ListAPIView):
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
-        return queryset.order_by("?")[: _limit(self.request, default=25, maximum=100)]
+        return _random_sample(queryset, _limit(self.request, default=25, maximum=100))
 
 
 class PYQCheckView(APIView):
@@ -104,7 +137,21 @@ class PYQMetaView(APIView):
 
     permission_classes = [AllowAny]
 
+    # The question bank only changes when a new DB is deployed (which restarts the
+    # process), so a per-process cache is safe and turns a 30s+ request into ~0ms.
+    CACHE_SECONDS = 60 * 60
+
     def get(self, request):
+        exam_filter = request.query_params.get("exam") or ""
+        key = f"pyq-meta:{exam_filter}"
+        data = cache.get(key)
+        if data is None:
+            data = self._build(exam_filter)
+            cache.set(key, data, self.CACHE_SECONDS)
+        return Response(data)
+
+    @staticmethod
+    def _build(exam_filter):
         qs = ExamQuestion.objects.all()
 
         # Group by exam_type with counts
@@ -114,21 +161,20 @@ class PYQMetaView(APIView):
             .order_by("exam_type")
         )
 
-        # For a specific exam, return available years and subjects
-        exam_filter = request.query_params.get("exam")
-        if exam_filter:
-            filtered = qs.filter(exam_type=exam_filter)
-            years = sorted(set(filtered.values_list("year", flat=True)), reverse=True)
-            subjects = sorted(set(filtered.values_list("subject", flat=True)))
-            total = filtered.count()
-        else:
-            years = sorted(set(qs.values_list("year", flat=True)), reverse=True)
-            subjects = sorted(set(qs.values_list("subject", flat=True)))
-            total = qs.count()
+        # For a specific exam, return available years and subjects.
+        # DISTINCT in SQL instead of pulling every row's year/subject into Python.
+        scoped = qs.filter(exam_type=exam_filter) if exam_filter else qs
+        years = list(scoped.order_by("-year").values_list("year", flat=True).distinct())
+        subjects = list(scoped.order_by("subject").values_list("subject", flat=True).distinct())
+        total = (
+            next((e["count"] for e in exams if e["exam_type"] == exam_filter), 0)
+            if exam_filter
+            else sum(e["count"] for e in exams)
+        )
 
-        return Response({
+        return {
             "exams": exams,
             "years": years,
             "subjects": subjects,
             "total_questions": total,
-        })
+        }

@@ -3,7 +3,8 @@ import { PYQClient } from '@/components/pyq/PYQClient';
 import { RelatedLinks, PYQ_RELATED_LINKS } from '@/components/RelatedLinks';
 
 export const metadata: Metadata = {
-  title: 'PYQ Practice — Previous Year Question Papers | SarkariAlert',
+  title: 'PYQ Practice — Previous Year Question Papers',
+  alternates: { canonical: '/pyq' },
   description:
     'Practice Previous Year Questions (PYQ) for JEE, NEET, GATE, SSC, UPSC, Railway, Banking, CBSE, State PSC and 60+ exams. Year-wise, subject-wise MCQ practice with instant answers and mock test mode.',
   keywords: [

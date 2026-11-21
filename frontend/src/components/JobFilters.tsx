@@ -12,6 +12,8 @@ const CONTENT_TYPES = [
   { value: 'answer_key', label: 'Answer Keys' },
   { value: 'admission', label: 'Admissions' },
   { value: 'syllabus', label: 'Syllabus' },
+  { value: 'exam_date', label: 'Exam Dates' },
+  { value: 'notice', label: 'Notices' },
 ];
 
 interface JobFiltersProps {

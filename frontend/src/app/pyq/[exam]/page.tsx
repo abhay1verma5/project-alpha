@@ -19,11 +19,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { exam } = await params;
   const info = findExamInfo(exam);
-  if (!info) return { title: 'PYQ Practice | SarkariAlert' };
+  if (!info) return { title: 'PYQ Practice' };
 
   const name = info.exam.label;
   return {
-    title: `${name} PYQ — Previous Year Questions with Solutions | SarkariAlert`,
+    // The root layout's title template already appends " | SarkariAlert".
+    title: `${name} PYQ — Previous Year Questions with Solutions`,
+    alternates: { canonical: `/pyq/${exam}` },
     description: `Practice ${name} Previous Year Questions (PYQ) with detailed solutions. Year-wise, subject-wise MCQ practice with instant answers and mock test mode. Free ${name} question bank.`,
     keywords: [
       `${name} PYQ`, `${name} previous year questions`, `${name} solved papers`,
@@ -59,6 +61,7 @@ export default async function ExamPYQPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }} />
       <main className="max-w-3xl mx-auto px-4 py-6">
+        <h1 className="text-2xl font-bold mb-4">{name} Previous Year Questions (PYQ) with Solutions</h1>
         <PYQClient initialExam={exam} />
       </main>
     </>

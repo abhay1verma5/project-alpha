@@ -20,10 +20,12 @@ class UPSCParser(BaseParser):
     category = "upsc"
     state = "all_india"
 
+    # upsc.gov.in was rebuilt (Nov 2026): the old /examinations/active-exams and
+    # /examinations/forthcoming-exams pages now return 404.
     LIST_PAGES = [
-        "/examinations/active-exams",
-        "/examinations/forthcoming-exams",
+        "/active-examinations/",
     ]
+    EXAM_PREFIX = "/active-examinations/"
     # Section links on every page; not exams.
     SKIP_PATHS = {
         "/examinations/active-exams", "/examinations/forthcoming-exams",
@@ -39,11 +41,15 @@ class UPSCParser(BaseParser):
             html = self.fetch(f"{self.base_url}{page}", timeout=20)
             if not html:
                 continue
-            for a in self.soup(html).select("a[href^='/examinations/']"):
+            for a in self.soup(html).select(f"a[href^='{self.EXAM_PREFIX}']"):
                 href = a.get("href", "")
-                if href in self.SKIP_PATHS or href.startswith("/examinations/demo-files"):
+                if href.rstrip("/") == self.EXAM_PREFIX.rstrip("/") or href in self.SKIP_PATHS:
                     continue
                 title = self.clean_text(a.get_text())
+                # New cards prefix the exam name with the button text.
+                title = re.sub(r"^\s*View Exam Details\s*", "", title, flags=re.I)
+                # ...and append notice no. / dates; keep only the exam name.
+                title = re.split(r"Examination Notice No|Date of Commencement|Last date", title, flags=re.I)[0].strip()
                 if len(title) < 10:
                     continue
                 links.setdefault(href, title)
@@ -62,11 +68,22 @@ class UPSCParser(BaseParser):
             if len(cells) >= 2:
                 fields[cells[0].lower()] = cells[1]
 
+        # New site: dates are plain text, e.g.
+        # "Last date for submission of Application 6 Oct 2026, 06:00 PM ... Date of Upload 16 Sep 2026"
+        text = self.clean_text(soup.get_text(" "))
+        date_re = r"(\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4}|\d{1,2}/\d{1,2}/\d{4})"
+        m = re.search(r"last\s+date[^0-9]{0,60}" + date_re, text, re.I)
+        if m:
+            fields.setdefault("last date", m.group(1))
+        m = re.search(r"date\s+of\s+upload[^0-9]{0,20}" + date_re, text, re.I)
+        if m:
+            fields.setdefault("date of upload", m.group(1))
+
         last_date = None
         for key, value in fields.items():
             if "last date" in key:
                 # "27/02/2026 - 6:00pm" -> keep the date part only
-                m = re.search(r"\d{1,2}/\d{1,2}/\d{4}", value)
+                m = re.search(r"\d{1,2}/\d{1,2}/\d{4}|\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4}", value)
                 last_date = self.parse_date(m.group(0)) if m else None
                 break
 
