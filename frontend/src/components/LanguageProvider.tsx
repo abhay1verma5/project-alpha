@@ -44,6 +44,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem(LANG_KEY);
       if (saved && VALID_LANGS.has(saved)) {
         setLangState(saved as Language);
+      } else if ((navigator.languages || [navigator.language]).some((l) => /^hi\b/i.test(l))) {
+        // No choice made yet and the phone is set to Hindi: start in Hindi.
+        setLangState('hi');
       }
     } catch {}
     setMounted(true);

@@ -32,7 +32,8 @@ class CurrentAffairsListView(APIView):
             data.append({
                 "date": ca.date.isoformat(),
                 "items": ca.items,
-                "quiz": ca.quiz,
+                # No AI quiz that day -> 10 real past-paper GK questions instead.
+                "quiz": ca.quiz or _past_paper_gk_quiz(ca.date.isoformat()),
                 "source": ca.source,
             })
 

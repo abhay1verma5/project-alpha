@@ -280,6 +280,21 @@ export default async function JobDetailPage({ params }: Props) {
               <div className="bg-white dark:bg-gray-900 px-4 py-3 min-w-0">
                 <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Last date / अंतिम तिथि</p>
                 <p className={`text-sm font-bold ${job.is_expired ? 'text-red-500 line-through' : 'text-gray-900 dark:text-white'}`}>{formatDate(job.last_date)}</p>
+                {!job.is_expired && (() => {
+                  // Google Calendar all-day event the day before the last date.
+                  const d = new Date(job.last_date + 'T00:00:00');
+                  const prev = new Date(d.getTime() - 86400000);
+                  const ymd = (x: Date) => x.toISOString().slice(0, 10).replace(/-/g, '');
+                  const href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+                    + `&text=${encodeURIComponent('Last date tomorrow: ' + job.title.slice(0, 80))}`
+                    + `&dates=${ymd(prev)}/${ymd(d)}`
+                    + `&details=${encodeURIComponent('Apply before ' + formatDate(job.last_date) + ' — https://sarkarialert.online/jobs/' + job.slug)}`;
+                  return (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="inline-block mt-1 text-xs font-bold text-blue-700 dark:text-blue-300 underline">
+                      ⏰ Remind me / याद दिलाएं
+                    </a>
+                  );
+                })()}
               </div>
             )}
             {!!job.vacancies && (

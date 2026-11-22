@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Globe, Landmark, TrendingUp, FlaskConical, Trophy, Award, Shield, Users, Lightbulb, Flame, CheckCircle, XCircle } from 'lucide-react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-const LOCAL_API = '/api/current-affairs';
 
 interface CAItem {
   title: string;
@@ -65,11 +64,8 @@ export function CurrentAffairsClient() {
   async function fetchData() {
     setLoading(true);
     try {
-      // Try local static data first (updated during deploy), fall back to backend
-      let res = await fetch(`${LOCAL_API}?days=7`).catch(() => null);
-      if (!res || !res.ok) {
-        res = await fetch(`${API_BASE}/current-affairs/?days=7`).catch(() => null);
-      }
+      // Always the backend: the old bundled JSON was frozen at the last deploy.
+      const res = await fetch(`${API_BASE}/current-affairs/?days=7`).catch(() => null);
       if (res && res.ok) {
         const json = await res.json();
         setData(json.results || []);

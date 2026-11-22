@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { X, SlidersHorizontal } from 'lucide-react';
 import { CATEGORY_LABELS, STATE_LABELS, QUALIFICATION_GROUPS, SORT_OPTIONS, cn } from '@/lib/utils';
@@ -45,6 +46,34 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
   };
 
   const clearAll = () => router.push(basePath);
+
+  // "Jobs for me": a saved qualification + state, applied in one tap.
+  const PROFILE_KEY = 'sa_my_profile';
+  const [profile, setProfile] = useState<{ qualification?: string; state?: string } | null>(null);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (raw) setProfile(JSON.parse(raw));
+    } catch {}
+  }, []);
+  const saveProfile = () => {
+    const p = { qualification: activeQualification || undefined, state: activeState || undefined };
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch {}
+    setProfile(p);
+  };
+  const applyProfile = () => {
+    if (!profile) return;
+    const params = new URLSearchParams(searchParams.toString());
+    if (profile.qualification) params.set('qualification', profile.qualification); else params.delete('qualification');
+    if (profile.state) params.set('state', profile.state); else params.delete('state');
+    params.delete('page');
+    router.push(`${basePath}?${params.toString()}`);
+  };
+  const profileLabel = profile
+    ? [profile.qualification && (QUALIFICATION_GROUPS.flatMap((g) => g.options).find((o) => o.value === profile.qualification)?.label || profile.qualification),
+       profile.state && (STATE_LABELS[profile.state] || profile.state)].filter(Boolean).join(' · ')
+    : '';
+  const profileActive = !!profile && (profile.qualification || '') === activeQualification && (profile.state || '') === activeState;
 
   return (
     <div className="mb-8 space-y-4">
@@ -151,6 +180,24 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
         )}
 
       </div>
+
+      {/* Jobs for me */}
+      {profile && profileLabel && !profileActive && (
+        <button
+          onClick={applyProfile}
+          className="w-full text-left rounded-xl border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2.5 text-sm font-bold text-emerald-800 dark:text-emerald-200"
+        >
+          ⭐ Jobs for me / मेरे लिए नौकरियां — {profileLabel}
+        </button>
+      )}
+      {(activeQualification || activeState) && !profileActive && (
+        <button onClick={saveProfile} className="text-sm font-semibold text-blue-700 dark:text-blue-300 underline">
+          Save as my profile / इसे मेरी प्रोफ़ाइल बनाएं
+        </button>
+      )}
+      {profileActive && (
+        <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">⭐ Showing jobs for your profile</p>
+      )}
 
       {/* Active filter tags */}
       {activeCount > 0 && (
