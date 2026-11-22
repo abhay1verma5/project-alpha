@@ -34,7 +34,9 @@ class BaseParser(ABC):
 
     def fetch(self, url, timeout=30):
         try:
-            resp = requests.get(url, headers=self.get_headers(), timeout=timeout, verify=False)
+            # (connect, read): many .gov.in hosts never answer from CI runners; an
+            # 8s connect timeout fails them fast instead of burning 30s+ each.
+            resp = requests.get(url, headers=self.get_headers(), timeout=(8, timeout), verify=False)
             resp.raise_for_status()
             # Many NIC sites omit charset; requests then assumes ISO-8859-1 and
             # Hindi text turns into mojibake. Trust the sniffed encoding instead.

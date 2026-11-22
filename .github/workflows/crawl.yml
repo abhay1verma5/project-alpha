@@ -15,7 +15,7 @@ concurrency:
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: backend
@@ -51,12 +51,17 @@ jobs:
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
-      - name: Crawl all job sources
-        run: |
-          echo "========================================"
-          echo "  CRAWLING ALL JOB SOURCES"
-          echo "========================================"
-          timeout 900 python manage.py crawl_jobs 2>&1 || echo "[DONE] crawl completed"
+      # Two steps: the aggregators (answer keys, admissions, syllabus, results)
+      # used to sit at the end of one 15-minute step and never ran because slow
+      # .gov.in sites used up the time. python -u so logs survive a timeout.
+      - name: Crawl aggregator sources
+        run: timeout 600 python -u manage.py crawl_jobs --group aggregators 2>&1 || echo "[DONE] aggregators"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_DEBUG: 'False'
+
+      - name: Crawl official sources
+        run: timeout 900 python -u manage.py crawl_jobs --group official 2>&1 || echo "[DONE] official"
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_DEBUG: 'False'

@@ -89,6 +89,14 @@ class Command(BaseCommand):
             help="Crawl specific source only (ssc/upsc/railway/ncs/ibps/state_psc/army/police/teaching)",
         )
         parser.add_argument(
+            "--group",
+            choices=["aggregators", "official"],
+            help="aggregators = SarkariResult/FreeJobAlert/SarkariExam/RojgarResult/"
+            "EmploymentNews/Judiciary (fast, most answer keys/admissions/syllabus); "
+            "official = the .gov.in parsers. Run as separate steps so slow official "
+            "sites can't starve the aggregators of the step timeout.",
+        )
+        parser.add_argument(
             "--dry-run",
             action="store_true",
             help="Print results without saving to DB",
@@ -99,6 +107,13 @@ class Command(BaseCommand):
         dry_run = options.get("dry_run", False)
 
         parsers = ALL_PARSERS
+        group = options.get("group")
+        if group:
+            agg = {
+                "SarkariResultParser", "FreeJobAlertParser", "EmploymentNewsParser",
+                "SarkariExamParser", "RojgarResultParser", "JudiciaryParser",
+            }
+            parsers = [p for p in parsers if (p.__name__ in agg) == (group == "aggregators")]
         if source_filter:
             parsers = [p for p in parsers if p.name.lower().replace(" ", "_") == source_filter.lower()]
             if not parsers:

@@ -27,6 +27,8 @@ RECRUITMENT_RE = re.compile(
     re.I,
 )
 
+ONLINE_FORM_RE = re.compile(r'\b(online\s*form|apply\s*online|vacancy|vacancies)\b', re.I)
+
 # Checked only when the title has no recruitment signal.
 UPDATE_PATTERNS = [
     (re.compile(r'\b(exam(ination)?\s*(date|schedule|calendar|time\s*-?\s*table|city)|'
@@ -103,6 +105,20 @@ class Command(BaseCommand):
                 updated_ct += 1
                 changed = True
                 fields.append("content_type")
+            # Aggregator section pages mix types (an "admission" page lists online
+            # forms and answer keys), so the page's type is often wrong. When the
+            # title states the type explicitly, the title wins.
+            elif job.content_type != "job" and new_ct != job.content_type:
+                title_type = new_ct
+                if new_ct == "job" and not (
+                    RECRUITMENT_RE.search(job.title) or ONLINE_FORM_RE.search(job.title)
+                ):
+                    title_type = None  # title has no type signal; keep the page's type
+                if title_type and job.content_type not in ("notice", "exam_date"):
+                    job.content_type = title_type
+                    updated_ct += 1
+                    changed = True
+                    fields.append("content_type")
 
             # Backfill missing qualification from title
             if new_qual and not job.qualification:
