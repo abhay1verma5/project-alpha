@@ -172,9 +172,21 @@ class PYQMetaView(APIView):
             else sum(e["count"] for e in exams)
         )
 
+        # Real previous-year questions (everything not AI-generated), so the UI can
+        # offer "real PYQ only" and say honestly how many exist for this exam.
+        real = scoped.exclude(source="ai_generated")
+        real_questions = real.count()
+        real_years = (
+            list(real.order_by("-year").values_list("year", flat=True).distinct())
+            if real_questions
+            else []
+        )
+
         return {
             "exams": exams,
             "years": years,
             "subjects": subjects,
             "total_questions": total,
+            "real_questions": real_questions,
+            "real_years": real_years,
         }

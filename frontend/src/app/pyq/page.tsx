@@ -35,11 +35,11 @@ const faqData = [
   },
   {
     question: 'Are these actual exam questions?',
-    answer: 'Yes, these are actual questions from previous year examination papers. They are collected from official sources and organized year-wise and subject-wise for easy practice.',
+    answer: 'Some are. Questions marked "Previous year" come from actual past papers (for example JEE Main, NEET, CTET, UPSC Prelims, SSC CGL, CAT, RRB and GATE). Questions marked "Practice (AI)" are written by AI in the same exam pattern and syllabus — useful for practice, but not from a real paper. Tick "Real previous-year questions only" on any exam to practise only real ones.',
   },
   {
     question: 'How many questions are available?',
-    answer: 'SarkariAlert has a database of 10,00,000+ previous year questions across 60+ exams, covering multiple years and subjects. New questions are added regularly as more exams are conducted.',
+    answer: 'Over 6 lakh practice questions across 170+ exams, including 20,000+ real previous-year questions. Each exam page shows how many real previous-year questions it has.',
   },
 ];
 

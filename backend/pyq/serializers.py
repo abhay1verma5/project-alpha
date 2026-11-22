@@ -23,6 +23,7 @@ class ExamQuestionMockSerializer(serializers.ModelSerializer):
         fields = [
             "id", "exam_type", "year", "subject", "chapter",
             "question_text", "options", "difficulty", "language",
+            "source", "is_verified",
         ]
 
 

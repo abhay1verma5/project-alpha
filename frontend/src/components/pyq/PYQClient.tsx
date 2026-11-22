@@ -51,6 +51,7 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
   const [qCount, setQCount] = useState(20);
   const [selectedYear, setSelectedYear] = useState<number | ''>('');
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [realOnly, setRealOnly] = useState(false);
 
   // Meta from API
   const [meta, setMeta] = useState<PYQMeta | null>(null);
@@ -101,6 +102,7 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
     const params = new URLSearchParams({ exam: selectedExam });
     if (selectedYear) params.set('year', String(selectedYear));
     if (selectedSubject) params.set('subject', selectedSubject);
+    if (realOnly) params.set('source', 'crawled');
     params.set('limit', String(qCount));
 
     const endpoint = mode === 'mock' ? 'pyq/mock' : 'pyq';
@@ -381,9 +383,39 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
         <div className="bg-surface rounded-2xl border border-border p-4 mb-4">
           <h2 className="text-lg font-bold text-foreground mb-1">{examLabel}</h2>
           <p className="text-xs text-muted">
-            {meta ? `${meta.total_questions} ${hi ? 'प्रश्न उपलब्ध' : 'questions available'}` : ''}
+            {meta ? `${meta.total_questions.toLocaleString('en-IN')} ${hi ? 'प्रश्न उपलब्ध' : 'questions available'}` : ''}
+            {meta && (meta.real_questions || 0) > 0
+              ? ` · ${(meta.real_questions || 0).toLocaleString('en-IN')} ${hi ? 'असली पिछले वर्ष के प्रश्न' : 'real previous-year'}`
+              : ''}
           </p>
         </div>
+
+        {/* Real PYQ vs practice: be explicit about where questions come from */}
+        {meta && !metaLoading && ((meta.real_questions || 0) > 0 ? (
+          <label className="flex items-start gap-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-4 mb-3 cursor-pointer">
+            <input
+              type="checkbox"
+              className="mt-1 w-4 h-4 accent-emerald-600"
+              checked={realOnly}
+              onChange={(e) => { setRealOnly(e.target.checked); setSelectedYear(''); }}
+            />
+            <span className="text-sm text-foreground">
+              <b>{hi ? 'सिर्फ़ असली पिछले वर्ष के प्रश्न' : 'Real previous-year questions only'}</b>
+              {' '}({(meta.real_questions || 0).toLocaleString('en-IN')})
+              <span className="block text-xs text-muted mt-0.5">
+                {hi
+                  ? 'बंद करने पर अभ्यास प्रश्न (AI द्वारा, इसी परीक्षा के पैटर्न में) भी शामिल होंगे।'
+                  : 'Turn off to also include practice questions written by AI in this exam’s pattern.'}
+              </span>
+            </span>
+          </label>
+        ) : (
+          <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-2xl p-3 mb-3 text-xs text-foreground">
+            {hi
+              ? 'इस परीक्षा के असली पुराने प्रश्नपत्र अभी उपलब्ध नहीं हैं। ये अभ्यास प्रश्न AI द्वारा इसी परीक्षा के पैटर्न में बनाए गए हैं।'
+              : 'Real past papers for this exam aren’t available yet. These are practice questions written by AI in this exam’s pattern.'}
+          </div>
+        ))}
 
         {metaLoading ? (
           <div className="flex items-center justify-center py-12">
@@ -409,7 +441,7 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
                   >
                     {hi ? 'सभी वर्ष' : 'All Years'}
                   </button>
-                  {meta.years.map(y => (
+                  {(realOnly ? (meta.real_years || []) : meta.years).map(y => (
                     <button
                       key={y}
                       onClick={() => setSelectedYear(y)}
@@ -608,6 +640,15 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
 
           {/* Question */}
           <div className="bg-surface rounded-xl border border-border p-3 sm:p-4 mb-3">
+            <span
+              className={`inline-block text-[10px] font-bold px-1.5 py-0.5 rounded mb-2 ${
+                q.source === 'ai_generated'
+                  ? 'text-purple-700 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-200'
+                  : 'text-emerald-700 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-200'
+              }`}
+            >
+              {q.source === 'ai_generated' ? 'Practice (AI)' : `Previous year${q.year ? ' · ' + q.year : ''}`}
+            </span>
             <p className="text-sm sm:text-base font-bold text-foreground leading-relaxed">
               <MathText text={q.question_text} />
             </p>

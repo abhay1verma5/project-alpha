@@ -19,6 +19,9 @@ export interface PYQMeta {
   years: number[];
   subjects: string[];
   total_questions: number;
+  /** Questions from actual past papers (not AI-generated) in this scope. */
+  real_questions?: number;
+  real_years?: number[];
 }
 
 export interface PYQCheckResult {

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // The root layout's title template already appends " | SarkariAlert".
     title: `${name} PYQ — Previous Year Questions with Solutions`,
     alternates: { canonical: `/pyq/${exam}` },
-    description: `Practice ${name} Previous Year Questions (PYQ) with detailed solutions. Year-wise, subject-wise MCQ practice with instant answers and mock test mode. Free ${name} question bank.`,
+    description: `Practice ${name} questions with answers: real previous-year questions where available, plus practice MCQs in the ${name} exam pattern. Year-wise, subject-wise, with mock test mode. Free.`,
     keywords: [
       `${name} PYQ`, `${name} previous year questions`, `${name} solved papers`,
       `${name} question bank`, `${name} mock test`, `${name} practice questions`,
@@ -50,7 +50,7 @@ export default async function ExamPYQPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: `${name} Previous Year Questions`,
-    description: `Practice previous year questions for ${name}. Free PYQ with solutions.`,
+    description: `Practice questions for ${name}: real previous-year questions where available plus exam-pattern practice MCQs.`,
     provider: { '@type': 'Organization', name: 'SarkariAlert', sameAs: 'https://sarkarialert.online' },
     educationalLevel: 'Competitive Exam',
     isAccessibleForFree: true,
