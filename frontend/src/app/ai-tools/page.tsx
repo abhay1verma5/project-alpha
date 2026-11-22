@@ -20,7 +20,7 @@ const AI_TOOLS = [
     tag: 'Smart Search',
   },
   {
-    href: '/ai-quiz',
+    href: '/practice?type=ai',
     icon: Brain,
     title: 'AI Quiz Generator',
     title_hi: 'AI क्विज़ जनरेटर',

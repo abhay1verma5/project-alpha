@@ -68,7 +68,7 @@ function FAQSchema() {
 export default function PYQPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-6">
-      <PYQClient />
+      <PYQClient realOnlyMode />
       {/* FAQ Section */}
       <section className="mt-12 border-t border-gray-200 dark:border-gray-800 pt-8">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">

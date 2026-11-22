@@ -16,7 +16,7 @@ export function BottomNav() {
     { href: '/jobs', icon: Briefcase, label: tr('bottomNav.jobs', lang), activeColor: 'text-[#ff6f00]', activeBg: 'bg-orange-50' },
     { href: '/results', icon: FileCheck, label: tr('bottomNav.results', lang), activeColor: 'text-green-600', activeBg: 'bg-green-50' },
     { href: '/tools', icon: Wrench, label: tr('bottomNav.tools', lang), activeColor: 'text-[#1b5e20]', activeBg: 'bg-emerald-50' },
-    { href: '/ai-quiz', icon: Sparkles, label: tr('bottomNav.quiz', lang), activeColor: 'text-purple-600', activeBg: 'bg-purple-50' },
+    { href: '/practice?type=ai', icon: Sparkles, label: tr('bottomNav.quiz', lang), activeColor: 'text-purple-600', activeBg: 'bg-purple-50' },
   ];
 
   return (
@@ -25,8 +25,8 @@ export function BottomNav() {
         {NAV_ITEMS.map((item) => {
           const isActive = item.href === '/'
             ? pathname === '/'
-            : item.href === '/ai-quiz'
-              ? pathname === '/ai-quiz'
+            : item.href === '/practice?type=ai'
+              ? pathname === '/practice?type=ai'
               : pathname.startsWith(item.href);
           return (
             <Link

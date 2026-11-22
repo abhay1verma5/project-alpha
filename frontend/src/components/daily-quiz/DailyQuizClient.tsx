@@ -214,9 +214,9 @@ export function DailyQuizClient() {
           onClick={() => {
             const text = `I scored ${displayScore}/${displayTotal} (${pct}%) on today's Daily GK Quiz on SarkariAlert! 🔥 ${streak.count} day streak!`;
             if (navigator.share) {
-              navigator.share({ title: 'Daily GK Quiz Score', text, url: 'https://sarkarialert.online/daily-quiz' }).catch(() => {});
+              navigator.share({ title: 'Daily GK Quiz Score', text, url: 'https://sarkarialert.online/practice?type=daily' }).catch(() => {});
             } else {
-              window.open(`https://wa.me/?text=${encodeURIComponent(text + '\nhttps://sarkarialert.online/daily-quiz')}`, '_blank');
+              window.open(`https://wa.me/?text=${encodeURIComponent(text + '\nhttps://sarkarialert.online/practice?type=daily')}`, '_blank');
             }
           }}
           className="w-full py-3 bg-green-600 text-white rounded-lg text-sm font-bold flex items-center justify-center gap-2"

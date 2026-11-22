@@ -37,6 +37,8 @@ const T: Record<string, TranslationEntry> = {
   'nav.aiEligibility': { en: 'Eligibility', hi: 'पात्रता जाँच', ta: 'தகுதி', te: 'అర్హత', bn: 'যোগ্যতা' },
   'nav.aiCareer': { en: 'Career AI', hi: 'करियर AI', ta: 'கரியர் AI', te: 'కెరీర్ AI', bn: 'ক্যারিয়ার AI' },
   'nav.pyqPractice': { en: 'PYQ Practice', hi: 'PYQ अभ्यास' },
+  'nav.pyqReal': { en: 'PYQ (Real Papers)', hi: 'PYQ (असली प्रश्नपत्र)' },
+  'nav.practice': { en: 'Practice & Mock Tests', hi: 'अभ्यास और मॉक टेस्ट' },
   'nav.currentAffairs': { en: 'Current Affairs', hi: 'करंट अफेयर्स', ta: 'நடப்பு நிகழ்வுகள்', te: 'కరెంట్ అఫైర్స్', bn: 'কারেন্ট অ্যাফেয়ার্স' },
   'nav.dailyQuiz': { en: 'Daily Quiz', hi: 'डेली क्विज़', ta: 'தினசரி வினாடி வினா', te: 'డైలీ క్విజ్', bn: 'দৈনিক কুইজ' },
   'nav.salary': { en: 'Salary', hi: 'वेतन' },

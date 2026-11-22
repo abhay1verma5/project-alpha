@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  // Practice pages were merged: PYQ (/pyq) = real past papers only,
+  // Practice (/practice) = mock tests + daily quiz + AI quiz.
+  async redirects() {
+    return [
+      { source: '/previous-papers', destination: '/pyq', permanent: true },
+      { source: '/mock-tests', destination: '/practice?type=mock', permanent: true },
+      { source: '/daily-quiz', destination: '/practice?type=daily', permanent: true },
+      { source: '/ai-quiz', destination: '/practice?type=ai', permanent: true },
+    ];
+  },
   async rewrites() {
     return [
       { source: '/favicon.ico', destination: '/icon-192.png' },

@@ -49,7 +49,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: <Brain className="w-8 h-8" />,
     color: 'text-green-600',
     bgColor: 'bg-green-50 dark:bg-green-950/40',
-    href: '/daily-quiz',
+    href: '/practice?type=daily',
   },
 ];
 

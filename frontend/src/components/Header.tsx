@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Briefcase, Bell, Menu, X, FileCheck, CreditCard, Key, GraduationCap, BookOpen, Wrench, Newspaper, Sparkles, Award, FileText, BarChart3, Target, Brain, ClipboardCheck, MessageCircle, ScrollText, IndianRupee, Clock, TrendingDown, BookMarked } from 'lucide-react';
+import { Briefcase, Bell, Menu, X, FileCheck, CreditCard, Key, GraduationCap, BookOpen, Wrench, Newspaper, Sparkles, Award, BarChart3, Target, ClipboardCheck, MessageCircle, ScrollText, IndianRupee, Clock, TrendingDown, BookMarked } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
 import { useLanguage } from './LanguageProvider';
@@ -25,20 +25,17 @@ export function Header() {
     { href: '/admissions', label: tr('nav.admissions', lang), icon: GraduationCap },
     { href: '/syllabus', label: tr('nav.syllabus', lang), icon: BookOpen },
     { href: '/scholarships', label: tr('nav.scholarships', lang), icon: Award },
-    { href: '/previous-papers', label: tr('nav.pyqPapers', lang), icon: FileText },
-    { href: '/pyq', label: tr('nav.pyqPractice', lang), icon: ScrollText },
+    { href: '/pyq', label: tr('nav.pyqReal', lang), icon: ScrollText },
+    { href: '/practice', label: tr('nav.practice', lang), icon: Target },
     { href: '/current-affairs', label: tr('nav.currentAffairs', lang), icon: Newspaper },
-    { href: '/daily-quiz', label: tr('nav.dailyQuiz', lang), icon: Brain },
     { href: '/topic-weightage', label: tr('nav.weightage', lang), icon: BarChart3 },
     { href: '/salary', label: tr('nav.salary', lang), icon: IndianRupee },
     { href: '/age-limit', label: tr('nav.ageLimit', lang), icon: Clock },
     { href: '/cutoff-tracker', label: tr('nav.cutoff', lang), icon: TrendingDown },
     { href: '/blog', label: tr('nav.blog', lang), icon: BookMarked },
-    { href: '/mock-tests', label: tr('nav.mockTests', lang), icon: Target },
     { href: '/tools', label: tr('nav.tools', lang), icon: Wrench },
     { href: '/exam-calendar', label: tr('nav.jobNews', lang), icon: Newspaper },
     { href: '/search', label: tr('nav.aiSearch', lang), icon: Sparkles },
-    { href: '/ai-quiz', label: tr('nav.aiQuiz', lang), icon: Brain },
     { href: '/ai-eligibility', label: tr('nav.aiEligibility', lang), icon: ClipboardCheck },
     { href: '/ai-career', label: tr('nav.aiCareer', lang), icon: MessageCircle },
     { href: '/ai-tools', label: tr('nav.aiTools', lang), icon: Sparkles },

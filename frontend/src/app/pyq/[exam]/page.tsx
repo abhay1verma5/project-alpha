@@ -62,7 +62,7 @@ export default async function ExamPYQPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }} />
       <main className="max-w-3xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold mb-4">{name} Previous Year Questions (PYQ) with Solutions</h1>
-        <PYQClient initialExam={exam} />
+        <PYQClient initialExam={exam} realOnlyMode />
       </main>
     </>
   );

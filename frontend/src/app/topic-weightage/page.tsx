@@ -109,7 +109,7 @@ export default function TopicWeightagePage() {
         {/* CTA */}
         <div className="mt-10 grid sm:grid-cols-2 gap-4">
           <Link
-            href="/previous-papers"
+            href="/pyq"
             className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
           >
             <FileText className="w-8 h-8 text-blue-600 mb-3" />
@@ -120,7 +120,7 @@ export default function TopicWeightagePage() {
             </span>
           </Link>
           <Link
-            href="/mock-tests"
+            href="/practice?type=mock"
             className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
           >
             <Target className="w-8 h-8 text-green-600 mb-3" />

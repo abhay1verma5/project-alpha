@@ -40,7 +40,11 @@ function saveStats(s: PYQStats) {
   try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch {}
 }
 
-export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
+/**
+ * realOnlyMode: the PYQ section — only questions from actual past papers
+ * (source != ai_generated). AI-written practice lives under /practice.
+ */
+export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?: string; realOnlyMode?: boolean } = {}) {
   const { lang } = useLanguage();
   const hi = lang === 'hi';
 
@@ -51,7 +55,16 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
   const [qCount, setQCount] = useState(20);
   const [selectedYear, setSelectedYear] = useState<number | ''>('');
   const [selectedSubject, setSelectedSubject] = useState('');
-  const [realOnly, setRealOnly] = useState(false);
+  const [realOnly, setRealOnly] = useState(realOnlyMode);
+  // exam_type -> real question count (PYQ section exam list)
+  const [realByExam, setRealByExam] = useState<Record<string, number> | null>(null);
+  useEffect(() => {
+    if (!realOnlyMode) return;
+    fetch(`${API_BASE}/pyq/meta/`)
+      .then((r) => r.json())
+      .then((d: PYQMeta) => setRealByExam(d.real_by_exam || {}))
+      .catch(() => setRealByExam({}));
+  }, [realOnlyMode]);
 
   // Meta from API
   const [meta, setMeta] = useState<PYQMeta | null>(null);
@@ -287,11 +300,11 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
           {/* Exam pages render their own server-side <h1>; keep one H1 per page. */}
           {initialExam ? (
             <h2 className="text-2xl font-extrabold text-foreground">
-              {hi ? 'PYQ अभ्यास' : 'PYQ Practice'}
+              {hi ? 'असली PYQ' : 'Real PYQ'}
             </h2>
           ) : (
             <h1 className="text-2xl font-extrabold text-foreground">
-              {hi ? 'PYQ अभ्यास' : 'PYQ Practice'}
+              {realOnlyMode ? (hi ? 'पिछले वर्ष के प्रश्नपत्र (असली)' : 'Previous Year Papers (Real)') : (hi ? 'PYQ अभ्यास' : 'PYQ Practice')}
             </h1>
           )}
         </div>
@@ -314,6 +327,49 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
           </div>
         )}
 
+        {realOnlyMode ? (
+          <div>
+            <p className="text-sm text-foreground mb-3">
+              {hi
+                ? 'सिर्फ़ असली पिछले वर्ष के प्रश्नपत्र। जिन परीक्षाओं के असली प्रश्न उपलब्ध हैं:'
+                : 'Only questions from actual past papers. Exams with real papers available:'}
+            </p>
+            {!realByExam ? (
+              <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 animate-spin text-muted" /></div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {Object.entries(realByExam)
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([value, count]) => {
+                    const info = findExamInfo(value);
+                    const label = info ? (hi ? info.exam.labelHi : info.exam.label) : value;
+                    return (
+                      <button
+                        key={value}
+                        onClick={() => { setSelectedExam(value); fetchMeta(value); setPhase('select_options'); }}
+                        className="text-left bg-surface rounded-xl border border-border px-3 py-3 hover:border-emerald-500 transition-colors"
+                      >
+                        <span className="block text-sm font-bold text-foreground">{label}</span>
+                        <span className="block text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold">
+                          {count.toLocaleString('en-IN')} {hi ? 'असली प्रश्न' : 'real questions'}
+                        </span>
+                      </button>
+                    );
+                  })}
+              </div>
+            )}
+            <a
+              href="/practice"
+              className="block mt-5 rounded-2xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-4 text-sm text-foreground"
+            >
+              <b>{hi ? 'अपनी परीक्षा नहीं दिखी?' : 'Don’t see your exam?'}</b>{' '}
+              {hi
+                ? '170+ परीक्षाओं के पैटर्न में अभ्यास प्रश्न और मॉक टेस्ट → Practice'
+                : 'Practice questions and mock tests in the pattern of 170+ exams → Practice'}
+            </a>
+          </div>
+        ) : (
+        <>
         {/* Category cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {EXAM_CATEGORIES.map(cat => (
@@ -363,6 +419,8 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
             </div>
           ))}
         </div>
+        </>
+        )}
       </div>
     );
   }
@@ -391,7 +449,17 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
         </div>
 
         {/* Real PYQ vs practice: be explicit about where questions come from */}
-        {meta && !metaLoading && ((meta.real_questions || 0) > 0 ? (
+        {meta && !metaLoading && realOnlyMode && (meta.real_questions || 0) === 0 && (
+          <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-2xl p-4 mb-3 text-sm text-foreground">
+            {hi
+              ? 'इस परीक्षा के असली पिछले वर्ष के प्रश्नपत्र अभी उपलब्ध नहीं हैं।'
+              : 'Real previous-year papers for this exam aren’t available yet.'}{' '}
+            <a className="font-bold text-purple-700 dark:text-purple-300 underline" href={`/practice?type=mock&exam=${selectedExam}`}>
+              {hi ? 'इस पैटर्न में अभ्यास करें →' : 'Practice in this exam’s pattern →'}
+            </a>
+          </div>
+        )}
+        {meta && !metaLoading && !realOnlyMode && ((meta.real_questions || 0) > 0 ? (
           <label className="flex items-start gap-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-4 mb-3 cursor-pointer">
             <input
               type="checkbox"
@@ -571,6 +639,7 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
             )}
 
             {/* Start button — safe-area aware for bottom nav */}
+            {!(realOnlyMode && meta && (meta.real_questions || 0) === 0) && (
             <div className="fixed bottom-[4.5rem] md:bottom-0 left-0 right-0 p-3 pb-4 bg-surface/95 backdrop-blur-lg border-t border-border md:static md:p-0 md:bg-transparent md:border-0 md:backdrop-blur-none md:mt-2 z-40">
               <button
                 onClick={startQuiz}
@@ -581,6 +650,7 @@ export function PYQClient({ initialExam }: { initialExam?: string } = {}) {
                 {mode === 'mock' && ` (${formatTime(MOCK_TIMES[qCount] || 1200)})`}
               </button>
             </div>
+            )}
           </>
         )}
       </div>

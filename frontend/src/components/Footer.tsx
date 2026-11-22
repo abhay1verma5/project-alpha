@@ -77,7 +77,7 @@ export function Footer() {
                 { href: '/tools', label: tr('footer.allTools', lang) },
                 { href: '/ai-tools', label: tr('footer.aiTools', lang) },
                 { href: '/pyq', label: tr('footer.pyqPractice', lang) },
-                { href: '/mock-tests', label: tr('footer.mockTests', lang) },
+                { href: '/practice?type=mock', label: tr('footer.mockTests', lang) },
                 { href: '/typing-test', label: lang === 'hi' ? 'टाइपिंग टेस्ट' : 'Typing Test' },
                 { href: '/exam-countdown', label: lang === 'hi' ? 'परीक्षा काउंटडाउन' : 'Exam Countdown' },
                 { href: '/fee-calculator', label: lang === 'hi' ? 'शुल्क कैलकुलेटर' : 'Fee Calculator' },

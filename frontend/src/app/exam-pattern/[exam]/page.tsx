@@ -83,7 +83,7 @@ export default async function ExamPatternDetail({ params }: Props) {
         <Link href={`/exam/${encodeURIComponent(p.name)}`} className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
           <ListChecks className="w-4 h-4" /> Notification · admit card · result timeline
         </Link>
-        <Link href={`/mock-tests?exam=${p.key}`} className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
+        <Link href={`/practice?type=mock&exam=${p.key}`} className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
           <BookOpen className="w-4 h-4" /> Mock test
         </Link>
       </div>

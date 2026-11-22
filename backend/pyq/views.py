@@ -182,6 +182,14 @@ class PYQMetaView(APIView):
             else []
         )
 
+        # Per-exam count of real previous-year questions (for the PYQ exam list).
+        real_by_exam = dict(
+            qs.exclude(source="ai_generated")
+            .values_list("exam_type")
+            .annotate(c=Count("id"))
+            .values_list("exam_type", "c")
+        )
+
         return {
             "exams": exams,
             "years": years,
@@ -189,4 +197,5 @@ class PYQMetaView(APIView):
             "total_questions": total,
             "real_questions": real_questions,
             "real_years": real_years,
+            "real_by_exam": real_by_exam,
         }

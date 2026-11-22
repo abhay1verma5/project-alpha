@@ -22,6 +22,8 @@ export interface PYQMeta {
   /** Questions from actual past papers (not AI-generated) in this scope. */
   real_questions?: number;
   real_years?: number[];
+  /** exam_type -> number of real previous-year questions */
+  real_by_exam?: Record<string, number>;
 }
 
 export interface PYQCheckResult {
