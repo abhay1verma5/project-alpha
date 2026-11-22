@@ -41,9 +41,12 @@ jobs:
       - name: Download latest DB from GitHub Release
         working-directory: backend
         run: |
-          curl -fL -o db.sqlite3.gz "https://github.com/abhay1verma5/project-alpha/releases/download/db-v1/db.sqlite3.gz" || true
-          [ -f db.sqlite3.gz ] && gunzip -f db.sqlite3.gz || echo "No release DB found, starting fresh"
-          python3 scripts/db_fingerprint.py db.sqlite3 > /tmp/db_before.fp; echo "fingerprint before: $(cat /tmp/db_before.fp)"
+          # Never start from an empty DB: if the release can't be downloaded, stop.
+          curl -fL --retry 5 --retry-delay 15 -o db.sqlite3.gz "https://github.com/abhay1verma5/project-alpha/releases/download/db-v1/db.sqlite3.gz"
+          gunzip -f db.sqlite3.gz
+          python3 scripts/db_fingerprint.py db.sqlite3 > /tmp/db_before.fp
+          python3 scripts/db_fingerprint.py db.sqlite3 --counts > /tmp/db_before_counts.json
+          echo "start of run: $(cat /tmp/db_before_counts.json | head -c 400)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -172,9 +175,9 @@ jobs:
 
       # Upload + Render redeploy ONLY if this run changed data (see .github/scripts/publish_db.sh)
       - name: Publish DB if changed
-        if: always()
+        if: ${{ !cancelled() }}
         working-directory: backend
-        run: bash ../.github/scripts/publish_db.sh pyq_examquestion 1000
+        run: bash ../.github/scripts/publish_db.sh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
