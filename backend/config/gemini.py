@@ -25,13 +25,16 @@ GENERATE_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:
 # free-tier quota (~20 req/day), so a model that returns 429 is skipped.
 # Models the key's /v1beta/models listing serves (checked 2026-11-22).
 MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.7-flash",
-    "gemini-3.5-flash",
-    "gemini-flash-latest",
+    # generateContent on these answers in ~1-2s with the current key (2026-11-22).
     "gemini-flash-lite-latest",
+    "gemini-flash-latest",
     "gemini-2.5-flash",
+    "gemini-3.5-flash",
+    "gemini-3.7-flash",
+    "gemini-3.8-flash",
 ]
+# Web requests run under gunicorn's 30s worker timeout: stop trying models after this.
+DEFAULT_DEADLINE = 20
 _exhausted = {}  # model -> time it hit 429; retried after _EXHAUSTED_TTL seconds
 _EXHAUSTED_TTL = 3600
 
@@ -46,7 +49,7 @@ def _is_exhausted(model):
     return True
 
 
-def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
+def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120, deadline=None):
     """Return the model's text for `prompt`, or None if every attempt failed.
     Tries the models in MODELS order, skipping any that are out of quota."""
     api_key = os.environ.get("GEMINI_API_KEY", "")
@@ -55,13 +58,18 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
         return None
 
     headers = {"Content-Type": "application/json", "x-goog-api-key": api_key}
+    started = time.time()
 
     for model in MODELS:
         if _is_exhausted(model):
             continue
+        if deadline and time.time() - started > deadline:
+            logger.warning("Gemini deadline (%ss) reached", deadline)
+            return None
 
-        # Try Interactions API first, fall back to generateContent
-        for api_style in ("interactions", "generate"):
+        # generateContent only: the Interactions API hung (no reply in 40s) on
+        # 2026-11-22 and would blow gunicorn's 30s timeout.
+        for api_style in ("generate",):
             if api_style == "interactions":
                 url = INTERACTIONS_URL
                 body = {
@@ -79,11 +87,20 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
                     "contents": [{"parts": [{"text": prompt}]}],
                     "generationConfig": {"temperature": 0.7, "maxOutputTokens": max_tokens},
                 }
+                if system:
+                    body["systemInstruction"] = {"parts": [{"text": system}]}
 
             for attempt in range(retries):
+                req_timeout = timeout
+                if deadline:
+                    left = deadline - (time.time() - started)
+                    if left <= 1:
+                        return None
+                    # One slow model must not eat the whole budget: cap each try at 8s.
+                    req_timeout = min(timeout, left, 8)
                 try:
                     h = headers if api_style == "interactions" else headers_gc
-                    resp = requests.post(url, json=body, headers=h, timeout=timeout)
+                    resp = requests.post(url, json=body, headers=h, timeout=req_timeout)
                 except requests.RequestException as e:
                     logger.warning(f"Gemini request failed ({model}): {e}")
                     time.sleep(2)
@@ -101,11 +118,11 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
                     _exhausted[model] = time.time()
                     logger.info(f"Gemini quota exhausted for {model}, rotating...")
                     break
-                if resp.status_code in (500, 503):
-                    time.sleep(3 * (attempt + 1))
+                if resp.status_code in (404, 500, 503):
+                    # Seen as transient on 2026-11-22: the same request returned
+                    # 404/503 and then 200 seconds later. Retry briefly, then move on.
+                    time.sleep(1 + attempt)
                     continue
-                if resp.status_code == 404:
-                    break  # this API style does not serve the model; try the other style
                 logger.warning(f"Gemini HTTP {resp.status_code} ({model}): {resp.text[:200]}")
                 break
             if _is_exhausted(model):
@@ -148,7 +165,10 @@ def _extract_text(payload):
 
 def _extract_generate_text(payload):
     """Extract text from generateContent API response."""
+    # Answers can arrive split across several parts (one reply came back as just
+    # "Nam" when only parts[0] was read); join every non-thought text part.
     try:
-        return payload["candidates"][0]["content"]["parts"][0]["text"]
-    except (KeyError, IndexError):
+        parts = payload["candidates"][0]["content"]["parts"]
+    except (KeyError, IndexError, TypeError):
         return ""
+    return "".join(p.get("text", "") for p in parts if isinstance(p, dict) and not p.get("thought"))

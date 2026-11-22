@@ -23,7 +23,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from config.gemini import gemini_text
+from config.gemini import DEFAULT_DEADLINE, gemini_text
 from jobs import views as jobs_views
 
 from . import prompts
@@ -93,7 +93,7 @@ def _is_number(value):
 
 def _ai_json(prompt, system, max_tokens, timeout):
     """Gemini reply parsed as JSON, or None if the call failed or the reply was not JSON."""
-    text = gemini_text(prompt, system=system, max_tokens=max_tokens, timeout=timeout)
+    text = gemini_text(prompt, system=system, max_tokens=max_tokens, timeout=timeout, deadline=DEFAULT_DEADLINE)
     if not text:
         return None
     cleaned = _JSON_FENCE_RE.sub("", text).strip()
@@ -179,7 +179,7 @@ class CareerView(AIView):
             for turn in turns
         )
         system = f"{prompts.CAREER_SYSTEM_PROMPT}\n\n{prompts.CAREER_TRANSCRIPT_INSTRUCTION}"
-        reply = gemini_text(transcript, system=system, max_tokens=1024, timeout=30)
+        reply = gemini_text(transcript, system=system, max_tokens=1024, timeout=30, deadline=DEFAULT_DEADLINE)
         if reply:
             return Response({"reply": reply})
         return _unavailable()
@@ -210,6 +210,7 @@ class ToolView(AIView):
             system=f"{tool_prompt}\n{lang_line}",
             max_tokens=1500,
             timeout=45,
+            deadline=DEFAULT_DEADLINE,
         )
         if reply:
             return Response({"reply": reply})
