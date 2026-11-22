@@ -195,6 +195,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const cat of EXAM_CATEGORIES) {
     for (const exam of cat.exams) {
       entries.push({ url: `${BASE_URL}/pyq/${exam.value}`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 });
+      entries.push({ url: `${BASE_URL}/practice/${exam.value}`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 });
     }
   }
 

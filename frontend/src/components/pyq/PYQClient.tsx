@@ -454,7 +454,7 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
             {hi
               ? 'इस परीक्षा के असली पिछले वर्ष के प्रश्नपत्र अभी उपलब्ध नहीं हैं।'
               : 'Real previous-year papers for this exam aren’t available yet.'}{' '}
-            <a className="font-bold text-purple-700 dark:text-purple-300 underline" href={`/practice?type=mock&exam=${selectedExam}`}>
+            <a className="font-bold text-purple-700 dark:text-purple-300 underline" href={`/practice/${selectedExam}`}>
               {hi ? 'इस पैटर्न में अभ्यास करें →' : 'Practice in this exam’s pattern →'}
             </a>
           </div>
