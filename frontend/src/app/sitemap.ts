@@ -199,6 +199,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // Year-wise real past papers: /pyq/<exam>/<year> (only exams that have real questions)
+  try {
+    const meta = await fetch(`${API_BASE}/pyq/meta/`, { next: { revalidate: 86400 } }).then((r) => r.json());
+    const exams = Object.keys((meta && meta.real_by_exam) || {});
+    const lists = await Promise.all(exams.map((e) =>
+      fetch(`${API_BASE}/pyq/papers/?exam=${e}`, { next: { revalidate: 86400 } }).then((r) => r.json()).catch(() => null)));
+    lists.forEach((d, i) => {
+      for (const y of (d && d.years) || []) {
+        entries.push({ url: `${BASE_URL}/pyq/${exams[i]}/${y.year}`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 });
+      }
+    });
+  } catch { /* sitemap still builds without these */ }
+
   // Category pages
   const categories = ['railway', 'ssc', 'banking', 'defence', 'upsc', 'state_psc', 'teaching', 'police', 'health', 'engineering', 'medical', 'university', 'gramin', 'other'];
   for (const cat of categories) {

@@ -199,3 +199,81 @@ class PYQMetaView(APIView):
             "real_years": real_years,
             "real_by_exam": real_by_exam,
         }
+
+
+# ---------------------------------------------------------------------------
+# Year-wise past papers (real questions only), like other exam sites:
+#   /api/pyq/papers/?exam=jee_main          -> years with counts and subjects
+#   /api/pyq/paper/?exam=jee_main&year=2024 -> the questions with options + answers
+# ---------------------------------------------------------------------------
+
+PAPER_CACHE_SECONDS = 60 * 60
+
+
+def _real(exam):
+    return ExamQuestion.objects.filter(exam_type=exam).exclude(source="ai_generated")
+
+
+class PYQPapersView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        exam = (request.query_params.get("exam") or "").strip()
+        if not exam:
+            return Response({"error": "exam is required"}, status=status.HTTP_400_BAD_REQUEST)
+        key = f"pyq-papers:{exam}"
+        data = cache.get(key)
+        if data is None:
+            rows = (
+                _real(exam).values("year", "subject").annotate(c=Count("id")).order_by("-year", "subject")
+            )
+            years = {}
+            for r in rows:
+                y = years.setdefault(r["year"], {"year": r["year"], "questions": 0, "subjects": []})
+                y["questions"] += r["c"]
+                y["subjects"].append({"subject": r["subject"], "count": r["c"]})
+            data = {"exam": exam, "years": list(years.values())}
+            cache.set(key, data, PAPER_CACHE_SECONDS)
+        return Response(data)
+
+
+class PYQPaperView(APIView):
+    permission_classes = [AllowAny]
+    MAX_PAGE_SIZE = 100
+
+    def get(self, request):
+        exam = (request.query_params.get("exam") or "").strip()
+        try:
+            year = int(request.query_params.get("year", ""))
+        except ValueError:
+            return Response({"error": "exam and year are required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not exam:
+            return Response({"error": "exam and year are required"}, status=status.HTTP_400_BAD_REQUEST)
+        subject = (request.query_params.get("subject") or "").strip()
+        try:
+            page = max(1, int(request.query_params.get("page", 1)))
+            size = max(1, min(int(request.query_params.get("page_size", 50)), self.MAX_PAGE_SIZE))
+        except ValueError:
+            page, size = 1, 50
+
+        qs = _real(exam).filter(year=year)
+        subjects = list(qs.values("subject").annotate(c=Count("id")).order_by("subject"))
+        if subject:
+            qs = qs.filter(subject__iexact=subject)
+        qs = qs.order_by("subject", "id")
+        total = qs.count()
+        start = (page - 1) * size
+        rows = qs.values(
+            "id", "subject", "chapter", "question_text", "options", "correct_answer",
+            "explanation", "is_verified", "source_url",
+        )[start : start + size]
+        return Response({
+            "exam": exam,
+            "year": year,
+            "subject": subject or None,
+            "subjects": [{"subject": s["subject"], "count": s["c"]} for s in subjects],
+            "count": total,
+            "page": page,
+            "pages": (total + size - 1) // size if total else 0,
+            "results": list(rows),
+        })
