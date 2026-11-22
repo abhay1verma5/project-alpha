@@ -40,7 +40,9 @@ class JobDetailView(generics.RetrieveAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        return Job.objects.filter(is_active=True)
+        # Closed listings stay readable (is_active=False in the response) so the
+        # site can show a "this notice has closed" page instead of a bare 404.
+        return Job.objects.all()
 
 
 @method_decorator(cache_page(CACHE_LIST), name="dispatch")

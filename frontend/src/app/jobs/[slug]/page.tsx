@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getJob } from '@/lib/api';
 import { notFound } from 'next/navigation';
+import { ClosedNotice } from '@/components/ClosedNotice';
 import {
   Calendar, MapPin, Users, GraduationCap, IndianRupee, Clock,
   ExternalLink, FileText, Building2, Shield, BookOpen,
@@ -27,6 +28,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const job = await getJob(slug);
+    if (!job.is_active) {
+      // Closed listing: keep the page for visitors from old links, keep it out of search.
+      return {
+        title: `${job.title} (Closed)`,
+        description: `This ${job.organization ? job.organization + ' ' : ''}notice has closed. See the latest government jobs on SarkariAlert.`,
+        robots: { index: false, follow: true },
+        alternates: { canonical: `https://sarkarialert.online/jobs/${slug}` },
+      };
+    }
     // Only real vacancies get "Apply before"; notices/results etc. never show "Apply before N/A".
     const desc = job.content_type === 'job'
       ? `${job.organization} — ${job.qualification || 'Various qualifications'}. ${job.vacancies ? formatNumber(job.vacancies) + ' vacancies. ' : ''}${job.last_date ? `Apply before ${formatDate(job.last_date)}.` : 'See the official notification for dates.'}`
@@ -123,6 +133,10 @@ export default async function JobDetailPage({ params }: Props) {
     job = await getJob(slug);
   } catch {
     notFound();
+  }
+
+  if (!job.is_active) {
+    return <ClosedNotice job={job} />;
   }
 
   const categoryLabel = CATEGORY_LABELS[job.category] || job.category;
