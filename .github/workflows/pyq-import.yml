@@ -53,10 +53,8 @@ jobs:
       - name: Import from open datasets
         run: python manage.py import_pyq_json
 
-      - name: Import GATE official papers (latest year; dedupes on re-run)
-        run: python manage.py import_gate_pdfs
-
-
+      - name: Import GATE official papers (all years 2022-2026; dedupes on re-run)
+        run: python manage.py import_gate_pdfs --years 2022 2023 2024 2025 2026
       # Upload + Render redeploy ONLY if this run changed data (see .github/scripts/publish_db.sh)
       - name: Publish DB if changed
         if: ${{ !cancelled() }}
