@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Sparkles, Loader2, CheckCircle2, XCircle, Trophy, RotateCcw, Lightbulb, IndianRupee, Calendar } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 import { tr } from '@/lib/translations';
 import { cn } from '@/lib/utils';
 
@@ -56,12 +57,9 @@ export function EligibilityClient() {
     setResult(null);
 
     try {
-      const res = await fetch('/api/ai-eligibility', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dob, qualification, category, gender, state, lang }),
+      const data = await postAI<EligibilityResponse>('eligibility', {
+        dob, qualification, category, gender, state, lang,
       });
-      const data = await res.json();
 
       if (data.error) {
         setError(data.error);

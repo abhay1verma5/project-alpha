@@ -27,6 +27,7 @@ async function AdmitCardsContent({ searchParams }: Props) {
   if (params.state) apiParams.state = params.state;
   if (params.qualification) apiParams.qualification = params.qualification;
   if (params.ordering) apiParams.ordering = params.ordering;
+  if (params.search) apiParams.search = params.search;
 
   let data;
   try {

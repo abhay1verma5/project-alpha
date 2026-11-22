@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { SALARY_DATA, getSalaryBySlug } from '../salary-data';
 import { SalaryDetail } from '../SalaryDetail';
+import { ApproxDataNotice } from '../../cutoff-tracker/ApproxDataNotice';
 
 export function generateStaticParams() {
   return SALARY_DATA.map((p) => ({ post: p.slug }));
@@ -66,7 +67,7 @@ export default async function SalaryPostPage({ params }: { params: Promise<{ pos
         name: `How much DA does ${post.name} get?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `${post.name} gets DA (Dearness Allowance) at 56% of basic pay, which is ₹${Math.round(post.basicPay * 0.56).toLocaleString('en-IN')} per month. DA increases by 3-4% every six months to adjust for inflation.`,
+          text: `DA (Dearness Allowance) is revised twice a year, and the rate in force applies. The calculation on this page uses an assumed DA of 56% of basic pay, which comes to ₹${Math.round(post.basicPay * 0.56).toLocaleString('en-IN')} per month for ${post.name}.`,
         },
       },
       {
@@ -98,6 +99,8 @@ export default async function SalaryPostPage({ params }: { params: Promise<{ pos
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-2">{post.name} — Salary Details</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{post.exam} · {post.payLevel}</p>
       </div>
+
+      <ApproxDataNotice />
 
       <SalaryDetail post={post} />
     </div>

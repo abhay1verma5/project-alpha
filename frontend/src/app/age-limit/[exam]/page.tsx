@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { AGE_LIMIT_DATA, getAgeLimitBySlug } from '../age-limit-data';
 import { AgeLimitDetail } from '../AgeLimitDetail';
+import { ApproxDataNotice } from '../../cutoff-tracker/ApproxDataNotice';
 
 export function generateStaticParams() {
   return AGE_LIMIT_DATA.map((e) => ({ exam: e.slug }));
@@ -98,6 +99,8 @@ export default async function AgeLimitExamPage({ params }: { params: Promise<{ e
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-2">{exam.name} — Age Limit</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{exam.organization}</p>
       </div>
+
+      <ApproxDataNotice />
 
       <AgeLimitDetail exam={exam} />
     </div>

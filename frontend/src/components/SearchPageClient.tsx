@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Sparkles, Mic, MicOff, Loader2, Filter, AlertCircle } from 'lucide-react';
 import { JobCard } from './JobCard';
-import { type Job, searchJobs } from '@/lib/api';
+import { type Job, postAI, searchJobs } from '@/lib/api';
 import { CATEGORY_LABELS, STATE_LABELS } from '@/lib/utils';
 import { useLanguage } from './LanguageProvider';
 import { tr } from '@/lib/translations';
@@ -74,12 +74,7 @@ export function SearchPageClient({ initialQuery, initialMode }: { initialQuery: 
 
     try {
       if (searchMode === 'ai') {
-        const res = await fetch('/api/ai-search', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: q }),
-        });
-        const data: AiResponse = await res.json();
+        const data = await postAI<AiResponse>('search', { query: q });
         if (data.error) {
           setError(data.error as string);
         } else {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BarChart3, TrendingUp, TrendingDown } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 import { cn } from '@/lib/utils';
+import { ApproxDataNotice } from '../cutoff-tracker/ApproxDataNotice';
 
 const YEARS = [2021, 2022, 2023, 2024, 2025];
 
@@ -108,10 +109,12 @@ export function VacancyTrendsClient() {
             {hi ? 'वैकेंसी ट्रेंड्स' : 'Vacancy Trends'}
           </h1>
           <p className="text-sm text-gray-500">
-            {hi ? 'सरकारी नौकरी भर्ती के आंकड़े (2021–2025)' : 'Government job vacancy statistics (2021–2025)'}
+            {hi ? 'सरकारी नौकरी भर्ती के अनुमानित आंकड़े (2021–2025)' : 'Approximate government job vacancy statistics (2021–2025)'}
           </p>
         </div>
       </div>
+
+      <ApproxDataNotice />
 
       {/* Exam Selector */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -157,7 +160,7 @@ export function VacancyTrendsClient() {
           <span>{formatVacancy(exam.vacancies[0])} (2021)</span>
           <span className="text-gray-300 dark:text-gray-600">&rarr;</span>
           <span className="font-bold text-gray-700 dark:text-gray-300">
-            {formatVacancy(exam.vacancies[exam.vacancies.length - 1])} (2025)
+            ~{formatVacancy(exam.vacancies[exam.vacancies.length - 1])} (2025, approx.)
           </span>
         </div>
       </div>
@@ -165,7 +168,7 @@ export function VacancyTrendsClient() {
       {/* Bar Chart */}
       <div className="p-4 bg-white dark:bg-gray-900 rounded-2xl border-2 border-gray-200 dark:border-gray-800 mb-6">
         <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
-          {hi ? `${exam.nameHi} — वार्षिक रिक्तियां` : `${exam.nameEn} — Yearly Vacancies`}
+          {hi ? `${exam.nameHi} — वार्षिक रिक्तियां (अनुमानित)` : `${exam.nameEn} — Yearly Vacancies (approx.)`}
         </p>
         <div className="space-y-3">
           {YEARS.map((year, i) => {
@@ -273,7 +276,7 @@ export function VacancyTrendsClient() {
       {/* All Exams Overview */}
       <div className="mt-6 p-4 bg-white dark:bg-gray-900 rounded-2xl border-2 border-gray-200 dark:border-gray-800">
         <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
-          {hi ? 'सभी परीक्षाओं का अवलोकन (2025)' : 'All Exams Overview (2025)'}
+          {hi ? 'सभी परीक्षाओं का अवलोकन (2025, अनुमानित)' : 'All Exams Overview (2025, approx.)'}
         </p>
         <div className="space-y-2.5">
           {EXAMS.map(e => {

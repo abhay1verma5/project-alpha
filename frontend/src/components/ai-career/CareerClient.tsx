@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Sparkles, RotateCcw, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 import { tr } from '@/lib/translations';
 import { cn } from '@/lib/utils';
 
@@ -57,12 +58,7 @@ export function CareerClient() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/ai-career', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply: string }>('career', { messages: newMessages });
 
       if (data.error) {
         setError(data.error);

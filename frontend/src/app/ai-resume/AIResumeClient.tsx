@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FileText, Loader2, Copy, Check, Download } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 
 export function AIResumeClient() {
   const { lang } = useLanguage();
@@ -41,12 +42,7 @@ Achievements: ${form.achievements}
 Generate in a professional format with sections: Personal Details, Career Objective, Education, Skills, Experience (if any), Achievements, Declaration. Use clean formatting.`;
 
     try {
-      const res = await fetch('/api/ai-career', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', text: prompt }] }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string; message?: string }>('career', { messages: [{ role: 'user', text: prompt }] });
       setResume(data.reply || data.message || 'Failed to generate resume.');
     } catch {
       setResume('Error generating resume. Please try again.');

@@ -1,101 +1,127 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ChevronRight, Target, FileText } from 'lucide-react';
-import { EXAM_DATA, getExamBySlug } from '../exam-data';
 import { notFound } from 'next/navigation';
+import { ArrowLeft, ChevronRight, FileText, Target } from 'lucide-react';
+import { fetchExamDetail, fetchExamSlugs } from '../api';
+import { ApproxNote, TwText } from '../TwText';
+import { BASE_PATH } from '../types';
 import { WeightageDetail } from './WeightageDetail';
 
-export function generateStaticParams() {
-  return EXAM_DATA.map((e) => ({ exam: e.slug }));
+export async function generateStaticParams() {
+  const slugs = await fetchExamSlugs();
+  return slugs.map((slug) => ({ exam: slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ exam: string }> }): Promise<Metadata> {
   const { exam: slug } = await params;
-  const exam = getExamBySlug(slug);
-  if (!exam) return { title: 'Exam Not Found' };
+  const result = await fetchExamDetail(slug);
+  if (result.status !== 'ok') return { title: 'Exam Not Found' };
+  const exam = result.exam;
+  const url = `https://sarkarialert.online${BASE_PATH}/${slug}`;
   return {
     title: `${exam.exam} Topic-wise Weightage — ${exam.paper} | SarkariAlert`,
     description: `Detailed subject-wise and topic-wise weightage analysis for ${exam.exam} ${exam.paper}. Know high-scoring topics and prioritize your preparation.`,
-    alternates: { canonical: `https://sarkarialert.online/topic-weightage/${slug}` },
+    alternates: { canonical: url },
     openGraph: {
       title: `${exam.exam} — Topic Weightage Analysis`,
-      description: `${exam.totalQuestions} questions, ${exam.totalMarks} marks, ${exam.subjects.length} subjects analyzed.`,
-      url: `https://sarkarialert.online/topic-weightage/${slug}`,
+      description: `${exam.total_questions} questions, ${exam.total_marks} marks, ${exam.subjects.length} subjects analyzed.`,
+      url,
     },
   };
 }
 
 export default async function ExamWeightagePage({ params }: { params: Promise<{ exam: string }> }) {
   const { exam: slug } = await params;
-  const exam = getExamBySlug(slug);
-  if (!exam) notFound();
+  const result = await fetchExamDetail(slug);
+  if (result.status === 'missing') notFound();
+
+  const backLink = (
+    <Link
+      href={BASE_PATH}
+      className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-indigo-200 transition-colors hover:text-white"
+    >
+      <ArrowLeft className="h-4 w-4" aria-hidden="true" /> <TwText id="tw.allExams" />
+    </Link>
+  );
+
+  if (result.status === 'error') {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <section className="bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900 px-4 py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-5xl">{backLink}</div>
+        </section>
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm font-semibold text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+            <TwText id="tw.error" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const exam = result.exam;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero */}
-      <section className={`relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900 py-6 sm:py-10`}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white/30 rounded-full" />
-          <div className="absolute bottom-10 right-10 w-48 h-48 border-2 border-white/20 rounded-full" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900 py-6 sm:py-10">
+        <div className="absolute inset-0 opacity-10" aria-hidden="true">
+          <div className="absolute left-10 top-10 h-32 w-32 rounded-full border-2 border-white/30" />
+          <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full border-2 border-white/20" />
         </div>
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/topic-weightage"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-200 hover:text-white transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" /> All Exams
-          </Link>
-          <h1 className="text-2xl sm:text-4xl font-bold text-white mb-1">{exam.exam}</h1>
-          <p className="text-base sm:text-lg text-indigo-200">{exam.paper}</p>
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          {backLink}
+          <h1 className="mb-1 break-words text-2xl font-bold text-white sm:text-4xl">{exam.exam}</h1>
+          <p className="break-words text-base text-indigo-200 sm:text-lg">{exam.paper}</p>
 
-          {/* Quick stats row */}
-          <div className="flex flex-wrap gap-3 mt-4 text-sm">
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white font-semibold">
-              {exam.totalQuestions} Questions
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <span className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold text-white backdrop-blur-sm">
+              {exam.total_questions} <TwText id="tw.questions" />
             </span>
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white font-semibold">
-              {exam.totalMarks} Marks
+            <span className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold text-white backdrop-blur-sm">
+              {exam.total_marks} <TwText id="tw.marks" />
             </span>
-            <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm text-white font-semibold">
-              {exam.duration}
-            </span>
-            <span className="px-3 py-1.5 rounded-lg bg-red-500/20 backdrop-blur-sm text-red-200 font-semibold">
-              Negative: {exam.negativeMarking}
-            </span>
+            <span className="rounded-lg bg-white/10 px-3 py-1.5 font-semibold text-white backdrop-blur-sm">{exam.duration}</span>
+            {exam.negative_marking && (
+              <span className="rounded-lg bg-red-500/20 px-3 py-1.5 font-semibold text-red-200 backdrop-blur-sm">
+                <TwText id="tw.negative" />: {exam.negative_marking}
+              </span>
+            )}
           </div>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 mb-16 md:mb-0">
-        {/* Interactive subject selector + weightage */}
+      <div className="mx-auto max-w-5xl px-4 py-6 mb-16 sm:px-6 sm:py-8 md:mb-0 lg:px-8">
+        <div className="mb-6">
+          <ApproxNote asOf={exam.as_of} />
+        </div>
+
         <WeightageDetail exam={exam} />
 
         {/* CTA */}
-        <div className="mt-10 grid sm:grid-cols-2 gap-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <Link
             href="/pyq"
-            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
+            className="group rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
-            <FileText className="w-8 h-8 text-blue-600 mb-3" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-700 transition-colors">
-              {exam.exam} Previous Papers
+            <FileText className="mb-3 h-8 w-8 text-blue-600" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-700 dark:text-white">
+              <TwText id="tw.cta.pyq" />
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Download year-wise PYQ PDFs</p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 mt-3">
-              Download <ChevronRight className="w-4 h-4" />
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-600">
+              <TwText id="tw.cta.downloadPapers" /> <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </span>
           </Link>
           <Link
-            href="/practice?type=ai"
-            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
+            href="/practice?type=mock"
+            className="group rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
-            <Target className="w-8 h-8 text-green-600 mb-3" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 transition-colors">
-              Practice {exam.exam} Quiz
+            <Target className="mb-3 h-8 w-8 text-green-600" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-green-700 dark:text-white">
+              <TwText id="tw.cta.mock" />
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">AI-generated MCQs for {exam.exam}</p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-600 mt-3">
-              Start Quiz <ChevronRight className="w-4 h-4" />
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-green-600">
+              <TwText id="tw.cta.startPractice" /> <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </span>
           </Link>
         </div>

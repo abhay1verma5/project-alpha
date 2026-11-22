@@ -21,23 +21,34 @@ logger = logging.getLogger(__name__)
 INTERACTIONS_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
 GENERATE_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
-# Round-robin through models; each free-tier model has ~20 req/day separate quota.
-# Only models the key's /v1beta/models listing actually returns (checked 2026-10-19).
+# Tried in this order: the first model that answers wins. Each model has its own
+# free-tier quota (~20 req/day), so a model that returns 429 is skipped.
+# Models the key's /v1beta/models listing serves (checked 2026-11-22).
 MODELS = [
     "gemini-3.8-flash",
-    "gemini-3.1-flash-lite",
-    "gemini-3-flash-preview",
-    "gemini-flash-lite-latest",
+    "gemini-3.7-flash",
+    "gemini-3.5-flash",
     "gemini-flash-latest",
+    "gemini-flash-lite-latest",
+    "gemini-2.5-flash",
 ]
-_model_idx = 0
-_exhausted = set()  # models that hit 429 today
+_exhausted = {}  # model -> time it hit 429; retried after _EXHAUSTED_TTL seconds
+_EXHAUSTED_TTL = 3600
+
+
+def _is_exhausted(model):
+    t = _exhausted.get(model)
+    if t is None:
+        return False
+    if time.time() - t > _EXHAUSTED_TTL:
+        _exhausted.pop(model, None)
+        return False
+    return True
 
 
 def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
     """Return the model's text for `prompt`, or None if every attempt failed.
-    Cycles through all models to maximize free-tier throughput."""
-    global _model_idx
+    Tries the models in MODELS order, skipping any that are out of quota."""
     api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
         logger.warning("GEMINI_API_KEY not set")
@@ -45,11 +56,8 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
 
     headers = {"Content-Type": "application/json", "x-goog-api-key": api_key}
 
-    for _ in range(len(MODELS)):
-        model = MODELS[_model_idx % len(MODELS)]
-        _model_idx = (_model_idx + 1) % len(MODELS)
-
-        if model in _exhausted:
+    for model in MODELS:
+        if _is_exhausted(model):
             continue
 
         # Try Interactions API first, fall back to generateContent
@@ -90,7 +98,7 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
                         return text
                     break
                 if resp.status_code == 429:
-                    _exhausted.add(model)
+                    _exhausted[model] = time.time()
                     logger.info(f"Gemini quota exhausted for {model}, rotating...")
                     break
                 if resp.status_code in (500, 503):
@@ -100,7 +108,7 @@ def gemini_text(prompt, system=None, max_tokens=4096, retries=2, timeout=120):
                     break  # this API style does not serve the model; try the other style
                 logger.warning(f"Gemini HTTP {resp.status_code} ({model}): {resp.text[:200]}")
                 break
-            if model in _exhausted:
+            if _is_exhausted(model):
                 break  # quota gone for this model today; move to the next model
 
     return None

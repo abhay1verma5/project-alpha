@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { HelpCircle, Loader2, Send } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 
 export function AIDoubtClient() {
   const { lang } = useLanguage();
@@ -15,12 +16,7 @@ export function AIDoubtClient() {
     if (!doubt.trim()) return;
     setLoading(true); setResult('');
     try {
-      const res = await fetch('/api/ai-tool', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool: 'doubt', prompt: doubt, lang }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string }>('tool', { tool: 'doubt', prompt: doubt, lang });
       setResult(data.reply || data.error || 'No response.');
     } catch { setResult('Error. Please try again.'); }
     setLoading(false);

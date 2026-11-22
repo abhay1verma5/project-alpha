@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ApproxDataNotice } from '../cutoff-tracker/ApproxDataNotice';
 import {
   GraduationCap, ExternalLink, BookOpen, Users, MapPin,
   Award, IndianRupee, ChevronRight, School, Building2,
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     canonical: 'https://sarkarialert.online/scholarships',
   },
   openGraph: {
-    title: 'Government Scholarships 2026-27-27 — All Schemes with Apply Links',
+    title: 'Government Scholarships 2026-27 — All Schemes with Apply Links',
     description: 'Complete guide to Indian government scholarships — class-wise, state-wise, category-wise. Direct apply links to NSP portal.',
     url: 'https://sarkarialert.online/scholarships',
   },
@@ -276,6 +277,8 @@ export default async function ScholarshipsPage(props: Props) {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <ApproxDataNotice />
+
         {/* Quick Apply Links */}
         <div className="mb-8 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">

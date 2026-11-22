@@ -99,16 +99,23 @@ export function JobCard({ job }: { job: Job; index?: number }) {
   const feeStr = formatFee(job.fee);
 
   return (
-    <Link href={`/jobs/${job.slug}`} className="block min-w-0 max-w-full group active:scale-[0.995] transition-transform">
+    <div className="relative block min-w-0 max-w-full active:scale-[0.995] transition-transform">
       <div className={cn(
-        "bg-white dark:bg-gray-900 rounded-2xl border-2 p-4 sm:p-5 transition-colors relative",
+        "group bg-white dark:bg-gray-900 rounded-2xl border-2 p-4 sm:p-5 transition-colors relative",
         job.is_expired
           ? "border-gray-300 dark:border-gray-700 opacity-75"
           : "border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500"
       )}>
+        {/* Whole-card link. Interactive children below are lifted with relative z-10 so they stay tappable. */}
+        <Link
+          href={`/jobs/${job.slug}`}
+          aria-label={title}
+          className="absolute inset-0 z-0 rounded-2xl"
+        />
+
         {/* Urgency badge — last 3 days */}
         {!job.is_expired && job.days_left !== null && job.days_left >= 0 && job.days_left <= 3 && (
-          <div className="absolute -top-2 -right-2 px-2 py-0.5 bg-red-600 text-white text-[10px] font-bold rounded-lg shadow-md animate-pulse z-10">
+          <div className="pointer-events-none absolute -top-2 -right-2 px-2 py-0.5 bg-red-600 text-white text-xs font-bold rounded-lg shadow-md animate-pulse z-10">
             {job.days_left === 0
               ? tr('job.lastDay', lang)
               : `${job.days_left} ${tr('job.daysLeft', lang)}!`}
@@ -117,21 +124,21 @@ export function JobCard({ job }: { job: Job; index?: number }) {
 
         {/* Expired badge */}
         {job.is_expired && (
-          <div className="absolute -top-2 -right-2 px-2 py-0.5 bg-gray-500 text-white text-[10px] font-bold rounded-lg shadow-md z-10">
+          <div className="pointer-events-none absolute -top-2 -right-2 px-2 py-0.5 bg-gray-500 text-white text-xs font-bold rounded-lg shadow-md z-10">
             {tr('job.expired', lang)}
           </div>
         )}
 
         {/* "New" badge for recent posts */}
         {postedAgo && !job.is_expired && (
-          <div className="absolute -top-2 -left-2 px-2 py-0.5 bg-green-600 text-white text-[10px] font-bold rounded-lg shadow-md z-10">
+          <div className="pointer-events-none absolute -top-2 -left-2 px-2 py-0.5 bg-green-600 text-white text-xs font-bold rounded-lg shadow-md z-10">
             {postedAgo}
           </div>
         )}
 
         {/* Tags + Actions */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 min-w-0">
             <span className={cn('text-xs font-bold px-2.5 py-1 rounded-lg', categoryColor)}>
               {categoryLabel}
             </span>
@@ -147,18 +154,20 @@ export function JobCard({ job }: { job: Job; index?: number }) {
             )}
             {job.is_official && <SourceBadge isOfficial sourceHost={job.source_host} />}
           </div>
-          <div className="flex items-center gap-0.5 flex-shrink-0">
+          <div className="relative z-10 flex items-center gap-0.5 flex-shrink-0">
             <button
+              type="button"
               onClick={handleShare}
-              className="p-2.5 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-400 hover:text-green-600 transition-colors"
+              className="h-10 w-10 flex items-center justify-center rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-400 hover:text-green-600 transition-colors"
               aria-label="Share"
             >
               <Share2 className="w-4 h-4" />
             </button>
             <button
+              type="button"
               onClick={handleSave}
               className={cn(
-                'p-2.5 rounded-lg transition-colors',
+                'h-10 w-10 flex items-center justify-center rounded-lg transition-colors',
                 saved
                   ? 'text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
                   : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
@@ -171,39 +180,39 @@ export function JobCard({ job }: { job: Job; index?: number }) {
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors break-words">
           {title}
         </h3>
 
         {/* Organization */}
         {job.organization && (
-          <p className="text-sm font-semibold text-gray-600 dark:text-gray-300 mt-1">{job.organization}</p>
+          <p className="text-sm font-semibold text-gray-600 dark:text-gray-300 mt-1 break-words">{job.organization}</p>
         )}
 
         {/* ── Important Dates / महत्वपूर्ण तिथियाँ ── */}
         <div className="mt-3 px-3 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/40">
-          <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1.5">
+          <p className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1.5">
             {tr('job.dates', lang)}
           </p>
           <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm">
             {/* Last Date */}
             {job.last_date && (
-            <span className={cn('flex items-center gap-1.5 font-semibold min-w-0',
+            <span className={cn('flex items-start gap-1.5 font-semibold min-w-0',
               job.is_expired ? 'text-red-500 line-through' : 'text-gray-800 dark:text-gray-200'
             )}>
-              <Calendar className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
-              <span className="truncate">
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 block leading-tight">{tr('job.lastDate', lang)}</span>
+              <Calendar className="w-3.5 h-3.5 mt-0.5 text-red-500 flex-shrink-0" />
+              <span className="min-w-0 break-words">
+                <span className="text-xs text-gray-500 dark:text-gray-400 block leading-tight">{tr('job.lastDate', lang)}</span>
                 {formatDate(job.last_date)}
               </span>
             </span>
             )}
 
             {/* Posted Date */}
-            <span className="flex items-center gap-1.5 font-semibold text-gray-700 dark:text-gray-300">
-              <CalendarCheck className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
-              <span className="truncate">
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 block leading-tight">{tr('job.postedOn', lang)}</span>
+            <span className="flex items-start gap-1.5 font-semibold min-w-0 text-gray-700 dark:text-gray-300">
+              <CalendarCheck className="w-3.5 h-3.5 mt-0.5 text-green-600 flex-shrink-0" />
+              <span className="min-w-0 break-words">
+                <span className="text-xs text-gray-500 dark:text-gray-400 block leading-tight">{tr('job.postedOn', lang)}</span>
                 {formatDate(job.posted_date)}
               </span>
             </span>
@@ -213,31 +222,31 @@ export function JobCard({ job }: { job: Job; index?: number }) {
         {/* ── Eligibility / पात्रता ── (only fields we actually know) */}
         {(job.qualification || job.age_limit || feeStr) && (
         <div className="mt-2.5 px-3 py-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-800/40">
-          <p className="text-[10px] font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1.5">
+          <p className="text-xs font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1.5">
             {tr('job.eligibility', lang)}
           </p>
           <div className="space-y-1.5 text-sm">
-            {/* Qualification — always show */}
+            {/* Qualification — always show, wraps fully */}
             {job.qualification && (
-            <span className="flex items-center gap-1.5 font-semibold min-w-0 text-purple-800 dark:text-purple-200">
-              <GraduationCap className="w-3.5 h-3.5 text-purple-500 flex-shrink-0" />
-              <span className="line-clamp-2">{job.qualification}</span>
+            <span className="flex items-start gap-1.5 font-semibold min-w-0 text-purple-800 dark:text-purple-200">
+              <GraduationCap className="w-3.5 h-3.5 mt-0.5 text-purple-500 flex-shrink-0" />
+              <span className="min-w-0 break-words">{job.qualification}</span>
             </span>
             )}
 
-            {/* Age Limit — always show */}
+            {/* Age Limit — always show, wraps fully */}
             {job.age_limit && (
-            <span className="flex items-center gap-1.5 font-semibold min-w-0 text-orange-700 dark:text-orange-300">
-              <UserCheck className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-              <span className="truncate">{`${tr('job.ageLimit', lang)}: ${job.age_limit}`}</span>
+            <span className="flex items-start gap-1.5 font-semibold min-w-0 text-orange-700 dark:text-orange-300">
+              <UserCheck className="w-3.5 h-3.5 mt-0.5 text-orange-500 flex-shrink-0" />
+              <span className="min-w-0 break-words">{`${tr('job.ageLimit', lang)}: ${job.age_limit}`}</span>
             </span>
             )}
 
-            {/* Fee — show when available */}
+            {/* Fee — show when available, wraps fully */}
             {feeStr && (
-              <span className="flex items-center gap-1.5 font-semibold text-rose-700 dark:text-rose-300">
-                <Wallet className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
-                <span className="truncate text-xs">{tr('job.fee', lang)}: {feeStr}</span>
+              <span className="flex items-start gap-1.5 font-semibold min-w-0 text-rose-700 dark:text-rose-300">
+                <Wallet className="w-3.5 h-3.5 mt-0.5 text-rose-500 flex-shrink-0" />
+                <span className="min-w-0 break-words">{tr('job.fee', lang)}: {feeStr}</span>
               </span>
             )}
           </div>
@@ -248,23 +257,23 @@ export function JobCard({ job }: { job: Job; index?: number }) {
         <div className="mt-2.5 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
           {/* Vacancies */}
           {!!job.vacancies && (
-          <span className="flex items-center gap-1.5 font-bold min-w-0 text-blue-800 dark:text-blue-300">
-            <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
-            <span className="truncate">{`${formatNumber(job.vacancies)} ${tr('job.posts', lang)}`}</span>
+          <span className="flex items-start gap-1.5 font-bold min-w-0 text-blue-800 dark:text-blue-300">
+            <Users className="w-4 h-4 mt-0.5 text-blue-600 flex-shrink-0" />
+            <span className="min-w-0 break-words">{`${formatNumber(job.vacancies)} ${tr('job.posts', lang)}`}</span>
           </span>
           )}
 
           {/* Location */}
-          <span className="flex items-center gap-1.5 font-semibold min-w-0 text-gray-700 dark:text-gray-300">
-            <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
-            <span className="truncate">{stateLabel}</span>
+          <span className="flex items-start gap-1.5 font-semibold min-w-0 text-gray-700 dark:text-gray-300">
+            <MapPin className="w-4 h-4 mt-0.5 text-red-500 flex-shrink-0" />
+            <span className="min-w-0 break-words">{stateLabel}</span>
           </span>
 
-          {/* Salary — always show */}
+          {/* Salary — always show, wraps fully */}
           {job.salary && (
-          <span className="flex items-center gap-1.5 font-semibold col-span-2 min-w-0 text-green-700 dark:text-green-300">
-            <IndianRupee className="w-4 h-4 text-green-600 flex-shrink-0" />
-            <span className="truncate">{job.salary}</span>
+          <span className="flex items-start gap-1.5 font-semibold col-span-2 min-w-0 text-green-700 dark:text-green-300">
+            <IndianRupee className="w-4 h-4 mt-0.5 text-green-600 flex-shrink-0" />
+            <span className="min-w-0 break-words">{job.salary}</span>
           </span>
           )}
         </div>
@@ -289,17 +298,15 @@ export function JobCard({ job }: { job: Job; index?: number }) {
           </div>
         )}
 
-        {/* Apply Online / View button */}
+        {/* Apply Online / View button — real anchor, lifted above the card link */}
         {job.apply_link && (
           <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-            <span
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(job.apply_link!, '_blank', 'noopener,noreferrer');
-              }}
+            <a
+              href={job.apply_link}
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
-                "inline-flex items-center gap-1.5 px-4 py-2 text-white text-xs font-bold rounded-lg transition-colors active:scale-[0.97] cursor-pointer",
+                "relative z-10 inline-flex items-center gap-1.5 min-h-10 px-4 py-2 text-white text-xs font-bold rounded-lg transition-colors active:scale-[0.97]",
                 job.is_expired ? "bg-gray-500 hover:bg-gray-600" : "bg-blue-600 hover:bg-blue-700"
               )}
             >
@@ -308,10 +315,10 @@ export function JobCard({ job }: { job: Job; index?: number }) {
                job.content_type === 'admit_card' ? tr('job.admitCardDl', lang) :
                job.content_type === 'answer_key' ? tr('job.viewAnswerKey', lang) :
                tr('job.applyOnline', lang)}
-            </span>
+            </a>
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }

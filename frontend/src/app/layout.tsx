@@ -141,6 +141,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${geist.variable} font-sans antialiased`}>
+        {/* Bottom bar spacing (mobile only). --bottom-nav-h = BottomNav height (4rem grid + 2.75rem badge inset + safe area). */}
+        <style dangerouslySetInnerHTML={{ __html: `
+:root { --bottom-nav-h: calc(6.75rem + env(safe-area-inset-bottom, 0px)); }
+@media (max-width: 768px) {
+  body main#main-content { padding-bottom: calc(var(--bottom-nav-h) + 1rem) !important; }
+  body[data-sticky-apply] main#main-content { padding-bottom: calc(var(--bottom-nav-h) + 5rem) !important; }
+  body footer[aria-label="Site footer"] { padding-bottom: calc(var(--bottom-nav-h) + 1rem) !important; }
+}
+` }} />
         {/* Skip to content link — visible on keyboard focus */}
         <a
           href="#main-content"

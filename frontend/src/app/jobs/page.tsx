@@ -29,6 +29,7 @@ async function JobsContent({ searchParams }: Props) {
   if (params.qualification) apiParams.qualification = params.qualification;
   if (params.content_type) apiParams.content_type = params.content_type;
   if (params.ordering) apiParams.ordering = params.ordering;
+  if (params.search) apiParams.search = params.search;
 
   let data;
   try {
@@ -49,6 +50,7 @@ async function JobsContent({ searchParams }: Props) {
   if (params.state) filterParams.state = params.state;
   if (params.qualification) filterParams.qualification = params.qualification;
   if (params.content_type) filterParams.content_type = params.content_type;
+  if (params.search) filterParams.search = params.search;
   if (params.ordering) filterParams.ordering = params.ordering;
 
   return (

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Languages, Loader2, Search, Shuffle } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 
 export function AIVocabularyClient() {
   const { lang } = useLanguage();
@@ -19,12 +20,7 @@ export function AIVocabularyClient() {
       const prompt = query
         ? 'Give me 10 important English vocabulary words useful for competitive exams. For each: word, meaning, Hindi meaning, part of speech, example sentence, one synonym.'
         : `Word: "${q}". Give meaning, Hindi meaning, part of speech, 2 example sentences, 3 synonyms, 2 antonyms, and origin if interesting.`;
-      const res = await fetch('/api/ai-tool', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool: 'vocabulary', prompt, lang }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string }>('tool', { tool: 'vocabulary', prompt, lang });
       setResult(data.reply || data.error || 'No response.');
     } catch { setResult('Error. Please try again.'); }
     setLoading(false);

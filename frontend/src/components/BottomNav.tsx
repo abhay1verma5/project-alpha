@@ -19,8 +19,10 @@ export function BottomNav() {
     { href: '/practice?type=ai', icon: Sparkles, label: tr('bottomNav.quiz', lang), activeColor: 'text-purple-600', activeBg: 'bg-purple-50' },
   ];
 
+  // Bottom 2.75rem is reserved for the Netlify "Powered by" badge, which is fixed bottom-right and would cover the last item.
+  // Total nav height (4rem grid + 2.75rem inset + safe area) is mirrored by --bottom-nav-h in layout.tsx.
   return (
-    <nav aria-label="Mobile navigation" className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-t-2 border-[#1a3a5c]/20 dark:border-gray-800 safe-area-bottom">
+    <nav aria-label="Mobile navigation" className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-t-2 border-[#1a3a5c]/20 dark:border-gray-800 pb-[calc(2.75rem_+_env(safe-area-inset-bottom,0px))]">
       <div className="grid grid-cols-5 h-16">
         {NAV_ITEMS.map((item) => {
           const isActive = item.href === '/'

@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     "crawler",
     "pyq",
     "currentaffairs",
+    "weightage",
+    "ai",
 ]
 
 MIDDLEWARE = [

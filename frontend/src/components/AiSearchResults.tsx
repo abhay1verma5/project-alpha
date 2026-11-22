@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Sparkles, Loader2, AlertCircle, Filter } from 'lucide-react';
 import { JobCard } from './JobCard';
-import { type Job } from '@/lib/api';
+import { type Job, postAI } from '@/lib/api';
 import { CATEGORY_LABELS, STATE_LABELS } from '@/lib/utils';
 
 interface AiSearchResponse {
@@ -34,13 +34,7 @@ export function AiSearchResults({ query, useAi }: { query: string; useAi: boolea
 
     const controller = new AbortController();
 
-    fetch('/api/ai-search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
-      signal: controller.signal,
-    })
-      .then((res) => res.json())
+    postAI<AiSearchResponse>('search', { query }, { signal: controller.signal })
       .then((json) => {
         if (json.error) {
           setError(json.error);

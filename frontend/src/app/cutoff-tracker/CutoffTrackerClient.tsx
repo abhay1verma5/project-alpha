@@ -5,6 +5,7 @@ import { TrendingUp, Search } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 import { cn } from '@/lib/utils';
 import { CUTOFF_DATA, CUTOFF_CATEGORIES, type ExamCutoff } from './cutoff-data';
+import { ApproxDataNotice } from './ApproxDataNotice';
 
 export function CutoffTrackerClient() {
   const { lang, t } = useLanguage();
@@ -47,6 +48,8 @@ export function CutoffTrackerClient() {
           </p>
         </div>
       </div>
+
+      <ApproxDataNotice />
 
       {/* Search */}
       <label className="relative block mb-3">

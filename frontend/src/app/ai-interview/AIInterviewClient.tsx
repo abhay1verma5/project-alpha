@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Mic, Loader2, RefreshCw, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 
 const ROLES = [
   { value: 'ssc_cgl', label: 'SSC CGL (Group B/C Officer)' },
@@ -43,12 +44,7 @@ export function AIInterviewClient() {
 Return ONLY the numbered questions, one per line. No answers.`;
 
     try {
-      const res = await fetch('/api/ai-career', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', text: prompt }] }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string; message?: string }>('career', { messages: [{ role: 'user', text: prompt }] });
       const reply = data.reply || data.message || '';
       const qs = reply.split('\n').filter((l: string) => l.trim().match(/^\d/)).map((l: string) => l.replace(/^\d+\.\s*/, '').trim());
       setQuestions(qs.length > 0 ? qs : ['Failed to generate questions. Try again.']);
@@ -64,12 +60,7 @@ Return ONLY the numbered questions, one per line. No answers.`;
     const prompt = `Give a brief (3-4 sentence) model answer tip for this ${roleLabel} interview question: "${question}". Be concise and practical.`;
 
     try {
-      const res = await fetch('/api/ai-career', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', text: prompt }] }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string; message?: string }>('career', { messages: [{ role: 'user', text: prompt }] });
       setRevealed(p => ({ ...p, [index]: data.reply || data.message || 'No tip available.' }));
     } catch {
       setRevealed(p => ({ ...p, [index]: 'Error loading tip.' }));

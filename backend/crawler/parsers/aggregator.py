@@ -1,7 +1,7 @@
 import logging
 import re
 import time
-from .base import BaseParser
+from .base import BaseParser, extract_organization
 
 logger = logging.getLogger(__name__)
 
@@ -596,7 +596,7 @@ class SarkariResultParser(BaseParser):
                 continue
 
         logger.info(f"[SarkariResult.com] Found {len(jobs)} entries (with deep details)")
-        return jobs
+        return fill_organization(jobs)
 
 
 class FreeJobAlertParser(BaseParser):
@@ -779,7 +779,7 @@ class FreeJobAlertParser(BaseParser):
                 continue
 
         logger.info(f"[FreeJobAlert.com] Found {len(jobs)} entries (with deep details)")
-        return jobs
+        return fill_organization(jobs)
 
 
 class EmploymentNewsParser(BaseParser):
@@ -837,7 +837,7 @@ class EmploymentNewsParser(BaseParser):
             })
 
         logger.info(f"[EmploymentNews] Found {len(jobs)} jobs")
-        return jobs
+        return fill_organization(jobs)
 
 
 class SarkariExamParser(BaseParser):
@@ -945,7 +945,7 @@ class SarkariExamParser(BaseParser):
                 continue
 
         logger.info(f"[SarkariExam.com] Found {len(jobs)} entries (with deep details)")
-        return jobs
+        return fill_organization(jobs)
 
 
 class RojgarResultParser(BaseParser):
@@ -1052,4 +1052,12 @@ class RojgarResultParser(BaseParser):
                 continue
 
         logger.info(f"[RojgarResult.com] Found {len(jobs)} entries (with deep details)")
-        return jobs
+        return fill_organization(jobs)
+
+
+def fill_organization(jobs):
+    """Fill empty organization from the title, so parsers that skip the detail page still get one."""
+    for job in jobs:
+        if not job.get("organization"):
+            job["organization"] = extract_organization(job.get("title", ""))
+    return jobs

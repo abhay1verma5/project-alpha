@@ -5,6 +5,7 @@ import { AlertCircle, BookOpen, ListChecks, BarChart3, FileQuestion } from 'luci
 import { EXAM_PATTERNS, getPattern, sectionWeightage, LEVEL_LABELS } from '@/lib/exam-patterns';
 import { getPYQMeta } from '@/lib/api';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { ApproxDataNotice } from '../../cutoff-tracker/ApproxDataNotice';
 
 interface Props {
   params: Promise<{ exam: string }>;
@@ -60,14 +61,19 @@ export default async function ExamPatternDetail({ params }: Props) {
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{p.name} — exam pattern</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          {p.body} · {LEVEL_LABELS[p.level]} · {p.frequency}{p.ageLimit ? ` · Age ${p.ageLimit}` : ''} · checked {p.checked}
+          {p.body} · {LEVEL_LABELS[p.level]} · {p.frequency}{p.ageLimit ? ` · Age ${p.ageLimit}` : ''} · last reviewed {formatReviewedDate(p.checked)}
         </p>
+        <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+          <AlertCircle className="w-3 h-3" /> Approx.
+        </span>
         {p.approx && (
           <p className="mt-2 text-xs text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
             <AlertCircle className="w-4 h-4" /> Based on the most recent notification we could find; confirm counts in the official notification for your cycle.
           </p>
         )}
       </div>
+
+      <ApproxDataNotice />
 
       <div className="flex flex-wrap gap-2 mb-8">
         {years.length > 0 && (
@@ -162,4 +168,11 @@ export default async function ExamPatternDetail({ params }: Props) {
       </section>
     </div>
   );
+}
+
+function formatReviewedDate(iso: string) {
+  const [year, month, day] = iso.split('-').map(Number);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (!year || !month || !day) return iso;
+  return `${day} ${months[month - 1]} ${year}`;
 }

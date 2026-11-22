@@ -1,133 +1,124 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BarChart3, ChevronRight, Target, FileText, Clock, HelpCircle, Award, AlertTriangle } from 'lucide-react';
-import { EXAM_DATA } from './exam-data';
+import { BarChart3, ChevronRight, FileText, Target } from 'lucide-react';
+import { fetchExamList } from './api';
+import { ExamCard } from './ExamCard';
+import { TopicFilters } from './TopicFilters';
+import { TwText } from './TwText';
+import { BASE_PATH, readFilterValues, toApiParams } from './types';
 
 export const metadata: Metadata = {
   title: 'Topic-wise Weightage Analysis — SSC CGL, UPSC, Railway, Banking (10+ Years Data)',
   description:
     'Subject-wise and topic-wise weightage analysis for SSC CGL, CHSL, UPSC Prelims, RRB NTPC, IBPS PO based on last 10+ years of papers. Know high-scoring topics and prioritize your preparation.',
-  alternates: { canonical: 'https://sarkarialert.online/topic-weightage' },
+  alternates: { canonical: `https://sarkarialert.online${BASE_PATH}` },
   openGraph: {
     title: 'Topic-wise Weightage — Government Exam Analysis',
     description: 'Data-driven analysis of which topics carry the most marks in SSC, UPSC, Railway, Banking exams.',
-    url: 'https://sarkarialert.online/topic-weightage',
+    url: `https://sarkarialert.online${BASE_PATH}`,
   },
 };
 
-export default function TopicWeightagePage() {
+type PageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function TopicWeightagePage({ searchParams }: PageProps) {
+  const values = readFilterValues(await searchParams);
+  const data = await fetchExamList(toApiParams(values));
+  const results = data?.results ?? [];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-purple-900 py-8 sm:py-12">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 border-2 border-white/30 rounded-full" />
-          <div className="absolute bottom-10 right-10 w-48 h-48 border-2 border-white/20 rounded-full" />
+        <div className="absolute inset-0 opacity-10" aria-hidden="true">
+          <div className="absolute left-10 top-10 h-32 w-32 rounded-full border-2 border-white/30" />
+          <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full border-2 border-white/20" />
         </div>
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-indigo-100 text-sm font-medium mb-4">
-            <BarChart3 className="w-4 h-4" />
-            Data-driven Analysis
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-indigo-100 backdrop-blur-sm">
+            <BarChart3 className="h-4 w-4" aria-hidden="true" />
+            <TwText id="tw.badge" />
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3">
-            Topic-wise Weightage
+          <h1 className="mb-3 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+            <TwText id="tw.title" />
           </h1>
-          <p className="text-base sm:text-lg text-indigo-100 max-w-2xl mx-auto">
-            Click on any exam to see detailed chapter-wise weightage. Based on 10+ years of papers.
+          <p className="mx-auto max-w-2xl text-base text-indigo-100 sm:text-lg">
+            <TwText id="tw.subtitle" />
           </p>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16 md:mb-0">
-        {/* Exam Cards Grid */}
-        <div className="grid sm:grid-cols-2 gap-4">
-          {EXAM_DATA.map((exam) => {
-            const totalSubjects = exam.subjects.length;
-            const totalTopics = exam.subjects.reduce((sum, s) => sum + s.topics.length, 0);
-            const highPriorityCount = exam.subjects.reduce(
-              (sum, s) => sum + s.topics.filter((t) => t.trend === 'high').length,
-              0
-            );
+      <div className="mx-auto max-w-5xl px-4 py-8 mb-16 sm:px-6 md:mb-0 lg:px-8">
+        <TopicFilters filters={data?.filters ?? null} values={values} />
 
-            return (
-              <Link
-                key={exam.slug}
-                href={`/topic-weightage/${exam.slug}`}
-                className={`group bg-white dark:bg-gray-900 rounded-2xl border-2 ${exam.borderColor} border-l-4 ${exam.color} p-5 sm:p-6 hover:shadow-lg transition-all active:scale-[0.98]`}
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h2 className="text-xl font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
-                      {exam.exam}
-                    </h2>
-                    <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-0.5">{exam.paper}</p>
-                  </div>
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${exam.iconBg} flex items-center justify-center shadow-md`}>
-                    <BarChart3 className="w-5 h-5 text-white" />
-                  </div>
-                </div>
+        {data ? (
+          <>
+            <p className="mt-6 text-sm font-semibold text-gray-600 dark:text-gray-400" aria-live="polite">
+              <TwText id="tw.count" vars={{ n: data.count }} />
+            </p>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm">
-                    <HelpCircle className="w-4 h-4 text-blue-500" />
-                    <span className="text-gray-700 dark:text-gray-300">
-                      <span className="font-bold">{exam.totalQuestions}</span> Qs / <span className="font-bold">{exam.totalMarks}</span> Marks
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock className="w-4 h-4 text-amber-500" />
-                    <span className="font-semibold text-gray-700 dark:text-gray-300">{exam.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Award className="w-4 h-4 text-green-500" />
-                    <span className="text-gray-700 dark:text-gray-300">
-                      <span className="font-bold">{totalSubjects}</span> Subjects, <span className="font-bold">{totalTopics}</span> Topics
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <AlertTriangle className="w-4 h-4 text-red-500" />
-                    <span className="font-semibold text-red-600 dark:text-red-400 text-xs">Neg: {exam.negativeMarking}</span>
-                  </div>
-                </div>
-
-                {/* High priority topics preview */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
-                  <span className="text-xs font-bold text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2.5 py-1 rounded-lg">
-                    {highPriorityCount} High Priority Topics
-                  </span>
-                  <span className="flex items-center gap-1 text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:gap-2 transition-all">
-                    View Weightage <ChevronRight className="w-4 h-4" />
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+            {results.length === 0 ? (
+              <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 text-center dark:border-gray-800 dark:bg-gray-900">
+                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                  <TwText id="tw.empty.title" />
+                </p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  <TwText id="tw.empty.body" />
+                </p>
+                <Link
+                  href={BASE_PATH}
+                  scroll={false}
+                  className="mt-4 inline-flex min-h-[44px] items-center rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white hover:bg-indigo-700"
+                >
+                  <TwText id="tw.reset" />
+                </Link>
+              </div>
+            ) : (
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {results.map((exam) => (
+                  <ExamCard key={exam.slug} exam={exam} />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6 text-sm font-semibold text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+            <TwText id="tw.error" />
+          </div>
+        )}
 
         {/* CTA */}
-        <div className="mt-10 grid sm:grid-cols-2 gap-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <Link
             href="/pyq"
-            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
+            className="group rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
-            <FileText className="w-8 h-8 text-blue-600 mb-3" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-700 transition-colors">Previous Year Papers</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Download year-wise PYQ PDFs from official sources</p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 mt-3">
-              Download Papers <ChevronRight className="w-4 h-4" />
+            <FileText className="mb-3 h-8 w-8 text-blue-600" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-700 dark:text-white">
+              <TwText id="tw.cta.pyq" />
+            </h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <TwText id="tw.cta.pyqDesc" />
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-600">
+              <TwText id="tw.cta.downloadPapers" /> <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </span>
           </Link>
           <Link
             href="/practice?type=mock"
-            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow group"
+            className="group rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
-            <Target className="w-8 h-8 text-green-600 mb-3" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 transition-colors">Free Mock Tests</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Practice with exam-pattern mock tests for all exams</p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-600 mt-3">
-              Start Practice <ChevronRight className="w-4 h-4" />
+            <Target className="mb-3 h-8 w-8 text-green-600" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-green-700 dark:text-white">
+              <TwText id="tw.cta.mock" />
+            </h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <TwText id="tw.cta.mockDesc" />
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-green-600">
+              <TwText id="tw.cta.startPractice" /> <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </span>
           </Link>
         </div>
@@ -141,8 +132,9 @@ export default function TopicWeightagePage() {
             '@context': 'https://schema.org',
             '@type': 'Article',
             headline: 'Topic-wise Weightage Analysis for Government Exams',
-            description: 'Subject-wise and topic-wise question distribution for SSC CGL, UPSC, RRB NTPC, IBPS PO based on 10+ years of data.',
-            url: 'https://sarkarialert.online/topic-weightage',
+            description:
+              'Subject-wise and topic-wise question distribution for SSC CGL, UPSC, RRB NTPC, IBPS PO based on 10+ years of data.',
+            url: `https://sarkarialert.online${BASE_PATH}`,
           }),
         }}
       />

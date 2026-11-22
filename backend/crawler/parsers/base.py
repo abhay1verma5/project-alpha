@@ -114,3 +114,116 @@ class BaseParser(ABC):
             except ValueError:
                 continue
         return None
+
+
+# Recruiting bodies named in notice titles, mapped to the short name we store.
+# Matched as whole words; when several match, the one earliest in the title wins.
+_ORG_ALIASES = [
+    (r"Railway Recruitment Boards?|RRB", "RRB"),
+    (r"Staff Selection Commission|SSC", "SSC"),
+    (r"Union Public Service Commission|UPSC", "UPSC"),
+    (r"Institute of Banking Personnel Selection|IBPS", "IBPS"),
+    (r"UPSSSC|Uttar Pradesh Subordinate Service Selection Commission", "UPSSSC"),
+    (r"UPPSC|UP PSC", "UPPSC"),
+    (r"BPSC|Bihar Public Service Commission", "BPSC"),
+    (r"BSSC|Bihar Staff Selection Commission", "BSSC"),
+    (r"RPSC|Rajasthan Public Service Commission", "RPSC"),
+    (r"RSMSSB|RSSB|Rajasthan Staff Selection Board", "RSMSSB"),
+    (r"MPPSC|MP PSC", "MPPSC"),
+    (r"MPESB|Madhya Pradesh Employees Selection Board", "MPESB"),
+    (r"HSSC|Haryana Staff Selection Commission", "HSSC"),
+    (r"HPSC|Haryana Public Service Commission", "HPSC"),
+    (r"DSSSB|Delhi Subordinate Services Selection Board", "DSSSB"),
+    (r"NTA|National Testing Agency", "NTA"),
+    (r"TNPSC|Tamil Nadu Public Service Commission", "TNPSC"),
+    (r"KPSC|Karnataka Public Service Commission", "KPSC"),
+    (r"APPSC|Andhra Pradesh Public Service Commission", "APPSC"),
+    (r"TSPSC|Telangana State Public Service Commission", "TSPSC"),
+    (r"WBPSC|West Bengal PSC", "WBPSC"),
+    (r"JSSC|Jharkhand Staff Selection Commission", "JSSC"),
+    (r"JPSC|Jharkhand Public Service Commission", "JPSC"),
+    (r"OSSSC|Odisha Sub Ordinate Staff Selection Commission", "OSSSC"),
+    (r"OPSC|Odisha Public Service Commission", "OPSC"),
+    (r"CSBC|Central Selection Board of Constable", "CSBC"),
+    (r"SBI|State Bank of India", "SBI"),
+    (r"RBI|Reserve Bank of India", "RBI"),
+    (r"Punjab National Bank|PNB", "PNB"),
+    (r"Bank of Baroda", "Bank of Baroda"),
+    (r"Canara Bank", "Canara Bank"),
+    (r"UCO Bank", "UCO Bank"),
+    (r"Coal India Limited", "Coal India Limited"),
+    (r"Bharat Electronics Limited|BEL", "BEL"),
+    (r"BHEL|Bharat Heavy Electricals", "BHEL"),
+    (r"NTPC", "NTPC"),
+    (r"ONGC|Oil and Natural Gas Corporation", "ONGC"),
+    (r"IOCL|Indian Oil Corporation", "IOCL"),
+    (r"GAIL", "GAIL"),
+    (r"SAIL|Steel Authority of India", "SAIL"),
+    (r"NHPC", "NHPC"),
+    (r"NLC|Neyveli Lignite", "NLC"),
+    (r"ISRO", "ISRO"),
+    (r"DRDO", "DRDO"),
+    (r"AIIMS", "AIIMS"),
+    (r"ESIC|Employees State Insurance Corporation", "ESIC"),
+    (r"FCI|Food Corporation of India", "FCI"),
+    (r"AAI|Airports Authority of India", "AAI"),
+    (r"India Post|Indian Postal", "India Post"),
+    (r"KVS|Kendriya Vidyalaya Sangathan", "KVS"),
+    (r"NVS|Navodaya Vidyalaya Samiti", "NVS"),
+    (r"CBSE|Central Board of Secondary Education", "CBSE"),
+    (r"CISF|Central Industrial Security Force", "CISF"),
+    (r"CRPF|Central Reserve Police Force", "CRPF"),
+    (r"BSF|Border Security Force", "BSF"),
+    (r"ITBP|Indo Tibetan Border Police", "ITBP"),
+    (r"Sashastra Seema Bal|SSB", "SSB"),
+    (r"Assam Rifles", "Assam Rifles"),
+    (r"Indian Army", "Indian Army"),
+    (r"Indian Navy", "Indian Navy"),
+    (r"Indian Air Force|IAF", "Indian Air Force"),
+    (r"Indian Coast Guard", "Indian Coast Guard"),
+    (r"Delhi Police", "Delhi Police"),
+    (r"UP Police|Uttar Pradesh Police", "UP Police"),
+    (r"Bihar Police", "Bihar Police"),
+    (r"Rajasthan Police", "Rajasthan Police"),
+    (r"MP Police|Madhya Pradesh Police", "MP Police"),
+    (r"Haryana Police", "Haryana Police"),
+    (r"Punjab Police", "Punjab Police"),
+    (r"Maharashtra Police", "Maharashtra Police"),
+]
+_ORG_ALIAS_RES = [(re.compile(rf"\b(?:{pattern})\b", re.I), name) for pattern, name in _ORG_ALIASES]
+
+# Text before " - " counts as the organization only when it is not a job title or notice wording.
+_ORG_PREFIX_NOISE_RE = re.compile(
+    r"recruit|notification|notice|vacanc|\bposts?\b|admit|result|answer key|exam|apply|online|"
+    r"form|syllabus|advt|advertis|engineer|officer|constable|clerk|teacher|lecturer|manager|"
+    r"assistant|technician|trainee|analyst|inspector|graduate|supervisor|operator|driver|nurse|"
+    r"junior|senior|deputy|\d",
+    re.I,
+)
+
+
+def extract_organization(title):
+    """Return the recruiting body named in a notice title, or "" when none is clear.
+
+    Known bodies win (short form, e.g. "RRB", "UPSSSC", "Coal India Limited"). Otherwise the
+    text before " - " is used when it reads like an organization name rather than a job title.
+    """
+    title = re.sub(r"\s+", " ", title or "").strip()
+    if not title:
+        return ""
+
+    best_pos, best_name = None, ""
+    for regex, name in _ORG_ALIAS_RES:
+        match = regex.search(title)
+        if match and (best_pos is None or match.start() < best_pos):
+            best_pos, best_name = match.start(), name
+    if best_name:
+        return best_name
+
+    for separator in (" - ", " – ", " | "):
+        if separator in title:
+            prefix = title.split(separator, 1)[0].strip(" -:,|")
+            if 3 <= len(prefix) <= 60 and not _ORG_PREFIX_NOISE_RE.search(prefix):
+                return prefix
+            return ""
+    return ""

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { AGE_LIMIT_DATA } from './age-limit-data';
 import { AgeLimitIndex } from './AgeLimitIndex';
+import { ApproxDataNotice } from '../cutoff-tracker/ApproxDataNotice';
 
 export const metadata: Metadata = {
   title: 'Age Limit for Government Exams 2026-27 — SSC, Railway, Banking, UPSC, Police, Defence',
@@ -31,7 +32,7 @@ const ageLimitFaqData = [
   },
   {
     question: 'What is the age cutoff date for SSC exams?',
-    answer: 'For SSC exams, the age cutoff date is usually 01 January or 01 August of the notification year. For example, SSC CGL 2026 has cutoff date 01-01-2027. Your age on this specific date determines eligibility, not the exam date or application date.',
+    answer: 'For SSC exams, the age cutoff date is often 01 January or 01 August of the notification year, but the exact date is set in each notification. Check the specific notification for the cutoff date of the exam you are applying for. Your age on this specific date determines eligibility, not the exam date or application date.',
   },
   {
     question: 'Is there any age relaxation for female candidates?',
@@ -75,6 +76,7 @@ export default function AgeLimitPage() {
       <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-6">
         {AGE_LIMIT_DATA.length} exams with category-wise age limits, relaxation details, and attempt limits.
       </p>
+      <ApproxDataNotice />
       <AgeLimitIndex />
 
       <section className="mt-10 border-t border-gray-200 dark:border-gray-800 pt-8">

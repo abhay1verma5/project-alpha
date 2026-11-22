@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 const cutoffFaqData = [
   {
-    question: 'What are the cut-off marks for SSC CGL 2026?',
-    answer: 'SSC CGL Tier-1 2026 cut-off marks are approximately: General 149, EWS 144, OBC 137, SC 126, ST 116 out of 200.',
+    question: 'What were the approximate cut-off marks for SSC CGL 2026?',
+    answer: 'As per our approximate past data, SSC CGL Tier-1 cut-off marks for 2026 were around General 149, EWS 144, OBC 137, SC 126 and ST 116 out of 200. These figures are approximate; check the official result for exact cut-offs.',
   },
   {
     question: 'How are government exam cut-off marks decided?',

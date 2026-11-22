@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SALARY_DATA } from './salary-data';
 import { SalaryIndex } from './SalaryIndex';
+import { ApproxDataNotice } from '../cutoff-tracker/ApproxDataNotice';
 
 export const metadata: Metadata = {
   title: 'Government Job Salary Details 2026-27 — In-hand Salary, Pay Level, Allowances',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 const salaryFaqData = [
   {
     question: 'What is the salary of SSC CGL posts?',
-    answer: 'SSC CGL posts like Tax Assistant and Auditor start at Pay Level 4 (₹25,500 basic). With DA (56%), HRA, and other allowances, the in-hand salary ranges from ₹35,000 to ₹45,000 per month depending on city. Inspector-level posts start at Pay Level 7 (₹44,900 basic) with in-hand ₹60,000-₹75,000.',
+    answer: 'SSC CGL posts like Tax Assistant and Auditor start at Pay Level 4 (₹25,500 basic). With DA (assumed 56% in our calculations), HRA, and other allowances, the in-hand salary ranges from ₹35,000 to ₹45,000 per month depending on city. Inspector-level posts start at Pay Level 7 (₹44,900 basic) with in-hand ₹60,000-₹75,000.',
   },
   {
     question: 'Sarkari naukri mein kitni salary milti hai?',
@@ -19,7 +20,7 @@ const salaryFaqData = [
   },
   {
     question: 'What is DA (Dearness Allowance) and how does it affect salary?',
-    answer: 'DA (Dearness Allowance) is a cost-of-living adjustment paid to government employees. As of 2026, DA is 56% of basic pay. It increases by 3-4% every 6 months. DA directly increases your gross salary — for ₹25,500 basic, DA alone adds ₹14,280.',
+    answer: 'DA (Dearness Allowance) is a cost-of-living adjustment paid to government employees. DA is revised twice a year by the government, and the rate in force applies. The calculations on this page use 56% as an assumed DA rate. DA directly increases your gross salary — for ₹25,500 basic, DA alone adds ₹14,280.',
   },
   {
     question: 'How does HRA vary by city in government jobs?',
@@ -35,7 +36,7 @@ const salaryFaqData = [
   },
   {
     question: 'Do government employees get 7th Pay Commission benefits?',
-    answer: 'Yes, all central government employees get 7th CPC benefits with a minimum pay of ₹18,000 and fitment factor of 2.57x. State government employees follow their own pay commissions. The 8th Pay Commission is expected around 2026, which may further increase salaries.',
+    answer: 'Yes, all central government employees get 7th CPC benefits with a minimum pay of ₹18,000 and fitment factor of 2.57x. State government employees follow their own pay commissions. A future 8th Pay Commission may be constituted, and its recommendations, if implemented, could change salary structures. Check official government announcements for the current status.',
   },
   {
     question: 'What additional perks do government employees receive?',
@@ -75,6 +76,7 @@ export default function SalaryPage() {
       <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-6">
         {SALARY_DATA.length} government posts with detailed in-hand salary breakdowns, city-wise comparison, and promotion paths.
       </p>
+      <ApproxDataNotice />
       <SalaryIndex />
 
       <section className="mt-10 border-t border-gray-200 dark:border-gray-800 pt-8">

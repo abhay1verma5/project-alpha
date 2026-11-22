@@ -135,11 +135,43 @@ export async function getNews(params?: Record<string, string>): Promise<Paginate
 }
 
 export async function searchJobs(query: string): Promise<{ results: Job[] }> {
+  if (!query || query.length < 2) return { results: [] };
   const params = new URLSearchParams({ q: query });
-  // Proxy through Next.js API route to avoid CORS issues
-  const res = await fetch(`/api/search?${params.toString()}`);
+  const res = await fetch(`${API_BASE}/search/?${params.toString()}`);
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
+}
+
+// ── AI API (Django /ai/<name>/) ──
+
+export const AI_UNAVAILABLE_EN = 'AI is unavailable right now';
+export const AI_UNAVAILABLE_HI = 'AI अभी उपलब्ध नहीं है';
+
+export type AiEndpoint = 'career' | 'tool' | 'search' | 'quiz' | 'eligibility';
+
+/**
+ * POST to {API_BASE}/ai/<name>/. Success bodies are returned unchanged.
+ * HTTP 503 (AI unavailable) resolves to `{ error }` carrying both the English and Hindi
+ * text, so callers show the message instead of a made-up answer. Other error bodies
+ * ({ error } from 400/429/500) are returned as-is; a non-JSON failure throws.
+ */
+export async function postAI<T extends object = Record<string, unknown>>(
+  name: AiEndpoint,
+  body: unknown,
+  init?: { signal?: AbortSignal },
+): Promise<T & { error?: string }> {
+  const res = await fetch(`${API_BASE}/ai/${name}/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: init?.signal,
+  });
+  if (res.status === 503) {
+    return { error: `${AI_UNAVAILABLE_EN} — ${AI_UNAVAILABLE_HI}` } as T & { error?: string };
+  }
+  const data = await res.json();
+  if (!res.ok && !data?.error) throw new Error(`API error: ${res.status}`);
+  return data;
 }
 
 // ── PYQ API ──

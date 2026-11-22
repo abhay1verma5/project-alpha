@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { BookOpen, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { postAI } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 const EXAMS = ['SSC CGL', 'SSC CHSL', 'UPSC CSE Prelims', 'IBPS PO', 'RRB NTPC', 'CTET', 'NDA', 'CDS', 'SSC MTS', 'UGC NET'];
@@ -18,12 +19,7 @@ export function AISyllabusClient() {
     if (!exam) return;
     setLoading(true); setResult('');
     try {
-      const res = await fetch('/api/ai-tool', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool: 'syllabus', prompt: `Exam: ${exam}`, lang }),
-      });
-      const data = await res.json();
+      const data = await postAI<{ reply?: string }>('tool', { tool: 'syllabus', prompt: `Exam: ${exam}`, lang });
       setResult(data.reply || data.error || 'No response received.');
     } catch { setResult('Error fetching analysis. Please try again.'); }
     setLoading(false);

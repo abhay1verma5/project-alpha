@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { EXAM_PATTERNS } from '@/lib/exam-patterns';
 import { ExamPatternIndex } from './ExamPatternIndex';
+import { ApproxDataNotice } from '../cutoff-tracker/ApproxDataNotice';
 
 export const metadata: Metadata = {
   title: 'Exam Pattern & Weightage 2026-27 — SSC, UPSC, Railway, Bank, Police, TET, JEE, NEET, GATE',
@@ -76,6 +77,7 @@ export default function ExamPatternPage() {
         {EXAM_PATTERNS.length} exams. Section weightage is computed from the official marks split. Entries marked
         "re-check" follow the latest notification we could find — confirm before your exam cycle.
       </p>
+      <ApproxDataNotice />
       <ExamPatternIndex patterns={EXAM_PATTERNS} />
 
       <section className="mt-10 border-t border-gray-200 dark:border-gray-800 pt-8">

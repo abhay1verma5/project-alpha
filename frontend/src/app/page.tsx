@@ -75,12 +75,13 @@ async function LatestJobsSection() {
   return (
     <>
       {(jobs.results?.length ?? 0) > 0 && (
-        <div className="bg-gradient-to-b from-[#1a3a5c]/5 to-white dark:from-blue-950/10 dark:to-gray-950 py-8 sm:py-10">
+        <div className="order-1 md:order-none bg-gradient-to-b from-[#1a3a5c]/5 to-white dark:from-blue-950/10 dark:to-gray-950 py-8 sm:py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <HorizontalScroller title="Latest Job Notifications" subtitle="Newest government vacancies" iconName="Briefcase" iconBg="bg-gradient-to-br from-[#1a3a5c] to-[#0d2137] shadow-blue-900/20" jobs={jobs.results!.slice(0, 10)} viewAllHref="/jobs" viewAllColor="text-[#1a3a5c] dark:text-blue-400" />
           </div>
         </div>
       )}
+      <div className="order-3 md:order-none">
       {(results.results?.length ?? 0) > 0 && (
         <div className="bg-gradient-to-b from-green-50/50 to-white dark:from-green-950/10 dark:to-gray-950 py-8 sm:py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -116,14 +117,15 @@ async function LatestJobsSection() {
           </div>
         </div>
       )}
+      </div>
     </>
   );
 }
 
 /* ---------- Loading skeleton ---------- */
-function SectionSkeleton() {
+function SectionSkeleton({ className = '' }: { className?: string }) {
   return (
-    <div className="py-8 sm:py-10">
+    <div className={`py-8 sm:py-10 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4 animate-pulse" />
         <div className="flex gap-4 overflow-hidden">
@@ -178,8 +180,9 @@ export default function HomePage() {
     ],
   };
 
+  // Mobile order: hero search -> Latest Job Notifications -> Quick Filters -> everything else. md:order-none keeps desktop unchanged.
   return (
-    <div>
+    <div className="flex flex-col">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       {/* Instant — no API calls */}
@@ -191,27 +194,31 @@ export default function HomePage() {
       </Suspense>
 
       {/* Apply Tracker Banner — static */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6">
+      <div className="order-3 md:order-none max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 sm:mt-6">
         <ApplyTrackerBanner />
       </div>
 
       {/* Quick Filters — static */}
-      <div className="mt-8 sm:mt-12 bg-gradient-to-b from-white to-blue-50/50 dark:from-gray-950 dark:to-blue-950/10 py-8 sm:py-12">
+      <div className="order-2 md:order-none mt-8 sm:mt-12 bg-gradient-to-b from-white to-blue-50/50 dark:from-gray-950 dark:to-blue-950/10 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <QuickFilters />
         </div>
       </div>
 
       {/* Featured — streams in */}
-      <Suspense fallback={<SectionSkeleton />}>
-        <FeaturedSection />
-      </Suspense>
+      <div className="order-3 md:order-none">
+        <Suspense fallback={<SectionSkeleton />}>
+          <FeaturedSection />
+        </Suspense>
+      </div>
 
       {/* All job sections — streams in together */}
-      <Suspense fallback={<><SectionSkeleton /><SectionSkeleton /></>}>
+      <Suspense fallback={<><SectionSkeleton className="order-1 md:order-none" /><SectionSkeleton className="order-3 md:order-none" /></>}>
         <LatestJobsSection />
       </Suspense>
 
+      {/* Static sections below — grouped so they follow Quick Filters on mobile */}
+      <div className="order-3 md:order-none">
       {/* Browse by Qualification — static, renders instantly */}
       <div className="bg-gradient-to-b from-white to-purple-50/30 dark:from-gray-950 dark:to-purple-950/10 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -356,6 +363,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

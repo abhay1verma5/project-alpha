@@ -6,6 +6,7 @@ import { useLanguage } from '@/components/LanguageProvider';
 import { tr } from '@/lib/translations';
 import { EXAM_OPTIONS, type QuizQuestion } from '@/lib/static-quizzes';
 import { getSubjects } from '@/lib/quiz-data';
+import { postAI } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 type Phase = 'setup' | 'loading' | 'playing' | 'results';
@@ -70,12 +71,9 @@ export function QuizClient() {
     if (!exam || !subject) return;
     setPhase('loading'); setError('');
     try {
-      const res = await fetch('/api/ai-quiz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ exam, topic: topicForApi, lang, count: qCount }),
+      const data = await postAI<{ questions: QuizQuestion[]; source?: string }>('quiz', {
+        exam, topic: topicForApi, lang, count: qCount,
       });
-      const data = await res.json();
       if (data.error) { setError(data.error); setPhase('setup'); return; }
       setQuestions(data.questions);
       setAnswers(new Array(data.questions.length).fill(null));

@@ -1,12 +1,13 @@
 from django.db import models
 from django.db.models import Count, Sum
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .filters import JobFilter
+from .filters import JobFilter, search_jobs_queryset
 from .models import ContentType, Job
 from .serializers import JobDetailSerializer, JobListSerializer
 
@@ -21,7 +22,7 @@ CACHE_STATS = 60 * 10
 class JobListView(generics.ListAPIView):
     serializer_class = JobListSerializer
     filterset_class = JobFilter
-    search_fields = ["title", "title_hi", "organization", "qualification", "description"]
+    # ?search= is handled in get_queryset with the same word logic as /search/
     ordering_fields = ["posted_date", "last_date", "vacancies", "created_at"]
     ordering = ["-posted_date"]
 
@@ -31,6 +32,9 @@ class JobListView(generics.ListAPIView):
         # let the filter handle it when the user explicitly picks a type.
         if not self.request.query_params.get("content_type"):
             qs = qs.filter(content_type=ContentType.JOB)
+        term = self.request.query_params.get("search", "").strip()
+        if term:
+            qs, _ = search_jobs_queryset(qs, term)
         return qs
 
 
@@ -110,9 +114,20 @@ class FeaturedJobsView(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        return Job.objects.filter(
+        featured = Job.objects.filter(
             is_active=True, is_featured=True, content_type=ContentType.JOB
-        )[:10]
+        )
+        if featured.exists():
+            return featured[:10]
+        # Nothing hand-picked: newest open vacancies with a known last date first,
+        # topped up with the newest active vacancies (most crawled rows have no
+        # last_date) so the section always has 6 cards.
+        base = Job.objects.filter(is_active=True, content_type=ContentType.JOB)
+        dated = list(base.filter(last_date__gte=timezone.localdate()).order_by("-posted_date", "-id")[:6])
+        if len(dated) < 6:
+            seen = [j.id for j in dated]
+            dated += list(base.exclude(id__in=seen).order_by("-posted_date", "-id")[: 6 - len(dated)])
+        return dated
 
 
 @method_decorator(cache_page(CACHE_LIST), name="dispatch")
@@ -245,7 +260,8 @@ def exam_timeline_view(request):
         for stage in STAGE_ORDER
         if stage in grouped
     ]
-    return Response({"query": query, "total": len(rows), "stages": stages})
+    total = sum(len(stage["items"]) for stage in stages)
+    return Response({"query": query, "total": total, "stages": stages})
 
 
 TELEGRAM_HELP = (
@@ -359,32 +375,39 @@ def health_view(request):
 @api_view(["GET"])
 def search_view(request):
     query = request.query_params.get("q", "").strip()
-    if not query or len(query) < 2:
-        return Response({"results": []})
+    page = _positive_int(request.query_params.get("page"), default=1)
+    page_size = min(_positive_int(request.query_params.get("page_size"), default=20), 50)
+    if len(query) < 2:
+        return Response({"count": 0, "next": None, "previous": None, "results": []})
 
-    from django.db.models import Q
+    base_qs = Job.objects.filter(is_active=True)
+    qs, count = search_jobs_queryset(base_qs, query)
+    offset = (page - 1) * page_size
+    serializer = JobListSerializer(qs[offset : offset + page_size], many=True)
+    return Response(
+        {
+            "count": count,
+            "next": (
+                _search_page_url(request, page + 1, page_size)
+                if offset + page_size < count
+                else None
+            ),
+            "previous": _search_page_url(request, page - 1, page_size) if page > 1 else None,
+            "results": serializer.data,
+        }
+    )
 
-    # Remove common stop words, then AND-match remaining words
-    STOP_WORDS = {
-        "job", "jobs", "naukri", "vacancy", "vacancies", "bharti",
-        "recruitment", "sarkari", "government", "govt", "latest",
-        "new", "online", "form", "apply", "the", "for", "in", "of",
-        "and", "a", "an", "to", "is", "are", "was", "with",
-    }
-    words = [w for w in query.split() if w.lower() not in STOP_WORDS]
-    if not words:
-        words = query.split()[:2]  # fallback: use original words
 
-    qs = Job.objects.filter(is_active=True)
-    for word in words:
-        qs = qs.filter(
-            Q(title__icontains=word)
-            | Q(title_hi__icontains=word)
-            | Q(organization__icontains=word)
-            | Q(qualification__icontains=word)
-            | Q(description__icontains=word)
-        )
+def _positive_int(raw_value, default):
+    try:
+        value = int(raw_value)
+    except (TypeError, ValueError):
+        return default
+    return value if value > 0 else default
 
-    results = qs.order_by("-posted_date")[:20]
-    serializer = JobListSerializer(results, many=True)
-    return Response({"results": serializer.data})
+
+def _search_page_url(request, page, page_size):
+    params = request.query_params.copy()
+    params["page"] = str(page)
+    params["page_size"] = str(page_size)
+    return request.build_absolute_uri(f"{request.path}?{params.urlencode()}")
