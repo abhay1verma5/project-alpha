@@ -61,6 +61,12 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_DEBUG: 'False'
 
+      - name: Deactivate dead listings
+        if: ${{ !cancelled() }}
+        run: timeout 300 python manage.py deactivate_dead_jobs 2>&1
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
       - name: Re-categorize jobs
         run: timeout 120 python manage.py recategorize_jobs --all 2>&1 || echo "[DONE]"
         env:

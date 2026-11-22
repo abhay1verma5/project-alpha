@@ -9,6 +9,7 @@ import { BackToTop } from '@/components/BackToTop';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { SwipeNav } from '@/components/SwipeNav';
 import { ServiceWorkerRegistration } from '@/components/ServiceWorker';
+import { Analytics } from '@/components/Analytics';
 import './globals.css';
 import './print.css';
 
@@ -165,6 +166,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </LanguageProvider>
         </ThemeProvider>
         <ServiceWorkerRegistration />
+        <Analytics />
       </body>
     </html>
   );
