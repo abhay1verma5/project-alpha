@@ -11,9 +11,9 @@ from crawler.parsers.aggregator import guess_category, guess_state, guess_qualif
 
 # Patterns to detect content_type from title
 CONTENT_TYPE_PATTERNS = [
-    (re.compile(r'\b(result|merit\s*list|cut\s*off|score\s*card|final\s*result|marks)\b', re.I), 'result'),
-    (re.compile(r'\b(admit\s*card|hall\s*ticket|call\s*letter|e[\-\s]?admit)\b', re.I), 'admit_card'),
-    (re.compile(r'\b(answer\s*key|response\s*sheet|objection|key\s*paper|key\s*challenge|omr\s*(sheet|images?))\b', re.I), 'answer_key'),
+    (re.compile(r'\b(results?|merit\s*lists?|cut\s*offs?|score\s*cards?|final\s*results?|marks)\b', re.I), 'result'),
+    (re.compile(r'\b(admit\s*cards?|hall\s*tickets?|call\s*letters?|e[\-\s]?admit)\b', re.I), 'admit_card'),
+    (re.compile(r'\b(answer\s*keys?|response\s*sheets?|objections?|key\s*papers?|key\s*challenge|omr\s*(sheets?|images?))\b', re.I), 'answer_key'),
     (re.compile(r'\b(admission|counselling|counseling|seat\s*allotment)\b', re.I), 'admission'),
     (re.compile(r'\b(syllabus|exam\s*pattern|exam\s*scheme|scheme\s*(and|&)?\s*pattern|pattern\s+of\s+(the\s+)?exam(ination)?|scheme\s+of\s+(the\s+)?exam(ination)?)\b', re.I), 'syllabus'),
 ]

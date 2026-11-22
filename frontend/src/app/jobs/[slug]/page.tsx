@@ -273,6 +273,36 @@ export default async function JobDetailPage({ params }: Props) {
           </div>
         </div>
 
+        {/* Key facts — the four things people check first, before any scrolling */}
+        {(job.last_date || job.vacancies || job.qualification || job.age_limit) && (
+          <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
+            {job.last_date && (
+              <div className="bg-white dark:bg-gray-900 px-4 py-3 min-w-0">
+                <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Last date / अंतिम तिथि</p>
+                <p className={`text-sm font-bold ${job.is_expired ? 'text-red-500 line-through' : 'text-gray-900 dark:text-white'}`}>{formatDate(job.last_date)}</p>
+              </div>
+            )}
+            {!!job.vacancies && (
+              <div className="bg-white dark:bg-gray-900 px-4 py-3 min-w-0">
+                <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Posts / पद</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white">{formatNumber(job.vacancies)}</p>
+              </div>
+            )}
+            {job.qualification && (
+              <div className="bg-white dark:bg-gray-900 px-4 py-3 min-w-0 col-span-2">
+                <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Qualification / योग्यता</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2">{job.qualification}</p>
+              </div>
+            )}
+            {job.age_limit && (
+              <div className="bg-white dark:bg-gray-900 px-4 py-3 min-w-0 col-span-2">
+                <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">Age limit / आयु सीमा</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2">{job.age_limit}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Action buttons - full width on mobile */}
         <div className="px-4 sm:px-8 py-4 sm:py-5 border-b border-gray-100 dark:border-gray-800 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {job.apply_link && (
@@ -456,7 +486,7 @@ export default async function JobDetailPage({ params }: Props) {
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Globe className="w-5 h-5 text-emerald-500" /> Official Resources & Preparation
           </h2>
-          <div className="grid gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {resources.map((r) => (
               <a
                 key={r.url}

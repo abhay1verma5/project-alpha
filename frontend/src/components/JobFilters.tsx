@@ -107,13 +107,13 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
         ))}
       </div>
 
-      {/* Dropdowns row - always visible */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Dropdowns row - always visible; 2 per row on phones to keep jobs above the fold */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
         {/* State */}
         <select
           value={activeState}
           onChange={(e) => applyFilter('state', e.target.value)}
-          className="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
+          className="w-full min-w-0 px-3 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
         >
           <option value="">All States</option>
           {Object.entries(STATE_LABELS).map(([key, label]) => (
@@ -125,7 +125,7 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
         <select
           value={activeQualification}
           onChange={(e) => applyFilter('qualification', e.target.value)}
-          className="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
+          className="w-full min-w-0 px-3 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
         >
           <option value="">All Qualifications</option>
           {QUALIFICATION_GROUPS.map((group) => (
@@ -142,7 +142,7 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
           <select
             value={activeContentType}
             onChange={(e) => applyFilter('content_type', e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
+            className="w-full min-w-0 px-3 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none"
           >
             {CONTENT_TYPES.map((ct) => (
               <option key={ct.value} value={ct.value}>{ct.label}</option>
@@ -150,16 +150,6 @@ export function JobFilters({ basePath = '/jobs', hideContentType = false }: JobF
           </select>
         )}
 
-        {/* Sort (mobile - duplicate for easy access) */}
-        <select
-          value={activeSort}
-          onChange={(e) => applyFilter('ordering', e.target.value)}
-          className="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-white border-2 border-transparent focus:border-blue-500 focus:outline-none sm:hidden lg:block"
-        >
-          {SORT_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
       </div>
 
       {/* Active filter tags */}

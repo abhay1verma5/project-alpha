@@ -99,7 +99,7 @@ export function JobCard({ job }: { job: Job; index?: number }) {
   const feeStr = formatFee(job.fee);
 
   return (
-    <Link href={`/jobs/${job.slug}`} className="block group active:scale-[0.995] transition-transform">
+    <Link href={`/jobs/${job.slug}`} className="block min-w-0 max-w-full group active:scale-[0.995] transition-transform">
       <div className={cn(
         "bg-white dark:bg-gray-900 rounded-2xl border-2 p-4 sm:p-5 transition-colors relative",
         job.is_expired
@@ -187,16 +187,17 @@ export function JobCard({ job }: { job: Job; index?: number }) {
           </p>
           <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm">
             {/* Last Date */}
-            <span className={cn('flex items-center gap-1.5 font-semibold',
-              job.is_expired ? 'text-red-500 line-through' :
-              job.last_date ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'
+            {job.last_date && (
+            <span className={cn('flex items-center gap-1.5 font-semibold min-w-0',
+              job.is_expired ? 'text-red-500 line-through' : 'text-gray-800 dark:text-gray-200'
             )}>
               <Calendar className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
               <span className="truncate">
                 <span className="text-[10px] text-gray-500 dark:text-gray-400 block leading-tight">{tr('job.lastDate', lang)}</span>
-                {job.last_date ? formatDate(job.last_date) : tr('job.lastDateNA', lang)}
+                {formatDate(job.last_date)}
               </span>
             </span>
+            )}
 
             {/* Posted Date */}
             <span className="flex items-center gap-1.5 font-semibold text-gray-700 dark:text-gray-300">
@@ -209,31 +210,28 @@ export function JobCard({ job }: { job: Job; index?: number }) {
           </div>
         </div>
 
-        {/* ── Eligibility / पात्रता ── */}
+        {/* ── Eligibility / पात्रता ── (only fields we actually know) */}
+        {(job.qualification || job.age_limit || feeStr) && (
         <div className="mt-2.5 px-3 py-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-800/40">
           <p className="text-[10px] font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1.5">
             {tr('job.eligibility', lang)}
           </p>
           <div className="space-y-1.5 text-sm">
             {/* Qualification — always show */}
-            <span className={cn('flex items-center gap-1.5 font-semibold',
-              job.qualification ? 'text-purple-800 dark:text-purple-200' : 'text-gray-400 dark:text-gray-500'
-            )}>
+            {job.qualification && (
+            <span className="flex items-center gap-1.5 font-semibold min-w-0 text-purple-800 dark:text-purple-200">
               <GraduationCap className="w-3.5 h-3.5 text-purple-500 flex-shrink-0" />
-              <span className="truncate">{job.qualification || tr('job.qualificationNA', lang)}</span>
+              <span className="line-clamp-2">{job.qualification}</span>
             </span>
+            )}
 
             {/* Age Limit — always show */}
-            <span className={cn('flex items-center gap-1.5 font-semibold',
-              job.age_limit ? 'text-orange-700 dark:text-orange-300' : 'text-gray-400 dark:text-gray-500'
-            )}>
+            {job.age_limit && (
+            <span className="flex items-center gap-1.5 font-semibold min-w-0 text-orange-700 dark:text-orange-300">
               <UserCheck className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-              <span className="truncate">
-                {job.age_limit
-                  ? `${tr('job.ageLimit', lang)}: ${job.age_limit}`
-                  : tr('job.ageLimitNA', lang)}
-              </span>
+              <span className="truncate">{`${tr('job.ageLimit', lang)}: ${job.age_limit}`}</span>
             </span>
+            )}
 
             {/* Fee — show when available */}
             {feeStr && (
@@ -244,32 +242,31 @@ export function JobCard({ job }: { job: Job; index?: number }) {
             )}
           </div>
         </div>
+        )}
 
         {/* ── Job Details / नौकरी विवरण ── */}
         <div className="mt-2.5 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
           {/* Vacancies */}
-          <span className={cn('flex items-center gap-1.5 font-bold', job.vacancies ? 'text-blue-800 dark:text-blue-300' : 'text-gray-400 dark:text-gray-500')}>
+          {!!job.vacancies && (
+          <span className="flex items-center gap-1.5 font-bold min-w-0 text-blue-800 dark:text-blue-300">
             <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
-            <span className="truncate">
-              {job.vacancies ? `${formatNumber(job.vacancies)} ${tr('job.posts', lang)}` : tr('job.variousPosts', lang)}
-            </span>
+            <span className="truncate">{`${formatNumber(job.vacancies)} ${tr('job.posts', lang)}`}</span>
           </span>
+          )}
 
           {/* Location */}
-          <span className="flex items-center gap-1.5 font-semibold text-gray-700 dark:text-gray-300">
+          <span className="flex items-center gap-1.5 font-semibold min-w-0 text-gray-700 dark:text-gray-300">
             <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
             <span className="truncate">{stateLabel}</span>
           </span>
 
           {/* Salary — always show */}
-          <span className={cn('flex items-center gap-1.5 font-semibold col-span-2',
-            job.salary ? 'text-green-700 dark:text-green-300' : 'text-gray-400 dark:text-gray-500'
-          )}>
+          {job.salary && (
+          <span className="flex items-center gap-1.5 font-semibold col-span-2 min-w-0 text-green-700 dark:text-green-300">
             <IndianRupee className="w-4 h-4 text-green-600 flex-shrink-0" />
-            <span className="truncate">
-              {job.salary || tr('job.salaryNA', lang)}
-            </span>
+            <span className="truncate">{job.salary}</span>
           </span>
+          )}
         </div>
 
         {/* Days Left bar — show when > 3 days remaining */}

@@ -24,7 +24,7 @@ export default async function RelatedJobs({ category, currentSlug }: RelatedJobs
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 mb-6">
       <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-5">More in {categoryLabel}</h2>
-      <div className="grid gap-3">
+      <div className="grid grid-cols-1 gap-3">
         {jobs.map((job) => {
           const stateLabel = STATE_LABELS[job.state] || job.state;
           return (

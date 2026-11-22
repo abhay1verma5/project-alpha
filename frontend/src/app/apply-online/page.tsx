@@ -301,7 +301,7 @@ export default async function ApplyOnlinePage() {
           </p>
         </div>
       ) : (
-        <div className="grid gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {openForms.map((job) => (
             <ApplyCard key={job.id} job={job} />
           ))}

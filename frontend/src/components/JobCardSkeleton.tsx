@@ -18,7 +18,7 @@ export function JobCardSkeleton() {
 
 export function JobListSkeleton({ count = 5 }: { count?: number }) {
   return (
-    <div className="grid gap-3">
+    <div className="grid grid-cols-1 gap-3">
       {Array.from({ length: count }).map((_, i) => (
         <JobCardSkeleton key={i} />
       ))}

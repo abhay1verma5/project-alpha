@@ -52,7 +52,7 @@ async function FeaturedSection() {
             All <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="grid gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {featured.map((job, i) => (
             <FeaturedCard key={job.id} job={job} isFirst={i === 0} />
           ))}

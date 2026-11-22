@@ -25,7 +25,7 @@ export function FeaturedJobs({ jobs }: { jobs: Job[] }) {
           All <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="grid gap-3">
+      <div className="grid grid-cols-1 gap-3">
         {jobs.map((job, i) => (
           <JobCard key={job.id} job={job} index={i} />
         ))}

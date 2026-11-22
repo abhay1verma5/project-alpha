@@ -61,7 +61,9 @@ export function OnboardingTour() {
     // Check if the user has already seen the tour
     try {
       const done = localStorage.getItem(STORAGE_KEY);
-      if (!done) {
+      // Only on the homepage: most visitors land on a job/PYQ page from Google or
+      // WhatsApp and should see that content first, not a modal.
+      if (!done && window.location.pathname === '/') {
         // Small delay so the page has time to render first
         const timer = setTimeout(() => setIsVisible(true), 800);
         return () => clearTimeout(timer);

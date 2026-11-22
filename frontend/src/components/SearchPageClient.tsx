@@ -264,7 +264,7 @@ export function SearchPageClient({ initialQuery, initialMode }: { initialQuery: 
 
           {/* Job cards */}
           {results.length > 0 ? (
-            <div className="grid gap-3">
+            <div className="grid grid-cols-1 gap-3">
               {results.map((job) => (
                 <JobCard key={job.id} job={job} />
               ))}

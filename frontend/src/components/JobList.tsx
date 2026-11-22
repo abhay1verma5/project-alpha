@@ -21,7 +21,7 @@ export function JobList({ jobs, emptyMessage = 'No jobs found.' }: JobListProps)
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="grid grid-cols-1 gap-3">
       {jobs.map((job, i) => (
         <JobCard key={job.id} job={job} index={i} />
       ))}
