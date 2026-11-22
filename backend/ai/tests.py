@@ -3,7 +3,7 @@ import os
 from unittest import mock
 
 from django.core.cache import cache
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 
 from . import views
 from .throttles import allow_request
@@ -233,3 +233,19 @@ class GeminiAvailableTests(AITestBase):
         self.assertTrue(body["ai_powered"])
         self.assertEqual(body["summary"], 'Results for "ssc result"')
         self.assertEqual(body["filters"]["content_type"], "result")
+
+
+class QuizOptionsTests(SimpleTestCase):
+    def test_exam_list_and_subject_groups(self):
+        c = self.client
+        r = c.get("/api/ai/quiz/options/", secure=True)
+        self.assertEqual(r.status_code, 200)
+        exams = r.json()["exams"]
+        self.assertEqual(len(exams), 37)
+        self.assertIn("class_1", [e["value"] for e in exams])
+        r = c.get("/api/ai/quiz/options/?exam=class_3", secure=True)
+        self.assertEqual([s["value"] for s in r.json()["subjects"]], ["math", "english", "hindi", "evs", "gk"])
+        r = c.get("/api/ai/quiz/options/?exam=class_11", secure=True)
+        self.assertEqual(len(r.json()["subjects"]), 10)
+        r = c.get("/api/ai/quiz/options/?exam=ssc", secure=True)
+        self.assertEqual(len(r.json()["subjects"]), 8)

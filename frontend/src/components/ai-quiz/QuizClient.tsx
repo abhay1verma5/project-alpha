@@ -4,8 +4,15 @@ import { useState, useEffect } from 'react';
 import { Sparkles, Loader2, CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, BookOpen, ChevronRight, TrendingUp, Brain } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageProvider';
 import { tr } from '@/lib/translations';
-import { EXAM_OPTIONS, type QuizQuestion } from '@/lib/static-quizzes';
-import { getSubjects } from '@/lib/quiz-data';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+// Exam list and subjects now come from the backend (/api/ai/quiz/options/);
+// the 200 KB of quiz banks no longer ship to the browser.
+interface QuizQuestion { question: string; options: string[]; correct: number; explanation: string }
+interface ExamOption { value: string; label: string; label_hi: string }
+interface Chapter { value: string; label: string; labelHi: string }
+interface Subject { value: string; label: string; labelHi: string; chapters?: Chapter[] }
 import { postAI } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
@@ -55,7 +62,24 @@ export function QuizClient() {
 
   useEffect(() => { setStats(loadStats()); }, []);
 
-  const subjects = exam ? getSubjects(exam) : [];
+  const [examOptions, setExamOptions] = useState<ExamOption[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  useEffect(() => {
+    fetch(`${API_BASE}/ai/quiz/options/`)
+      .then((r) => r.json())
+      .then((d: { exams?: ExamOption[] }) => setExamOptions(d.exams || []))
+      .catch(() => setExamOptions([]));
+  }, []);
+  useEffect(() => {
+    if (!exam) { setSubjects([]); return; }
+    let cancelled = false;
+    fetch(`${API_BASE}/ai/quiz/options/?exam=${encodeURIComponent(exam)}`)
+      .then((r) => r.json())
+      .then((d: { subjects?: Subject[] }) => { if (!cancelled) setSubjects(d.subjects || []); })
+      .catch(() => { if (!cancelled) setSubjects([]); });
+    return () => { cancelled = true; };
+  }, [exam]);
+
   const currentSubject = subjects.find(s => s.value === subject);
   const chapters = currentSubject?.chapters || [];
 
@@ -111,11 +135,11 @@ export function QuizClient() {
   };
 
   const score = answers.filter((a, i) => a === questions[i]?.correct).length;
-  const examLabel = EXAM_OPTIONS.find(e => e.value === exam)?.[hi ? 'label_hi' : 'label'] || exam;
+  const examLabel = examOptions.find(e => e.value === exam)?.[hi ? 'label_hi' : 'label'] || exam;
   const subjectLabel = currentSubject?.[hi ? 'labelHi' : 'label'] || subject;
 
-  const classOpts = EXAM_OPTIONS.filter(e => e.value.startsWith('class_'));
-  const compOpts = EXAM_OPTIONS.filter(e => !e.value.startsWith('class_'));
+  const classOpts = examOptions.filter(e => e.value.startsWith('class_'));
+  const compOpts = examOptions.filter(e => !e.value.startsWith('class_'));
 
   /* ═══════════════════════════════════════════════════
      SETUP

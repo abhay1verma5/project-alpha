@@ -1,0 +1,630 @@
+{
+ "exams": [
+  {
+   "value": "class_1",
+   "label": "Class 1",
+   "label_hi": "कक्षा 1"
+  },
+  {
+   "value": "class_2",
+   "label": "Class 2",
+   "label_hi": "कक्षा 2"
+  },
+  {
+   "value": "class_3",
+   "label": "Class 3",
+   "label_hi": "कक्षा 3"
+  },
+  {
+   "value": "class_4",
+   "label": "Class 4",
+   "label_hi": "कक्षा 4"
+  },
+  {
+   "value": "class_5",
+   "label": "Class 5",
+   "label_hi": "कक्षा 5"
+  },
+  {
+   "value": "class_6",
+   "label": "Class 6",
+   "label_hi": "कक्षा 6"
+  },
+  {
+   "value": "class_7",
+   "label": "Class 7",
+   "label_hi": "कक्षा 7"
+  },
+  {
+   "value": "class_8",
+   "label": "Class 8",
+   "label_hi": "कक्षा 8"
+  },
+  {
+   "value": "class_9",
+   "label": "Class 9",
+   "label_hi": "कक्षा 9"
+  },
+  {
+   "value": "class_10",
+   "label": "Class 10",
+   "label_hi": "कक्षा 10"
+  },
+  {
+   "value": "class_11",
+   "label": "Class 11",
+   "label_hi": "कक्षा 11"
+  },
+  {
+   "value": "class_12",
+   "label": "Class 12",
+   "label_hi": "कक्षा 12"
+  },
+  {
+   "value": "ssc_cgl",
+   "label": "SSC CGL",
+   "label_hi": "SSC CGL"
+  },
+  {
+   "value": "ssc_chsl",
+   "label": "SSC CHSL",
+   "label_hi": "SSC CHSL"
+  },
+  {
+   "value": "ssc_mts",
+   "label": "SSC MTS",
+   "label_hi": "SSC MTS"
+  },
+  {
+   "value": "upsc",
+   "label": "UPSC CSE",
+   "label_hi": "UPSC सिविल सेवा"
+  },
+  {
+   "value": "railway",
+   "label": "Railway (RRB)",
+   "label_hi": "रेलवे (RRB)"
+  },
+  {
+   "value": "banking",
+   "label": "Banking (IBPS/SBI)",
+   "label_hi": "बैंकिंग (IBPS/SBI)"
+  },
+  {
+   "value": "defence",
+   "label": "Defence (CDS/NDA)",
+   "label_hi": "रक्षा (CDS/NDA)"
+  },
+  {
+   "value": "state_psc",
+   "label": "State PSC",
+   "label_hi": "राज्य PSC"
+  },
+  {
+   "value": "police",
+   "label": "Police (SI/Constable)",
+   "label_hi": "पुलिस (SI/कांस्टेबल)"
+  },
+  {
+   "value": "teaching",
+   "label": "Teaching (CTET/TET)",
+   "label_hi": "शिक्षा (CTET/TET)"
+  },
+  {
+   "value": "sbi",
+   "label": "SBI PO/Clerk",
+   "label_hi": "SBI PO/क्लर्क"
+  },
+  {
+   "value": "rbi",
+   "label": "RBI Grade B",
+   "label_hi": "RBI ग्रेड B"
+  },
+  {
+   "value": "ctet",
+   "label": "CTET",
+   "label_hi": "CTET"
+  },
+  {
+   "value": "nda",
+   "label": "NDA",
+   "label_hi": "NDA"
+  },
+  {
+   "value": "ssc_gd",
+   "label": "SSC GD Constable",
+   "label_hi": "SSC GD कांस्टेबल"
+  },
+  {
+   "value": "nabard",
+   "label": "NABARD Grade A",
+   "label_hi": "NABARD ग्रेड A"
+  },
+  {
+   "value": "sebi",
+   "label": "SEBI Grade A",
+   "label_hi": "SEBI ग्रेड A"
+  },
+  {
+   "value": "lic",
+   "label": "LIC AAO/ADO",
+   "label_hi": "LIC AAO/ADO"
+  },
+  {
+   "value": "uppsc",
+   "label": "UPPSC PCS",
+   "label_hi": "UPPSC PCS"
+  },
+  {
+   "value": "bpsc",
+   "label": "BPSC",
+   "label_hi": "BPSC"
+  },
+  {
+   "value": "mppsc",
+   "label": "MPPSC",
+   "label_hi": "MPPSC"
+  },
+  {
+   "value": "rpsc",
+   "label": "RPSC RAS",
+   "label_hi": "RPSC RAS"
+  },
+  {
+   "value": "dsssb",
+   "label": "DSSSB",
+   "label_hi": "DSSSB"
+  },
+  {
+   "value": "epfo",
+   "label": "EPFO SSA",
+   "label_hi": "EPFO SSA"
+  },
+  {
+   "value": "capf",
+   "label": "CAPF (AC)",
+   "label_hi": "CAPF (AC)"
+  }
+ ],
+ "subject_groups": {
+  "basic": [
+   {
+    "value": "math",
+    "label": "Math",
+    "labelHi": "गणित"
+   },
+   {
+    "value": "english",
+    "label": "English",
+    "labelHi": "अंग्रेजी"
+   },
+   {
+    "value": "hindi",
+    "label": "Hindi",
+    "labelHi": "हिंदी"
+   },
+   {
+    "value": "evs",
+    "label": "EVS",
+    "labelHi": "पर्यावरण"
+   },
+   {
+    "value": "gk",
+    "label": "GK",
+    "labelHi": "सामान्य ज्ञान"
+   }
+  ],
+  "middle": [
+   {
+    "value": "math",
+    "label": "Math",
+    "labelHi": "गणित"
+   },
+   {
+    "value": "science",
+    "label": "Science",
+    "labelHi": "विज्ञान"
+   },
+   {
+    "value": "social",
+    "label": "Social Science",
+    "labelHi": "सामाजिक विज्ञान"
+   },
+   {
+    "value": "english",
+    "label": "English",
+    "labelHi": "अंग्रेजी"
+   },
+   {
+    "value": "hindi",
+    "label": "Hindi",
+    "labelHi": "हिंदी"
+   },
+   {
+    "value": "sanskrit",
+    "label": "Sanskrit",
+    "labelHi": "संस्कृत"
+   },
+   {
+    "value": "gk",
+    "label": "GK",
+    "labelHi": "सामान्य ज्ञान"
+   }
+  ],
+  "high": [
+   {
+    "value": "math",
+    "label": "Math",
+    "labelHi": "गणित",
+    "chapters": [
+     {
+      "value": "number_system",
+      "label": "Number System",
+      "labelHi": "संख्या पद्धति"
+     },
+     {
+      "value": "algebra",
+      "label": "Algebra",
+      "labelHi": "बीजगणित"
+     },
+     {
+      "value": "geometry",
+      "label": "Geometry",
+      "labelHi": "ज्यामिति"
+     },
+     {
+      "value": "trigonometry",
+      "label": "Trigonometry",
+      "labelHi": "त्रिकोणमिति"
+     },
+     {
+      "value": "statistics",
+      "label": "Statistics",
+      "labelHi": "सांख्यिकी"
+     },
+     {
+      "value": "mensuration",
+      "label": "Mensuration",
+      "labelHi": "क्षेत्रमिति"
+     }
+    ]
+   },
+   {
+    "value": "science",
+    "label": "Science",
+    "labelHi": "विज्ञान",
+    "chapters": [
+     {
+      "value": "physics",
+      "label": "Physics",
+      "labelHi": "भौतिकी"
+     },
+     {
+      "value": "chemistry",
+      "label": "Chemistry",
+      "labelHi": "रसायन"
+     },
+     {
+      "value": "biology",
+      "label": "Biology",
+      "labelHi": "जीवविज्ञान"
+     }
+    ]
+   },
+   {
+    "value": "social",
+    "label": "Social Science",
+    "labelHi": "सामाजिक विज्ञान",
+    "chapters": [
+     {
+      "value": "history",
+      "label": "History",
+      "labelHi": "इतिहास"
+     },
+     {
+      "value": "geography",
+      "label": "Geography",
+      "labelHi": "भूगोल"
+     },
+     {
+      "value": "civics",
+      "label": "Civics",
+      "labelHi": "नागरिकशास्त्र"
+     },
+     {
+      "value": "economics",
+      "label": "Economics",
+      "labelHi": "अर्थशास्त्र"
+     }
+    ]
+   },
+   {
+    "value": "english",
+    "label": "English",
+    "labelHi": "अंग्रेजी"
+   },
+   {
+    "value": "hindi",
+    "label": "Hindi",
+    "labelHi": "हिंदी"
+   }
+  ],
+  "senior": [
+   {
+    "value": "physics",
+    "label": "Physics",
+    "labelHi": "भौतिकी",
+    "chapters": [
+     {
+      "value": "mechanics",
+      "label": "Mechanics",
+      "labelHi": "यांत्रिकी"
+     },
+     {
+      "value": "thermodynamics",
+      "label": "Thermodynamics",
+      "labelHi": "ऊष्मागतिकी"
+     },
+     {
+      "value": "waves",
+      "label": "Waves & Oscillations",
+      "labelHi": "तरंगें"
+     },
+     {
+      "value": "optics",
+      "label": "Optics",
+      "labelHi": "प्रकाशिकी"
+     },
+     {
+      "value": "electrostatics",
+      "label": "Electrostatics",
+      "labelHi": "स्थिरवैद्युतिकी"
+     },
+     {
+      "value": "current_electricity",
+      "label": "Current Electricity",
+      "labelHi": "विद्युत धारा"
+     },
+     {
+      "value": "magnetism",
+      "label": "Magnetism & EMI",
+      "labelHi": "चुंबकत्व"
+     },
+     {
+      "value": "modern_physics",
+      "label": "Modern Physics",
+      "labelHi": "आधुनिक भौतिकी"
+     }
+    ]
+   },
+   {
+    "value": "chemistry",
+    "label": "Chemistry",
+    "labelHi": "रसायन विज्ञान",
+    "chapters": [
+     {
+      "value": "physical_chem",
+      "label": "Physical Chemistry",
+      "labelHi": "भौतिक रसायन"
+     },
+     {
+      "value": "organic_chem",
+      "label": "Organic Chemistry",
+      "labelHi": "कार्बनिक रसायन"
+     },
+     {
+      "value": "inorganic_chem",
+      "label": "Inorganic Chemistry",
+      "labelHi": "अकार्बनिक रसायन"
+     },
+     {
+      "value": "chemical_bonding",
+      "label": "Chemical Bonding",
+      "labelHi": "रासायनिक बंध"
+     },
+     {
+      "value": "periodic_table",
+      "label": "Periodic Table",
+      "labelHi": "आवर्त सारणी"
+     },
+     {
+      "value": "electrochemistry",
+      "label": "Electrochemistry",
+      "labelHi": "विद्युत रसायन"
+     }
+    ]
+   },
+   {
+    "value": "math",
+    "label": "Math",
+    "labelHi": "गणित",
+    "chapters": [
+     {
+      "value": "calculus",
+      "label": "Calculus",
+      "labelHi": "कलन"
+     },
+     {
+      "value": "algebra",
+      "label": "Algebra",
+      "labelHi": "बीजगणित"
+     },
+     {
+      "value": "coordinate",
+      "label": "Coordinate Geometry",
+      "labelHi": "निर्देशांक ज्यामिति"
+     },
+     {
+      "value": "vectors",
+      "label": "Vectors & 3D",
+      "labelHi": "सदिश और 3D"
+     },
+     {
+      "value": "probability",
+      "label": "Probability",
+      "labelHi": "प्रायिकता"
+     },
+     {
+      "value": "trigonometry",
+      "label": "Trigonometry",
+      "labelHi": "त्रिकोणमिति"
+     },
+     {
+      "value": "matrices",
+      "label": "Matrices",
+      "labelHi": "आव्यूह"
+     }
+    ]
+   },
+   {
+    "value": "biology",
+    "label": "Biology",
+    "labelHi": "जीवविज्ञान",
+    "chapters": [
+     {
+      "value": "cell_biology",
+      "label": "Cell Biology",
+      "labelHi": "कोशिका"
+     },
+     {
+      "value": "genetics",
+      "label": "Genetics",
+      "labelHi": "आनुवंशिकी"
+     },
+     {
+      "value": "ecology",
+      "label": "Ecology",
+      "labelHi": "पारिस्थितिकी"
+     },
+     {
+      "value": "human_physiology",
+      "label": "Human Physiology",
+      "labelHi": "मानव शरीर"
+     },
+     {
+      "value": "plant_physiology",
+      "label": "Plant Physiology",
+      "labelHi": "पादप शरीर"
+     },
+     {
+      "value": "evolution",
+      "label": "Evolution",
+      "labelHi": "विकास"
+     },
+     {
+      "value": "biotechnology",
+      "label": "Biotechnology",
+      "labelHi": "जैव प्रौद्योगिकी"
+     }
+    ]
+   },
+   {
+    "value": "english",
+    "label": "English",
+    "labelHi": "अंग्रेजी"
+   },
+   {
+    "value": "economics",
+    "label": "Economics",
+    "labelHi": "अर्थशास्त्र",
+    "chapters": [
+     {
+      "value": "micro",
+      "label": "Microeconomics",
+      "labelHi": "सूक्ष्म अर्थशास्त्र"
+     },
+     {
+      "value": "macro",
+      "label": "Macroeconomics",
+      "labelHi": "समष्टि अर्थशास्त्र"
+     },
+     {
+      "value": "indian_economy",
+      "label": "Indian Economy",
+      "labelHi": "भारतीय अर्थव्यवस्था"
+     }
+    ]
+   },
+   {
+    "value": "accountancy",
+    "label": "Accountancy",
+    "labelHi": "लेखाशास्त्र",
+    "chapters": [
+     {
+      "value": "financial_statements",
+      "label": "Financial Statements",
+      "labelHi": "वित्तीय विवरण"
+     },
+     {
+      "value": "partnership",
+      "label": "Partnership",
+      "labelHi": "साझेदारी"
+     },
+     {
+      "value": "company_accounts",
+      "label": "Company Accounts",
+      "labelHi": "कंपनी खाते"
+     }
+    ]
+   },
+   {
+    "value": "history",
+    "label": "History",
+    "labelHi": "इतिहास"
+   },
+   {
+    "value": "political_science",
+    "label": "Political Science",
+    "labelHi": "राजनीति विज्ञान"
+   },
+   {
+    "value": "computer_science",
+    "label": "Computer Science",
+    "labelHi": "कंप्यूटर विज्ञान"
+   }
+  ],
+  "competitive": [
+   {
+    "value": "math",
+    "label": "Mathematics",
+    "labelHi": "गणित"
+   },
+   {
+    "value": "gk",
+    "label": "General Knowledge",
+    "labelHi": "सामान्य ज्ञान"
+   },
+   {
+    "value": "english",
+    "label": "English",
+    "labelHi": "अंग्रेजी"
+   },
+   {
+    "value": "reasoning",
+    "label": "Reasoning",
+    "labelHi": "रीज़निंग"
+   },
+   {
+    "value": "science",
+    "label": "General Science",
+    "labelHi": "सामान्य विज्ञान"
+   },
+   {
+    "value": "current_affairs",
+    "label": "Current Affairs",
+    "labelHi": "करंट अफेयर्स"
+   },
+   {
+    "value": "hindi",
+    "label": "Hindi",
+    "labelHi": "हिंदी"
+   },
+   {
+    "value": "polity",
+    "label": "Indian Polity",
+    "labelHi": "भारतीय राजव्यवस्था"
+   }
+  ]
+ },
+ "generated_from": "frontend/src/lib/{static-quizzes,quiz-data}.ts on 2026-11-22"
+}

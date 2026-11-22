@@ -514,3 +514,47 @@ class EligibilityView(AIView):
             return Response({**raw, "source": "ai"})
 
         return Response(_static_eligibility_response(age, qualification, category, gender, hi))
+
+
+# ---------------------------------------------------------------------------
+# Quiz options (exam list + subjects/chapters) — formerly bundled in the frontend
+# ---------------------------------------------------------------------------
+
+
+@lru_cache(maxsize=1)
+def _quiz_options():
+    with (DATA_DIR / "quiz_options.json").open(encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def quiz_subjects_for(exam):
+    """Same rule as the old frontend getSubjects(): class 1-5, 6-8, 9-10, 11-12, else competitive."""
+    groups = _quiz_options()["subject_groups"]
+    m = re.fullmatch(r"class_(\d+)", exam or "")
+    if m:
+        cls = int(m.group(1))
+        if 1 <= cls <= 5:
+            return groups["basic"]
+        if 6 <= cls <= 8:
+            return groups["middle"]
+        if 9 <= cls <= 10:
+            return groups["high"]
+        if 11 <= cls <= 12:
+            return groups["senior"]
+    return groups["competitive"]
+
+
+class QuizOptionsView(APIView):
+    """GET /api/ai/quiz/options/ -> {"exams": [...]}; with ?exam=X also {"subjects": [...]}."""
+
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        data = {"exams": _quiz_options()["exams"]}
+        exam = request.query_params.get("exam")
+        if exam:
+            data["subjects"] = quiz_subjects_for(exam)
+        resp = Response(data)
+        resp["Cache-Control"] = "public, max-age=86400"
+        return resp
