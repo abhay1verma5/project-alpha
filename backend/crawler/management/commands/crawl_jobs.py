@@ -135,6 +135,7 @@ class Command(BaseCommand):
                 log.duration_seconds = round(duration, 2)
 
                 new_count = 0
+                enriched = 0
                 for job_data in raw_jobs:
                     title = job_data.get("title", "").strip()
                     if not title or len(title) < 10:
@@ -147,7 +148,13 @@ class Command(BaseCommand):
                     if not slug:
                         continue
 
-                    if Job.objects.filter(slug=slug).exists():
+                    existing = Job.objects.filter(slug=slug).first()
+                    if existing:
+                        # Seen again: fill facts we did not have yet (never overwrite).
+                        if not dry_run:
+                            filled = fill_missing_facts(existing, job_data)
+                            if filled:
+                                enriched += 1
                         continue
 
                     # Don't add listings that are already over (e.g. "Answer Key 2024").
@@ -188,7 +195,7 @@ class Command(BaseCommand):
                 log.status = "success"
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"  {parser.name}: {len(raw_jobs)} found, {new_count} new ({duration:.1f}s)"
+                        f"  {parser.name}: {len(raw_jobs)} found, {new_count} new, {enriched} filled ({duration:.1f}s)"
                     )
                 )
 
@@ -283,3 +290,29 @@ class Command(BaseCommand):
                 )
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"  IndexNow ping failed: {e}"))
+
+
+ENRICH_FIELDS = ("last_date", "age_limit", "fee", "vacancies", "qualification", "notification_pdf")
+
+
+def fill_missing_facts(job, data):
+    """Copy facts from a fresh crawl into an existing row where the row is empty.
+    The apply link is replaced only when the stored one points at an aggregator page."""
+    changed = []
+    for f in ENRICH_FIELDS:
+        if data.get(f) and not getattr(job, f):
+            setattr(job, f, data[f])
+            changed.append(f)
+    new_link = clean_apply_link(data.get("apply_link"))
+    if new_link and (not job.apply_link or any(a in (job.apply_link or "") for a in
+                                               ("sarkariresult", "sarkariexam", "rojgarresult", "freejobalert"))):
+        if new_link != job.apply_link:
+            job.apply_link = new_link
+            changed.append("apply_link")
+    src = data.get("source_url") or ""
+    if src and src != job.source_url and not src.rstrip("/").endswith(("latest-jobs", "LatestJob.php", "recruitments")):
+        job.source_url = src
+        changed.append("source_url")
+    if changed:
+        job.save(update_fields=changed + ["updated_at"])
+    return changed

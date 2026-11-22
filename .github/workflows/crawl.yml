@@ -60,6 +60,12 @@ jobs:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_DEBUG: 'False'
 
+      - name: Fill job details from each notice page
+        if: ${{ !cancelled() }}
+        run: timeout 420 python -u manage.py enrich_job_facts --limit 150 --seconds 360 2>&1 || echo "[DONE] enrich"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
       - name: Crawl official sources
         run: timeout 900 python -u manage.py crawl_jobs --group official 2>&1 || echo "[DONE] official"
         env:

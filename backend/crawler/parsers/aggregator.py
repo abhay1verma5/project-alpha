@@ -567,29 +567,13 @@ class SarkariResultParser(BaseParser):
                         "vacancies": vacancies,
                         "last_date": last_date,
                         "apply_link": href,
-                        "source_url": f"{self.base_url}{path}",
+                        "source_url": href or f"{self.base_url}{path}",
                     }
                     detail_links.append((href, job_data))
 
-                # Deep fetch top 30 detail pages per section for full data
-                for i, (detail_url, job_data) in enumerate(detail_links[:30]):
-                    if detail_url and detail_url.startswith("http"):
-                        detail = self._parse_detail_page(detail_url)
-                        if detail:
-                            # Merge detail data (detail overrides only if non-empty)
-                            for key in ["description", "fee", "vacancy_details", "qualification",
-                                        "salary", "age_limit", "notification_pdf", "organization"]:
-                                if detail.get(key):
-                                    job_data[key] = detail[key]
-                            if detail.get("apply_link"):
-                                job_data["apply_link"] = detail["apply_link"]
-                            if detail.get("last_date") and not job_data.get("last_date"):
-                                job_data["last_date"] = detail["last_date"]
-                        # Respectful delay
-                        if i < len(detail_links) - 1:
-                            time.sleep(0.5)
+                # Facts from each job's own page (dates, fee, age, posts, official links)
 
-                    jobs.append(job_data)
+                jobs.extend(enrich_from_detail_pages(self, detail_links, limit=DETAIL_PAGE_LIMIT))
 
             except Exception as e:
                 logger.warning(f"[SarkariResult/{path}] Error: {e}")
@@ -753,26 +737,13 @@ class FreeJobAlertParser(BaseParser):
                         "content_type": content_type,
                         "vacancies": vacancies,
                         "apply_link": href,
-                        "source_url": f"{self.base_url}{path}",
+                        "source_url": href or f"{self.base_url}{path}",
                     }
                     detail_links.append((href, job_data))
 
-                # Deep fetch top 20 detail pages
-                for i, (detail_url, job_data) in enumerate(detail_links[:20]):
-                    if detail_url and detail_url.startswith("http"):
-                        detail = self._parse_detail_page(detail_url)
-                        if detail:
-                            for key in ["description", "fee", "vacancy_details", "qualification",
-                                        "salary", "age_limit", "notification_pdf", "organization",
-                                        "apply_link"]:
-                                if detail.get(key):
-                                    job_data[key] = detail[key]
-                            if detail.get("last_date") and not job_data.get("last_date"):
-                                job_data["last_date"] = detail["last_date"]
-                        if i < len(detail_links) - 1:
-                            time.sleep(0.5)
+                # Facts from each job's own page (dates, fee, age, posts, official links)
 
-                    jobs.append(job_data)
+                jobs.extend(enrich_from_detail_pages(self, detail_links, limit=DETAIL_PAGE_LIMIT))
 
             except Exception as e:
                 logger.warning(f"[FreeJobAlert/{path}] Error: {e}")
@@ -924,21 +895,12 @@ class SarkariExamParser(BaseParser):
                         "content_type": content_type,
                         "vacancies": vacancies,
                         "apply_link": href,
-                        "source_url": f"{self.base_url}{path}",
+                        "source_url": href or f"{self.base_url}{path}",
                     }
                     detail_links.append((href, job_data))
 
-                # Deep fetch top 20 detail pages to find real gov links
-                for i, (detail_url, job_data) in enumerate(detail_links[:20]):
-                    if detail_url and detail_url.startswith("http"):
-                        detail = self._extract_gov_link(detail_url)
-                        if detail.get("apply_link"):
-                            job_data["apply_link"] = detail["apply_link"]
-                        if detail.get("notification_pdf"):
-                            job_data["notification_pdf"] = detail["notification_pdf"]
-                        if i < len(detail_links) - 1:
-                            time.sleep(0.5)
-                    jobs.append(job_data)
+                # Facts from each job's own page (dates, fee, age, posts, official links)
+                jobs.extend(enrich_from_detail_pages(self, detail_links, limit=DETAIL_PAGE_LIMIT))
 
             except Exception as e:
                 logger.warning(f"[SarkariExam/{path}] Error: {e}")
@@ -1031,21 +993,12 @@ class RojgarResultParser(BaseParser):
                         "content_type": content_type,
                         "vacancies": vacancies,
                         "apply_link": href,
-                        "source_url": f"{self.base_url}{path}",
+                        "source_url": href or f"{self.base_url}{path}",
                     }
                     detail_links.append((href, job_data))
 
-                # Deep fetch top 20 detail pages to find real gov links
-                for i, (detail_url, job_data) in enumerate(detail_links[:20]):
-                    if detail_url and detail_url.startswith("http"):
-                        detail = self._extract_gov_link(detail_url)
-                        if detail.get("apply_link"):
-                            job_data["apply_link"] = detail["apply_link"]
-                        if detail.get("notification_pdf"):
-                            job_data["notification_pdf"] = detail["notification_pdf"]
-                        if i < len(detail_links) - 1:
-                            time.sleep(0.5)
-                    jobs.append(job_data)
+                # Facts from each job's own page (dates, fee, age, posts, official links)
+                jobs.extend(enrich_from_detail_pages(self, detail_links, limit=DETAIL_PAGE_LIMIT))
 
             except Exception as e:
                 logger.warning(f"[RojgarResult/{path}] Error: {e}")
@@ -1054,6 +1007,37 @@ class RojgarResultParser(BaseParser):
         logger.info(f"[RojgarResult.com] Found {len(jobs)} entries (with deep details)")
         return fill_organization(jobs)
 
+
+
+# How many detail pages each section reads per crawl (politeness + the 10-minute step budget).
+DETAIL_PAGE_LIMIT = 25
+
+
+def enrich_from_detail_pages(parser, detail_links, limit=DETAIL_PAGE_LIMIT):
+    """Read the facts of the first `limit` notices from their own pages.
+
+    Facts come from crawler.parsers.facts (never the page prose). A listing link
+    that points back to the aggregator itself is not an apply link, so it is
+    dropped; the user then sees the official link when we have one.
+    """
+    from .facts import extract_job_facts
+
+    own = parser.base_url.split("//", 1)[-1].replace("www.", "").split("/")[0].split(".")[0]
+    out = []
+    for i, (detail_url, job_data) in enumerate(detail_links):
+        if i < limit and detail_url and detail_url.startswith("http"):
+            html = parser.fetch(detail_url, timeout=15)
+            for key, value in extract_job_facts(html, detail_url).items():
+                if value and not job_data.get(key):
+                    job_data[key] = value
+                elif key in ("apply_link", "notification_pdf") and value:
+                    job_data[key] = value  # official link beats the aggregator link
+            time.sleep(0.3)
+        link = job_data.get("apply_link") or ""
+        if own and own in link.lower():
+            job_data["apply_link"] = None
+        out.append(job_data)
+    return out
 
 def fill_organization(jobs):
     """Fill empty organization from the title, so parsers that skip the detail page still get one."""
