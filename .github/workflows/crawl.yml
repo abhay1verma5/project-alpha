@@ -77,6 +77,11 @@ jobs:
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
+      - name: Remove placeholder questions
+        run: timeout 120 python manage.py purge_placeholder_questions 2>&1 || echo "[DONE]"
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
       - name: Backfill organization names
         run: timeout 120 python manage.py backfill_organization 2>&1 || echo "[DONE]"
         env:
