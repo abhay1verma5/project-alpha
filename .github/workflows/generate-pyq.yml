@@ -2,7 +2,7 @@ name: PYQ Generator + Crawler
 
 on:
   schedule:
-    - cron: '20 * * * *'    # Every hour at :20
+    - cron: '20 22 * * *'   # Daily 03:50 IST
   workflow_dispatch:
     inputs:
       exam:
@@ -106,8 +106,21 @@ jobs:
           python seed_questions.py 2>&1 || echo "[DONE] seed"
 
       # ── Phase 4: AI Generate PYQ Questions (uses remaining quota) ──
+      # Skip AI generation fast when the Gemini key is missing/invalid (on
+      # 2026-11-21 every call returned HTTP 401 and the run held the DB lock ~40 min).
+      - name: Check Gemini API key
+        id: gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -n "$GEMINI_API_KEY" ] && curl -sf -o /dev/null "https://generativelanguage.googleapis.com/v1beta/models?key=$GEMINI_API_KEY"; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"; echo "Gemini key OK"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"; echo "::warning::GEMINI_API_KEY missing or invalid — skipping AI generation"
+          fi
+
       - name: Generate PYQ questions (AI)
-        if: ${{ github.event.inputs.crawl_only != 'true' }}
+        if: ${{ github.event.inputs.crawl_only != 'true' && steps.gemini.outputs.ok == 'true' }}
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

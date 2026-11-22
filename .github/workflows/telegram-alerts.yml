@@ -3,7 +3,7 @@ name: Telegram alerts
 # Daily at 08:30 IST (03:00 UTC): new notices to subscribers + "closing soon" reminders.
 on:
   schedule:
-    - cron: '50 * * * *'    # Every hour at :50
+    - cron: '45 1-23/3 * * *'  # Every 3 hours at :45
   workflow_dispatch:
 
 permissions:
