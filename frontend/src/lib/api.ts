@@ -62,11 +62,18 @@ export interface Stats {
 }
 
 async function fetchAPI<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
+  // Retry briefly on rate limits / a waking Render instance instead of failing
+  // the page (one 429 used to abort the whole Netlify build).
+  const delays = [1000, 3000];
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(`${API_BASE}${path}`, {
+      next: { revalidate: 3600 },
+    });
+    if (res.ok) return res.json();
+    const retryable = res.status === 429 || res.status === 502 || res.status === 503 || res.status === 504;
+    if (!retryable || attempt >= delays.length) throw new Error(`API error: ${res.status}`);
+    await new Promise((r) => setTimeout(r, delays[attempt]));
+  }
 }
 
 export async function getJobs(params?: Record<string, string>): Promise<PaginatedResponse<Job>> {

@@ -143,7 +143,10 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "anon": "30/minute",
+        # All server-rendered pages reach the API from a few shared Netlify IPs, so
+        # 30/min throttled real visitors and failed whole builds (HTTP 429 on
+        # 2026-11-23). AI endpoints keep their own stricter per-IP limits.
+        "anon": "600/minute",
     },
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
