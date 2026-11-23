@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '10th Pass Sarkari Naukri 2026-27 — 10th Pass Government Jobs',
+  title: '10th Pass Sarkari Naukri 2026-27 — 10वीं पास सरकारी नौकरी',
   description:
     '10th pass sarkari naukri 2026-27: Browse latest government jobs for 10th pass candidates. SSC, Railway, Defence, Police, Postal & Group D vacancies. Apply online with eligibility, salary & last date.',
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     canonical: 'https://sarkarialert.online/10th-pass-jobs',
   },
   openGraph: {
-    title: '10th Pass Government Jobs 2026-27 — Latest Sarkari Naukri for 10th Pass',
+    title: '10th Pass Government Jobs 2026-27 — 10वीं पास सरकारी नौकरी',
     description:
       'Find 10th pass sarkari naukri 2026-27. Railway Group D, SSC GD, Police Constable, Postal, Defence & more vacancies for 10th pass candidates.',
     url: 'https://sarkarialert.online/10th-pass-jobs',
@@ -147,7 +147,7 @@ export default function TenthPassJobsPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              10th Pass Government Jobs 2026
+              10th Pass Government Jobs 2026 — 10वीं पास सरकारी नौकरी
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
               10वीं पास सरकारी नौकरी 2026 — दसवीं पास के लिए सरकारी भर्ती

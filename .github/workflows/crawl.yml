@@ -2,7 +2,7 @@ name: Daily Job Crawler
 
 on:
   schedule:
-    - cron: '0 */2 * * *'    # Every 2 hours (a run takes ~25-30 min; all DB workflows share one lock)
+    - cron: '17 */2 * * *'    # Every 2 hours at :17, off the top of the hour (a run takes ~25-30 min; all DB workflows share one lock)
   workflow_dispatch:         # Manual trigger from GitHub Actions tab
 
 permissions:

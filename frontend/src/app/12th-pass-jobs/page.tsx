@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '12th Pass Sarkari Naukri 2026-27 — 12th Pass Government Jobs',
+  title: '12th Pass Sarkari Naukri 2026-27 — 12वीं पास सरकारी नौकरी',
   description:
     '12th pass sarkari naukri 2026-27: Browse latest government jobs for 12th pass / Intermediate candidates. SSC CHSL, Railway, Banking Clerk, Defence, Police & more. Apply online with eligibility & last date.',
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     canonical: 'https://sarkarialert.online/12th-pass-jobs',
   },
   openGraph: {
-    title: '12th Pass Government Jobs 2026-27 — Latest Sarkari Naukri for 12th Pass',
+    title: '12th Pass Government Jobs 2026-27 — 12वीं पास सरकारी नौकरी',
     description:
       'Find 12th pass sarkari naukri 2026-27. SSC CHSL, Railway, Banking Clerk, Police SI, Defence & more vacancies for 12th / Intermediate pass candidates.',
     url: 'https://sarkarialert.online/12th-pass-jobs',
@@ -152,7 +152,7 @@ export default function TwelfthPassJobsPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              12th Pass Government Jobs 2026
+              12th Pass Government Jobs 2026 — 12वीं पास सरकारी नौकरी
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
               12वीं पास सरकारी नौकरी 2026 — बारहवीं पास के लिए सरकारी भर्ती
