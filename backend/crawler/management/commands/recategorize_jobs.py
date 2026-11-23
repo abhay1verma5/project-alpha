@@ -27,7 +27,9 @@ RECRUITMENT_RE = re.compile(
     re.I,
 )
 
-ONLINE_FORM_RE = re.compile(r'\b(online\s*form|apply\s*online|vacancy|vacancies)\b', re.I)
+ONLINE_FORM_RE = re.compile(
+    r'\b((on|off)line\s*(application\s*)?form|application\s*form|apply\s*(online|offline)|vacancy|vacancies)\b', re.I
+)
 
 # Checked only when the title has no recruitment signal.
 UPDATE_PATTERNS = [
