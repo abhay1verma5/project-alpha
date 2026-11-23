@@ -1,0 +1,35 @@
+name: Telegram setup check
+# Manual only. Prints the bot's username and the chats it can see (ids/titles; never the token),
+# so TELEGRAM_CHANNEL_ID can be set. The bot must be a channel admin and a message posted after that.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    steps:
+      - name: Bot and visible chats
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          t = os.environ["TELEGRAM_BOT_TOKEN"]
+          def call(m):
+              with urllib.request.urlopen(f"https://api.telegram.org/bot{t}/{m}", timeout=20) as r:
+                  return json.load(r)
+          me = call("getMe")
+          print("bot:", me.get("ok"), "@" + str(me.get("result", {}).get("username")))
+          ups = call("getUpdates")
+          chats = {}
+          for u in ups.get("result", []):
+              for k in ("channel_post", "my_chat_member", "message"):
+                  c = (u.get(k) or {}).get("chat")
+                  if c:
+                      status = (u.get("my_chat_member") or {}).get("new_chat_member", {}).get("status")
+                      chats[c["id"]] = (c.get("title") or c.get("username"), c.get("type"), status)
+          print("updates:", len(ups.get("result", [])))
+          for cid, v in chats.items():
+              print("CHAT", cid, v)
+          PY
