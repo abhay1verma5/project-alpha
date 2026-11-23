@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getJob } from '@/lib/api';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { ClosedNotice } from '@/components/ClosedNotice';
 import {
   Calendar, MapPin, Users, GraduationCap, IndianRupee, Clock,
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
     // Only real vacancies get "Apply before"; notices/results etc. never show "Apply before N/A".
     const desc = job.content_type === 'job'
-      ? `${job.organization} — ${job.qualification || 'Various qualifications'}. ${job.vacancies ? formatNumber(job.vacancies) + ' vacancies. ' : ''}${job.last_date ? `Apply before ${formatDate(job.last_date)}.` : 'See the official notification for dates.'}`
-      : `${job.organization}: ${job.title}. Read the official update, dates and links on SarkariAlert.`;
+      ? `${job.organization ? job.organization + ' — ' : `${job.title} — `}${job.qualification || 'Various qualifications'}. ${job.vacancies ? formatNumber(job.vacancies) + ' vacancies. ' : ''}${job.last_date ? `Apply before ${formatDate(job.last_date)}.` : 'See the official notification for dates.'}`
+      : `${job.organization ? job.organization + ': ' : ''}${job.title}. Read the official update, dates and links on SarkariAlert.`;
     const stateLabel = STATE_LABELS[job.state] || job.state;
     const categoryLabel = CATEGORY_LABELS[job.category] || job.category;
     const url = `https://sarkarialert.online/jobs/${slug}`;
@@ -133,6 +133,11 @@ export default async function JobDetailPage({ params }: Props) {
     job = await getJob(slug);
   } catch {
     notFound();
+  }
+
+  // Merged duplicate (same notification, another aggregator's wording): 308 to the kept page.
+  if (!job.is_active && job.replacement_slug) {
+    permanentRedirect(`/jobs/${job.replacement_slug}`);
   }
 
   if (!job.is_active) {

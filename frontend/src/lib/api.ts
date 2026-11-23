@@ -19,6 +19,7 @@ export interface Job {
   is_expired: boolean;
   /** True when the notice was read from the recruiting body's own website. */
   is_official?: boolean;
+  replacement_slug?: string | null;
   source_host?: string;
   age_limit?: string | null;
   apply_link?: string | null;

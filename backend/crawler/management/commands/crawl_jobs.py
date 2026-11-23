@@ -9,6 +9,8 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import slugify
 
+from jobs.dedupe import find_match
+
 # Reject titles that are clearly garbage (Angular templates, JS artifacts, etc.)
 _BAD_TITLE_RE = re.compile(
     r"\{\{|translate\s*\}|angular\.|ng-|<%|<script|javascript:|"
@@ -121,6 +123,8 @@ class Command(BaseCommand):
                 return
 
         total_new = 0
+        # Same notification under another aggregator's wording -> update that page, don't add one.
+        active_jobs = list(Job.objects.filter(is_active=True).order_by("id"))
         for parser_cls in parsers:
             parser = parser_cls()
             self.stdout.write(f"\n--- Crawling {parser.name} ---")
@@ -157,6 +161,17 @@ class Command(BaseCommand):
                                 enriched += 1
                         continue
 
+                    match = find_match(title, job_data.get("content_type", "job"), active_jobs)
+                    if match:
+                        if not dry_run:
+                            if fill_missing_facts(match, job_data):
+                                enriched += 1
+                            new_last = job_data.get("last_date")
+                            if new_last and (not match.last_date or str(new_last) > str(match.last_date)):
+                                match.last_date = new_last
+                                match.save(update_fields=["last_date", "updated_at"])
+                        continue
+
                     # Don't add listings that are already over (e.g. "Answer Key 2024").
                     if is_dead(title, job_data.get("content_type", "job")):
                         continue
@@ -169,7 +184,7 @@ class Command(BaseCommand):
                     # Auto-fill qualification from title if not provided
                     qual = job_data.get("qualification") or guess_qualification(title)
 
-                    Job.objects.create(
+                    created = Job.objects.create(
                         title=title,
                         slug=slug,
                         organization=job_data.get("organization", ""),
@@ -188,6 +203,7 @@ class Command(BaseCommand):
                         fee=job_data.get("fee"),
                         vacancy_details=job_data.get("vacancy_details"),
                     )
+                    active_jobs.append(created)
                     new_count += 1
 
                 total_new += new_count
