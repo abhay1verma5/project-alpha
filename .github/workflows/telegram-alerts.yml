@@ -24,6 +24,10 @@ jobs:
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_SECRET: ${{ secrets.X_API_SECRET }}
+      X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+      X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
 
     steps:
       - uses: actions/checkout@v4
@@ -63,6 +67,10 @@ jobs:
       - name: Closing-soon reminders to subscribers
         if: env.TELEGRAM_BOT_TOKEN != ''
         run: python manage.py send_deadline_reminders
+
+      - name: Post new vacancies to X
+        if: env.X_API_KEY != ''
+        run: timeout 120 python manage.py post_to_x --max 2 --daily-cap 8 2>&1 || echo "[DONE]"
 
       # Upload + Render redeploy ONLY if this run changed data (see .github/scripts/publish_db.sh)
       - name: Publish DB if changed

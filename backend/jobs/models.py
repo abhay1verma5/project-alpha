@@ -326,3 +326,16 @@ class CrawlLog(models.Model):
 
     def __str__(self):
         return f"{self.source} - {self.status} ({self.started_at})"
+
+class XPostLog(models.Model):
+    """One row per job posted to X, so a job is never posted twice."""
+
+    job = models.OneToOneField(Job, on_delete=models.CASCADE, related_name="x_post")
+    tweet_id = models.CharField(max_length=40)
+    posted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-posted_at"]
+
+    def __str__(self):
+        return f"X post {self.tweet_id} for {self.job_id}"
