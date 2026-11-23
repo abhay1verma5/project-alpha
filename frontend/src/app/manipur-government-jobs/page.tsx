@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Manipur Government Jobs 2026-27 — मणिपुर सरकारी नौकरी | SarkariAlert',
+  title: 'Manipur Government Jobs 2026-27 — मणिपुर सरकारी नौकरी',
   description:
     'Manipur Government Jobs 2026-27: Latest Manipur sarkari naukri for MPSC, Manipur Police, Manipur Education Dept & more. Apply online for Manipur government vacancies.',
   keywords: [

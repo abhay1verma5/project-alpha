@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { FileCheck, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'SSC CHSL 2026-27 — LDC, DEO, PA/SA Recruitment | SarkariAlert',
+  title: 'SSC CHSL 2026-27 — LDC, DEO, PA/SA Recruitment',
   description:
     'SSC CHSL 2026-27 recruitment for LDC, Data Entry Operator, Postal Assistant & Sorting Assistant. 12th pass eligibility, exam pattern, salary, typing test details. Apply online for SSC Combined Higher Secondary Level exam.',
   keywords: [

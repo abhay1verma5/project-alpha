@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Landmark, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'IBPS PO 2026-27 — Probationary Officer Recruitment | SarkariAlert',
+  title: 'IBPS PO 2026-27 — Probationary Officer Recruitment',
   description:
     'IBPS PO 2026-27 probationary officer recruitment in public sector banks. Eligibility, exam pattern (Prelims + Mains + Interview), salary Rs 52,000+, participating banks, number of attempts & vacancy details.',
   keywords: [

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { EligibilityClient } from '@/components/ai-eligibility/EligibilityClient';
 
 export const metadata: Metadata = {
-  title: 'AI Eligibility Checker — Check Your Government Exam Eligibility | SarkariAlert',
+  title: 'AI Eligibility Checker — Check Your Government Exam Eligibility',
   description: 'Check your eligibility for 30+ government exams including SSC, UPSC, Railway, Banking, Defence, Police, and Teaching. AI-powered analysis based on age, qualification, and category.',
   keywords: 'eligibility checker, sarkari exam eligibility, ssc age limit, upsc eligibility, railway exam qualification, government job eligibility',
 };

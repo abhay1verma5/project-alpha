@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Post Graduate Government Jobs 2026-27 — PG, MA, M.Sc, M.Com Sarkari Naukri | SarkariAlert',
+  title: 'Post Graduate Government Jobs 2026-27 — PG, MA, M.Sc, M.Com Sarkari Naukri',
   description:
     'Post graduate government jobs 2026-27: Browse latest sarkari naukri for PG degree holders. UGC NET, teaching, UPSC, research, scientist posts for MA, M.Sc, M.Com, MBA candidates. Apply online with eligibility, salary & last date.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Calculator } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Commerce Government Jobs 2026-27 — B.Com, CA, Accountant Sarkari Naukri | SarkariAlert',
+  title: 'Commerce Government Jobs 2026-27 — B.Com, CA, Accountant Sarkari Naukri',
   description:
     'Commerce government jobs 2026-27: Browse latest sarkari naukri for B.Com, M.Com, CA, ICWA candidates. SSC CGL accountant, Income Tax Inspector, CAG audit, banking exams & state accountant vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

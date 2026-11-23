@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Dadra & Nagar Haveli and Daman & Diu Government Jobs 2026-27 — सरकारी नौकरी | SarkariAlert',
+  title: 'Dadra & Nagar Haveli and Daman & Diu Government Jobs 2026-27 — सरकारी नौकरी',
   description:
     'Dadra & Nagar Haveli and Daman & Diu Government Jobs 2026-27: Latest DNHDD UT sarkari naukri for Administration, Police, Education & more. Apply online.',
   keywords: [

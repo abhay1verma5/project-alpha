@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Cog } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Engineering Government Jobs 2026-27 — PSU, SSC JE & Technical Sarkari Naukri | SarkariAlert',
+  title: 'Engineering Government Jobs 2026-27 — PSU, SSC JE & Technical Sarkari Naukri',
   description:
     'Engineering government jobs 2026-27: Browse latest sarkari naukri for B.Tech, B.E., Diploma engineers. PSU recruitment through GATE, SSC JE, ISRO, DRDO, Railway & State Engineering Services vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

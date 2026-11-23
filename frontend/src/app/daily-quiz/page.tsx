@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { DailyQuizClient } from '@/components/daily-quiz/DailyQuizClient';
 
 export const metadata: Metadata = {
-  title: 'Daily GK Quiz — Free Practice for Competitive Exams | SarkariAlert',
+  title: 'Daily GK Quiz — Free Practice for Competitive Exams',
   description:
     'Free daily GK quiz for UPSC, SSC, Banking, Railway exams. 10 questions daily with answers & explanations. Track your streak and improve your general knowledge.',
   keywords: [

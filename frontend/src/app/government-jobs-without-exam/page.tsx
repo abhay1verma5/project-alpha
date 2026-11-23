@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, FileCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Government Jobs Without Exam 2026-27 — बिना परीक्षा सरकारी नौकरी | SarkariAlert',
+  title: 'Government Jobs Without Exam 2026-27 — बिना परीक्षा सरकारी नौकरी',
   description:
     'Government jobs without exam 2026-27: Browse latest sarkari naukri without written test. GDS, Anganwadi, ASHA worker, sports quota, compassionate appointment, ex-servicemen & direct recruitment vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

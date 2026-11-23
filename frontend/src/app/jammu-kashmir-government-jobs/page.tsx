@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Jammu & Kashmir Government Jobs 2026-27 — JK सरकारी नौकरी | SarkariAlert',
+  title: 'Jammu & Kashmir Government Jobs 2026-27 — JK सरकारी नौकरी',
   description:
     'Jammu & Kashmir Government Jobs 2026-27: Latest JK sarkari naukri for JKPSC, JKSSB, JK Police, JK Bank & more. Apply online for J&K UT government vacancies.',
   keywords: [

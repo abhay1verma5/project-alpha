@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { CareerPath } from '@/components/tools/CareerPath';
 
 export const metadata: Metadata = {
-  title: 'Career Path Finder — मेरी योग्यता पर कौन सी सरकारी नौकरी? | SarkariAlert',
+  title: 'Career Path Finder — मेरी योग्यता पर कौन सी सरकारी नौकरी?',
   description:
     'Enter your qualification (10th, 12th, Graduate, B.Tech, Post Graduate) and discover ALL government job options with salary, timeline, selection process & difficulty level. SSC, UPSC, Railway, Banking, Defence — complete career map.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chandigarh Government Jobs 2026-27 — चंडीगढ़ सरकारी नौकरी | SarkariAlert',
+  title: 'Chandigarh Government Jobs 2026-27 — चंडीगढ़ सरकारी नौकरी',
   description:
     'Chandigarh Government Jobs 2026-27: Latest Chandigarh sarkari naukri for Chandigarh Administration, PGI, PU, Punjab & Haryana HC & more. Apply online for Chandigarh UT government vacancies.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Teaching Government Jobs 2026-27 — TGT, PGT, PRT Vacancies | SarkariAlert',
+  title: 'Teaching Government Jobs 2026-27 — TGT, PGT, PRT Vacancies',
   description:
     'Teaching government jobs 2026-27: Browse latest sarkari naukri for teachers. TGT, PGT, PRT, CTET, KVS, NVS, Army School, State TET & DSSSB teacher vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ExamSimilarity } from '@/components/tools/ExamSimilarity';
 
 export const metadata: Metadata = {
-  title: 'Exam Similarity Finder — कौन सी परीक्षाएं मिलती-जुलती हैं? | SarkariAlert',
+  title: 'Exam Similarity Finder — कौन सी परीक्षाएं मिलती-जुलती हैं?',
   description: 'Find which government exams share syllabus overlap. Preparing for SSC CGL? See 70-90% overlap with CHSL, CPO, MTS. Compare difficulty, salary & common subjects for 20+ exams.',
   keywords: [
     'exam similarity finder',

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Anchor } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Indian Navy Recruitment 2026-27 — Agniveer, SSR, MR Vacancy | SarkariAlert',
+  title: 'Indian Navy Recruitment 2026-27 — Agniveer, SSR, MR Vacancy',
   description:
     'Indian Navy recruitment 2026-27: Latest Agniveer SSR, MR, AA vacancy notifications. Navy officer entry through NDA, CDS, 10+2 B.Tech cadet entry & SSC. Check eligibility, age limit, physical standards, salary & apply online for Indian Navy sarkari naukri.',
   keywords: [

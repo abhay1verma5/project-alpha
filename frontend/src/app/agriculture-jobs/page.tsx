@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Sprout } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Agriculture Government Jobs 2026-27 — B.Sc Agriculture, ICAR Sarkari Naukri | SarkariAlert',
+  title: 'Agriculture Government Jobs 2026-27 — B.Sc Agriculture, ICAR Sarkari Naukri',
   description:
     'Agriculture government jobs 2026-27: Browse latest sarkari naukri for B.Sc Agriculture, M.Sc Agriculture candidates. ICAR, FCI, Agriculture Officer, Krishi Vibhag, NABARD & state agriculture department vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

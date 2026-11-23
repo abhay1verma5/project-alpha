@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Government Jobs for Women 2026-27 — महिलाओं के लिए सरकारी नौकरी | SarkariAlert',
+  title: 'Government Jobs for Women 2026-27 — महिलाओं के लिए सरकारी नौकरी',
   description:
     'Government jobs for women 2026-27: Browse latest sarkari naukri for women candidates. Anganwadi worker, WCD posts, women police, CISF, bank jobs, teaching & women-only vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

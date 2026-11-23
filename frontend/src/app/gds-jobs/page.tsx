@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'GDS Recruitment 2026-27 — Gramin Dak Sevak India Post Vacancy | SarkariAlert',
+  title: 'GDS Recruitment 2026-27 — Gramin Dak Sevak India Post Vacancy',
   description:
     'GDS recruitment 2026-27: Latest Gramin Dak Sevak vacancy by India Post. 10th pass eligibility, TRCA salary Rs 12,000-14,500, merit-based selection on 10th marks. Apply online for Branch Postmaster, ABPM & Dak Sevak posts.',
   keywords: [

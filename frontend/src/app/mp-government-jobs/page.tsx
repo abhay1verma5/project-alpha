@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'MP Government Jobs 2026-27 — मध्य प्रदेश सरकारी नौकरी | SarkariAlert',
+  title: 'MP Government Jobs 2026-27 — मध्य प्रदेश सरकारी नौकरी',
   description:
     'MP Government Jobs 2026-27: Latest Madhya Pradesh sarkari naukri for MPPSC, MP Vyapam (MPPEB), MP Police, MP Patwari & more. Apply online for MP state government vacancies with eligibility, salary & last date.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Scale } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Court Jobs 2026-27 — Judiciary Clerk, Stenographer, Peon Vacancy | SarkariAlert',
+  title: 'Court Jobs 2026-27 — Judiciary Clerk, Stenographer, Peon Vacancy',
   description:
     'Court jobs 2026-27: Latest High Court, District Court, Supreme Court vacancy for clerk, stenographer, peon, process server & reader posts. Check eligibility, salary, syllabus & apply online for judiciary sarkari naukri across all states.',
   keywords: [

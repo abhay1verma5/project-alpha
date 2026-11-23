@@ -63,7 +63,10 @@ class PYQListView(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        return ExamQuestion.objects.all()
+        return ExamQuestion.objects.exclude(
+            id__in=ExamQuestion.objects.exclude(source="ai_generated").extra(
+                where=["json_array_length(options) < 4"]).values("id")
+        )
 
     def filter_queryset(self, queryset):
         # Limit at the database level: a practice set is 10-200 questions, never
@@ -81,7 +84,10 @@ class PYQMockView(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        return ExamQuestion.objects.all()
+        return ExamQuestion.objects.exclude(
+            id__in=ExamQuestion.objects.exclude(source="ai_generated").extra(
+                where=["json_array_length(options) < 4"]).values("id")
+        )
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
@@ -210,8 +216,15 @@ class PYQMetaView(APIView):
 PAPER_CACHE_SECONDS = 60 * 60
 
 
+# Some imported past-paper rows were split badly by their source dataset (e.g.
+# options "Only two (e) Only three"), leaving fewer than 4 options and an
+# untrustworthy answer index. 47 such rows on 2026-11-23; the daily import would
+# bring them back if deleted, so they are filtered out when serving instead.
+WELL_FORMED = ["json_array_length(options) >= 4"]
+
+
 def _real(exam):
-    return ExamQuestion.objects.filter(exam_type=exam).exclude(source="ai_generated")
+    return ExamQuestion.objects.filter(exam_type=exam).exclude(source="ai_generated").extra(where=WELL_FORMED)
 
 
 class PYQPapersView(APIView):
@@ -277,3 +290,22 @@ class PYQPaperView(APIView):
             "pages": (total + size - 1) // size if total else 0,
             "results": list(rows),
         })
+
+
+class PYQPaperIndexView(APIView):
+    """GET /api/pyq/paper-index/ -> {"jee_main": [2026, 2025, ...], ...} (real papers only, one call)."""
+
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        data = cache.get("pyq-paper-index")
+        if data is None:
+            data = {}
+            rows = (
+                ExamQuestion.objects.exclude(source="ai_generated").extra(where=WELL_FORMED)
+                .values_list("exam_type", "year").distinct().order_by("exam_type", "-year")
+            )
+            for exam, year in rows:
+                data.setdefault(exam, []).append(year)
+            cache.set("pyq-paper-index", data, PAPER_CACHE_SECONDS)
+        return Response(data)

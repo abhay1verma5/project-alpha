@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Train, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'RRB NTPC 2026-27 — Railway Non-Technical Recruitment | SarkariAlert',
+  title: 'RRB NTPC 2026-27 — Railway Non-Technical Recruitment',
   description:
     'RRB NTPC 2026-27 railway non-technical popular categories recruitment. Station Master, Goods Guard, Commercial Clerk & other posts. Eligibility, CBT stages, salary, vacancy details for 12th pass & graduates.',
   keywords: [

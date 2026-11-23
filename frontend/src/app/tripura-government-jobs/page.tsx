@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Tripura Government Jobs 2026-27 — ত্রিপুরা সরকারি চাকরি | SarkariAlert',
+  title: 'Tripura Government Jobs 2026-27 — ত্রিপুরা সরকারি চাকরি',
   description:
     'Tripura Government Jobs 2026-27: Latest Tripura sarkari naukri for TPSC, Tripura Police, TET, TTPSC & more. Apply online for Tripura government vacancies.',
   keywords: [

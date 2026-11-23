@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ exam: str
   const exam = getAgeLimitBySlug(slug);
   if (!exam) return { title: 'Exam Not Found' };
   return {
-    title: `${exam.name} Age Limit 2026-27 — Category-wise Relaxation & Eligibility | SarkariAlert`,
+    title: `${exam.name} Age Limit 2026-27 — Category-wise Relaxation & Eligibility`,
     description: `${exam.name} age limit: ${exam.minAge}-${exam.maxAge} years (General). OBC +${exam.relaxation.obc}, SC/ST +${exam.relaxation.sc_st} years relaxation. Qualification: ${exam.qualification}.`,
     alternates: { canonical: `https://sarkarialert.online/age-limit/${slug}` },
   };

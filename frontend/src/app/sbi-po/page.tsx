@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Building, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'SBI PO 2026-27 — State Bank Probationary Officer | SarkariAlert',
+  title: 'SBI PO 2026-27 — State Bank Probationary Officer',
   description:
     'SBI PO 2026-27 State Bank of India Probationary Officer recruitment. Eligibility (graduation, 21-30 age), exam pattern (Prelims + Mains + GD + Interview), salary Rs 52,000+, career growth & how SBI PO differs from IBPS PO.',
   keywords: [

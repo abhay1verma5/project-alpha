@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Ladakh Government Jobs 2026-27 — लद्दाख सरकारी नौकरी | SarkariAlert',
+  title: 'Ladakh Government Jobs 2026-27 — लद्दाख सरकारी नौकरी',
   description:
     'Ladakh Government Jobs 2026-27: Latest Ladakh UT sarkari naukri for LAHDC, Ladakh Police, Army, BRO & more. Apply online for Ladakh UT government vacancies.',
   keywords: [

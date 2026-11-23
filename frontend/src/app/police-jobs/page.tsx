@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Police Government Jobs 2026-27 — Constable, SI & ASI Vacancies | SarkariAlert',
+  title: 'Police Government Jobs 2026-27 — Constable, SI & ASI Vacancies',
   description:
     'Police government jobs 2026-27: Browse latest sarkari naukri for Police Constable, Sub Inspector (SI), ASI & Head Constable. SSC GD, State Police, CRPF, BSF, CISF, ITBP, SSB & Delhi Police vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

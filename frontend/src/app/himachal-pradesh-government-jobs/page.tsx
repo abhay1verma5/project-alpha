@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Himachal Pradesh Government Jobs 2026-27 — HP सरकारी नौकरी | SarkariAlert',
+  title: 'Himachal Pradesh Government Jobs 2026-27 — HP सरकारी नौकरी',
   description:
     'Himachal Pradesh Government Jobs 2026-27: Latest HP sarkari naukri for HPPSC, HPSSC, HP Police, HP TET & more. Apply online for Himachal Pradesh state government vacancies with eligibility, salary & last date.',
   keywords: [

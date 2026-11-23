@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Flame, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Agniveer Bharti 2026-27 — Army, Navy, Air Force Recruitment | SarkariAlert',
+  title: 'Agniveer Bharti 2026-27 — Army, Navy, Air Force Recruitment',
   description:
     'Agniveer Bharti 2026-27 for Indian Army, Navy & Air Force. Eligibility (17.5-21 age, 10th/12th pass), salary Rs 30,000-40,000, Seva Nidhi package Rs 11.71 lakh, 4-year service scheme. Apply online for Agnipath recruitment.',
   keywords: [

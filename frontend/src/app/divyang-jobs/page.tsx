@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Accessibility } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Divyang/PwBD Government Jobs 2026-27 — 4% Reservation Vacancies | SarkariAlert',
+  title: 'Divyang/PwBD Government Jobs 2026-27 — 4% Reservation Vacancies',
   description:
     'Divyang sarkari naukri 2026-27: Latest PwBD government jobs with 4% reservation under RPWD Act 2016. Handicapped vacancy in SSC, Railway, Banking, UPSC & state government. Age relaxation, disability certificate, eligible categories & apply online.',
   keywords: [

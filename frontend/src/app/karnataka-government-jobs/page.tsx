@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Karnataka Government Jobs 2026-27 — ಕರ್ನಾಟಕ ಸರ್ಕಾರಿ ಉದ್ಯೋಗ | SarkariAlert',
+  title: 'Karnataka Government Jobs 2026-27 — ಕರ್ನಾಟಕ ಸರ್ಕಾರಿ ಉದ್ಯೋಗ',
   description:
     'Karnataka Government Jobs 2026-27: Latest Karnataka sarkari naukri for KPSC, KSP, KEA & more. Apply online for Karnataka state government vacancies with eligibility, salary & last date.',
   keywords: [

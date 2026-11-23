@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Arunachal Pradesh Government Jobs 2026-27 — अरुणाचल प्रदेश सरकारी नौकरी | SarkariAlert',
+  title: 'Arunachal Pradesh Government Jobs 2026-27 — अरुणाचल प्रदेश सरकारी नौकरी',
   description:
     'Arunachal Pradesh Government Jobs 2026-27: Latest AP sarkari naukri for APPSC, Arunachal Police, Education & Health Dept. Apply online for Arunachal Pradesh vacancies.',
   keywords: [

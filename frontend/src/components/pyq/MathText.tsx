@@ -45,6 +45,15 @@ function renderMath(input: string): string {
       }
     }
 
+    // A '$' that opens no math (no closing '$', e.g. "$500" or a shell "$PATH"):
+    // keep it as plain text and move on. Without this the loop never advanced
+    // and server-rendering hung (GATE CSE 2024 page returned 502).
+    if (input[i] === '$') {
+      parts.push('$');
+      i += 1;
+      continue;
+    }
+
     // Regular text — collect until next $
     const next = input.indexOf('$', i);
     if (next === -1) {

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Goa Government Jobs 2026-27 — गोवा सरकारी नौकरी | SarkariAlert',
+  title: 'Goa Government Jobs 2026-27 — गोवा सरकारी नौकरी',
   description:
     'Goa Government Jobs 2026-27: Latest Goa sarkari naukri for GPSC, Goa Police, DIET, Goa Shipyard & more. Apply online for Goa state government vacancies.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Puducherry Government Jobs 2026-27 — पुडुचेरी सरकारी नौकरी | SarkariAlert',
+  title: 'Puducherry Government Jobs 2026-27 — पुडुचेरी सरकारी नौकरी',
   description:
     'Puducherry Government Jobs 2026-27: Latest Puducherry sarkari naukri for Puducherry Administration, JIPMER, Puducherry Police & more. Apply online for Puducherry UT vacancies.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Meghalaya Government Jobs 2026-27 — मेघालय सरकारी नौकरी | SarkariAlert',
+  title: 'Meghalaya Government Jobs 2026-27 — मेघालय सरकारी नौकरी',
   description:
     'Meghalaya Government Jobs 2026-27: Latest Meghalaya sarkari naukri for MPSC Meghalaya, Meghalaya Police, MBOSE & more. Apply online for Meghalaya government vacancies.',
   keywords: [

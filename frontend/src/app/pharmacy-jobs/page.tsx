@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Pill } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Pharmacy Government Jobs 2026-27 — D.Pharm, B.Pharm Sarkari Naukri | SarkariAlert',
+  title: 'Pharmacy Government Jobs 2026-27 — D.Pharm, B.Pharm Sarkari Naukri',
   description:
     'Pharmacy government jobs 2026-27: Browse latest sarkari naukri for D.Pharm, B.Pharm, M.Pharm candidates. ESIC pharmacist, Railway pharmacist, CGHS, AIIMS, Army pharmacist & state health department vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

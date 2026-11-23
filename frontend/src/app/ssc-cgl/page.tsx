@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Target, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'SSC CGL 2026-27 — Notification, Syllabus, Eligibility, Exam Date | SarkariAlert',
+  title: 'SSC CGL 2026-27 — Notification, Syllabus, Eligibility, Exam Date',
   description:
     'SSC CGL 2026-27 notification, syllabus, eligibility, exam date, vacancy details. Apply for SSC Combined Graduate Level posts — Inspector, ASO, Auditor, Tax Assistant. Complete guide with salary, age limit & selection process.',
   keywords: [

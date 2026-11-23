@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Scale } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Law Government Jobs 2026-27 — LLB, Legal Officer Sarkari Naukri | SarkariAlert',
+  title: 'Law Government Jobs 2026-27 — LLB, Legal Officer Sarkari Naukri',
   description:
     'Law government jobs 2026-27: Browse latest sarkari naukri for LLB, LLM law graduates. Judicial services, APO, Legal Officer, CLAT, judiciary exam, state judicial service vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

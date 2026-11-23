@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, TrendingUp } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'MBA Government Jobs 2026-27 — Management Cadre Sarkari Naukri | SarkariAlert',
+  title: 'MBA Government Jobs 2026-27 — Management Cadre Sarkari Naukri',
   description:
     'MBA government jobs 2026-27: Browse latest sarkari naukri for MBA, PGDM, BBA management graduates. IBPS SO, RBI Grade B, CAG, UPSC management posts, PSU management trainee vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

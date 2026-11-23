@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Punjab Government Jobs 2026-27 — ਪੰਜਾਬ ਸਰਕਾਰੀ ਨੌਕਰੀ | SarkariAlert',
+  title: 'Punjab Government Jobs 2026-27 — ਪੰਜਾਬ ਸਰਕਾਰੀ ਨੌਕਰੀ',
   description:
     'Punjab Government Jobs 2026-27: Latest Punjab sarkari naukri for PPSC, PSSSB, Punjab Police, Punjab Patwari & more. Apply online for Punjab state government vacancies with eligibility, salary & last date.',
   keywords: [

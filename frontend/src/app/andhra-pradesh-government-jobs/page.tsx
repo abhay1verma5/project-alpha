@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Andhra Pradesh Government Jobs 2026-27 — AP సర్కారీ ఉద్యోగాలు | SarkariAlert',
+  title: 'Andhra Pradesh Government Jobs 2026-27 — AP సర్కారీ ఉద్యోగాలు',
   description:
     'Andhra Pradesh Government Jobs 2026-27: Latest AP sarkari naukri for APPSC, AP Police, AP TET, APGENCO, Grama Sachivalayam & more. Apply online for AP state government vacancies with eligibility, salary & last date.',
   keywords: [

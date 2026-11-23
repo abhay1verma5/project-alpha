@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Assam Government Jobs 2026-27 — অসম চৰকাৰী চাকৰি | SarkariAlert',
+  title: 'Assam Government Jobs 2026-27 — অসম চৰকাৰী চাকৰি',
   description:
     'Assam Government Jobs 2026-27: Latest Assam sarkari naukri for APSC, SLRC, Assam Police, Assam TET, DHS Assam & more. Apply online for Assam state government vacancies with eligibility, salary & last date.',
   keywords: [

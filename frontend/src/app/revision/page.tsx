@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { RevisionClient } from './RevisionClient';
 
 export const metadata: Metadata = {
-  title: 'Spaced Revision — Smart PYQ Review System | SarkariAlert',
+  title: 'Spaced Revision — Smart PYQ Review System',
   description:
     'Review PYQ questions you got wrong using spaced repetition (SM-2 algorithm). Scientifically proven intervals — 1, 3, 7, 14, 30 days — help you retain answers for JEE, NEET, SSC, UPSC, Railway, Banking and 60+ exams.',
   keywords: [

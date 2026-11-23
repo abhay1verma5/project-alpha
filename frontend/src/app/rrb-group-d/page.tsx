@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Hammer, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'RRB Group D 2026-27 — Railway Group D Bharti 32000+ Posts | SarkariAlert',
+  title: 'RRB Group D 2026-27 — Railway Group D Bharti 32000+ Posts',
   description:
     'RRB Group D 2026-27 railway recruitment for 32000+ posts. Eligibility (10th + ITI/NAC), age limit (18-33), PET details, salary Rs 18,000-56,900. Track Maintainer, Helper, Pointsman & other Group D vacancies.',
   keywords: [

@@ -3,6 +3,7 @@ import { TypingTestClient } from './TypingTestClient';
 
 export const metadata: Metadata = {
   title: 'Typing Test — Practice for SSC/Banking Typing Exams',
+  alternates: { canonical: '/typing-test' },
   description: 'Free typing speed test for SSC CHSL, SSC CGL, IBPS, and other government exam typing tests. Practice in English and Hindi.',
 };
 

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Wrench } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Apprentice Jobs 2026-27 — Railway, PSU & Government Apprenticeship | SarkariAlert',
+  title: 'Apprentice Jobs 2026-27 — Railway, PSU & Government Apprenticeship',
   description:
     'Apprentice recruitment 2026-27: Latest railway apprentice, PSU apprenticeship, ITI apprentice vacancy. NAPS/NATS portal registration, stipend Rs 7,000-9,000, trade & graduate apprentice vacancies with eligibility, duration & apply online.',
   keywords: [

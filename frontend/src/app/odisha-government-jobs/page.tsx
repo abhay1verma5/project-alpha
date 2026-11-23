@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Odisha Government Jobs 2026-27 — ଓଡ଼ିଶା ସରକାରୀ ଚାକିରୀ | SarkariAlert',
+  title: 'Odisha Government Jobs 2026-27 — ଓଡ଼ିଶା ସରକାରୀ ଚାକିରୀ',
   description:
     'Odisha Government Jobs 2026-27: Latest Odisha sarkari naukri for OPSC, OSSSC, Odisha Police, OTET, OAVS & more. Apply online for Odisha state government vacancies with eligibility, salary & last date.',
   keywords: [

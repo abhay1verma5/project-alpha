@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chhattisgarh Government Jobs 2026-27 — छत्तीसगढ़ सरकारी नौकरी | SarkariAlert',
+  title: 'Chhattisgarh Government Jobs 2026-27 — छत्तीसगढ़ सरकारी नौकरी',
   description:
     'Chhattisgarh Government Jobs 2026-27: Latest CG sarkari naukri for CGPSC, CG Vyapam (CGPEB), CG Police & more. Apply online for Chhattisgarh state government vacancies with eligibility, salary & last date.',
   keywords: [

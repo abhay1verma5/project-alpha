@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Andaman & Nicobar Government Jobs 2026-27 — अंडमान निकोबार सरकारी नौकरी | SarkariAlert',
+  title: 'Andaman & Nicobar Government Jobs 2026-27 — अंडमान निकोबार सरकारी नौकरी',
   description:
     'Andaman & Nicobar Government Jobs 2026-27: Latest A&N Islands UT sarkari naukri for Administration, Police, Navy, Coast Guard & more. Apply online for island government vacancies.',
   keywords: [

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { HindiTypingTest } from '@/components/tools/HindiTypingTest';
 
 export const metadata: Metadata = {
-  title: 'Hindi Typing Test — हिंदी टाइपिंग टेस्ट for SSC, CPCT, Court | SarkariAlert',
+  title: 'Hindi Typing Test — हिंदी टाइपिंग टेस्ट for SSC, CPCT, Court',
   description: 'Free online Hindi typing test for SSC, CPCT, Court exams. Check your WPM speed and accuracy. Practice with Unicode Hindi paragraphs. 5/10/15 minute tests.',
   keywords: ['hindi typing test', 'हिंदी टाइपिंग टेस्ट', 'cpct typing test', 'ssc typing test', 'court typing test', 'hindi typing speed test online', 'mangal font typing', 'kruti dev typing'],
   alternates: { canonical: 'https://sarkarialert.online/tools/hindi-typing-test' },

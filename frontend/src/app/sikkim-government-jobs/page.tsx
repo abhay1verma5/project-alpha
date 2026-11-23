@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Sikkim Government Jobs 2026-27 — सिक्किम सरकारी नौकरी | SarkariAlert',
+  title: 'Sikkim Government Jobs 2026-27 — सिक्किम सरकारी नौकरी',
   description:
     'Sikkim Government Jobs 2026-27: Latest Sikkim sarkari naukri for SPSC, Sikkim Police, HRDD & more. Apply online for Sikkim government vacancies.',
   keywords: [

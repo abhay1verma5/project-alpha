@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { GraduationCap, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'CTET 2026-27 — Central Teacher Eligibility Test | SarkariAlert',
+  title: 'CTET 2026-27 — Central Teacher Eligibility Test',
   description:
     'CTET 2026-27 Central Teacher Eligibility Test notification, eligibility (D.El.Ed/B.Ed), Paper 1 vs Paper 2, qualifying marks, validity (lifetime). Apply for KVS, NVS & central government school teaching jobs.',
   keywords: [

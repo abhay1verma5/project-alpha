@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Clerk Jobs 2026-27 — Government Clerk, LDC, UDC Vacancy | SarkariAlert',
+  title: 'Clerk Jobs 2026-27 — Government Clerk, LDC, UDC Vacancy',
   description:
     'Clerk jobs 2026-27: Latest government clerk, LDC (Lower Division Clerk), UDC (Upper Division Clerk) vacancy across SSC CHSL, court, bank, railway & state government departments. Check eligibility, salary, typing test & apply online for clerk sarkari naukri.',
   keywords: [

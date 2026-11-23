@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Footprints } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Walk-In Interview Government Jobs 2026-27 — Direct Recruitment | SarkariAlert',
+  title: 'Walk-In Interview Government Jobs 2026-27 — Direct Recruitment',
   description:
     'Walk-in interview government jobs 2026-27: Find latest direct recruitment sarkari naukri without written exam. Walk-in bharti for teachers, doctors, engineers, clerks & more. No exam government jobs with eligibility, date & venue.',
   keywords: [

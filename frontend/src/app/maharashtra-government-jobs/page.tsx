@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Maharashtra Government Jobs 2026-27 — महाराष्ट्र सरकारी नौकरी | SarkariAlert',
+  title: 'Maharashtra Government Jobs 2026-27 — महाराष्ट्र सरकारी नौकरी',
   description:
     'Maharashtra Government Jobs 2026-27: Latest Maharashtra sarkari naukri for MPSC, Maharashtra Police, Talathi, ZP Bharti, Mega Bharti & more. Apply online for Maharashtra state government vacancies with eligibility, salary & last date.',
   keywords: [

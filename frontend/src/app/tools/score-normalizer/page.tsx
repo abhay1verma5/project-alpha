@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ScoreNormalizer } from '@/components/tools/ScoreNormalizer';
 
 export const metadata: Metadata = {
-  title: 'SSC & Railway Score Normalization Calculator — Check Normalized Marks | SarkariAlert',
+  title: 'SSC & Railway Score Normalization Calculator — Check Normalized Marks',
   description: 'Calculate your normalized score for SSC CGL, SSC CHSL, SSC MTS, SSC GD, SSC CPO, RRB NTPC, RRB Group D multi-shift exams. See formula breakdown, estimated percentile, and visual comparison.',
   keywords: [
     'score normalization calculator',

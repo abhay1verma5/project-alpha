@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Anganwadi Bharti 2026-27 — Supervisor, Worker, Helper Vacancy | SarkariAlert',
+  title: 'Anganwadi Bharti 2026-27 — Supervisor, Worker, Helper Vacancy',
   description:
     'Anganwadi bharti 2026-27: Latest Anganwadi supervisor, worker & helper vacancy across all states. ICDS recruitment for 8th, 10th pass & graduate candidates. Apply online with eligibility, salary (Rs 4,000-20,000) & last date details.',
   keywords: [

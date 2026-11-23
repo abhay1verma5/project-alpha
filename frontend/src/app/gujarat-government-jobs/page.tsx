@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Gujarat Government Jobs 2026-27 — ગુજરાત સરકારી નોકરી | SarkariAlert',
+  title: 'Gujarat Government Jobs 2026-27 — ગુજરાત સરકારી નોકરી',
   description:
     'Gujarat Government Jobs 2026-27: Latest Gujarat sarkari naukri for GPSC, GSSSB, Gujarat Police, Talati & more. Apply online for Gujarat state government vacancies with eligibility, salary & last date.',
   keywords: [

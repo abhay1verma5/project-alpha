@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Plane } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Indian Air Force Recruitment 2026-27 — Agniveer Vayu, AFCAT | SarkariAlert',
+  title: 'Indian Air Force Recruitment 2026-27 — Agniveer Vayu, AFCAT',
   description:
     'Indian Air Force recruitment 2026-27: Latest Agniveer Vayu, AFCAT, Group X & Y vacancy notifications. IAF officer & airmen entry schemes with eligibility, age limit, physical standards, salary & online application for Air Force sarkari naukri.',
   keywords: [

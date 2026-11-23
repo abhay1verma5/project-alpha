@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { Camera, Calculator, IndianRupee, FileText, Combine, Wrench, ChevronRight, CheckCircle2, ClipboardCheck, Activity, PercentCircle, Keyboard, FileDown, Dumbbell, Scale, Hash, GitCompare, BarChart3, Target, Route, Compass } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Free Tools for Government Job Aspirants — SarkariAlert',
+  title: 'Free Tools for Government Job Aspirants',
+  alternates: { canonical: '/tools' },
   description: 'Free tools: Photo resizer, Age calculator, Salary calculator for government job applicants. No signup, 100% free, works offline.',
 };
 

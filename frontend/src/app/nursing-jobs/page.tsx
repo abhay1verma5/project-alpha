@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Nursing & Healthcare Government Jobs 2026-27 — Staff Nurse Sarkari Naukri | SarkariAlert',
+  title: 'Nursing & Healthcare Government Jobs 2026-27 — Staff Nurse Sarkari Naukri',
   description:
     'Nursing government jobs 2026-27: Browse latest sarkari naukri for GNM, ANM, B.Sc Nursing candidates. AIIMS, ESIC, Railway, State Hospital, PGIMER & Army nursing vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

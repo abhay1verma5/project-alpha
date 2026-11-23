@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Gift, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Sarkari Yojana 2026-27 — सरकारी योजना लिस्ट, Online Apply | SarkariAlert',
+  title: 'Sarkari Yojana 2026-27 — सरकारी योजना लिस्ट, Online Apply',
   description:
     'Sarkari Yojana 2026-27: Complete list of central & state government schemes. PM Kisan, Ayushman Bharat, PM Awas Yojana, Sukanya Samriddhi, Mudra Yojana, Ujjwala, Ladli Behna & more. Check eligibility, documents & apply online.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Telangana Government Jobs 2026-27 — తెలంగాణ సర్కారీ ఉద్యోగాలు | SarkariAlert',
+  title: 'Telangana Government Jobs 2026-27 — తెలంగాణ సర్కారీ ఉద్యోగాలు',
   description:
     'Telangana Government Jobs 2026-27: Latest TS sarkari naukri for TSPSC, TS Police, TS TET/DSC, TSSPDCL, TSNPDCL & more. Apply online for Telangana state government vacancies with eligibility, salary & last date.',
   keywords: [

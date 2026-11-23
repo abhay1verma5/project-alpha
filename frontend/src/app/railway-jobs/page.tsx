@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, TrainFront } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Railway Government Jobs 2026-27 — RRB NTPC, Group D, JE भर्ती | SarkariAlert',
+  title: 'Railway Government Jobs 2026-27 — RRB NTPC, Group D, JE भर्ती',
   description:
     'Railway government jobs 2026-27: Browse latest railway sarkari naukri. RRB NTPC, Group D, Railway JE, ALP, RPF, Loco Pilot & technician vacancies. Apply online with eligibility, salary, exam pattern & last date.',
   keywords: [

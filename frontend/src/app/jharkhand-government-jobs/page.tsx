@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Jharkhand Government Jobs 2026-27 — झारखंड सरकारी नौकरी | SarkariAlert',
+  title: 'Jharkhand Government Jobs 2026-27 — झारखंड सरकारी नौकरी',
   description:
     'Jharkhand Government Jobs 2026-27: Latest Jharkhand sarkari naukri for JPSC, JSSC, Jharkhand Police & more. Apply online for Jharkhand state government vacancies with eligibility, salary & last date.',
   keywords: [

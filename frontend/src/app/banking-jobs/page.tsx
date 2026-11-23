@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Banknote } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Banking Government Jobs 2026-27 — IBPS, SBI, RBI Bank Bharti | SarkariAlert',
+  title: 'Banking Government Jobs 2026-27 — IBPS, SBI, RBI Bank Bharti',
   description:
     'Banking government jobs 2026-27: Browse latest bank sarkari naukri. IBPS PO/Clerk, SBI PO/Clerk, RBI Grade B/Assistant, NABARD, SIDBI & cooperative bank vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

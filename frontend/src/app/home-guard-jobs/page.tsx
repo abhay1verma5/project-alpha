@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Home Guard Bharti 2026-27 — होम गार्ड भर्ती & Vacancy | SarkariAlert',
+  title: 'Home Guard Bharti 2026-27 — होम गार्ड भर्ती & Vacancy',
   description:
     'Home Guard bharti 2026-27: Latest Home Guard recruitment & vacancy across all states. 10th pass eligibility, honorarium Rs 600-900/day, physical test details. State-wise vacancies for UP, Bihar, MP, Rajasthan & more.',
   keywords: [

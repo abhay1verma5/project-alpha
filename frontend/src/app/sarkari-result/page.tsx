@@ -8,7 +8,7 @@ import { Trophy, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Sarkari Result 2026-27 — सरकारी रिजल्ट, Admit Card, Answer Key | SarkariAlert',
+  title: 'Sarkari Result 2026-27 — सरकारी रिजल्ट, Admit Card, Answer Key',
   description:
     'Sarkari Result 2026-27: Check latest sarkari exam results, admit cards & answer keys. SSC, UPSC, Railway, Banking, State PSC, Police, Defence government exam results with direct links, scorecard download & cut-off marks.',
   keywords: [

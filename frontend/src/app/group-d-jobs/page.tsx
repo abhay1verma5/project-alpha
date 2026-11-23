@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, HardHat } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Group D Government Jobs 2026-27 — MTS, Peon, Safai Karamchari | SarkariAlert',
+  title: 'Group D Government Jobs 2026-27 — MTS, Peon, Safai Karamchari',
   description:
     'Group D government jobs 2026-27: Latest MTS (Multi Tasking Staff), Peon, Safai Karamchari, Helper, Attendant & Chowkidar vacancy in railway, SSC, court & state government. Check eligibility, salary, syllabus & apply online for Group D sarkari naukri.',
   keywords: [

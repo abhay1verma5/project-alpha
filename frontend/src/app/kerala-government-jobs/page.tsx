@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Kerala Government Jobs 2026-27 — കേരള സർക്കാർ ജോലി | SarkariAlert',
+  title: 'Kerala Government Jobs 2026-27 — കേരള സർക്കാർ ജോലി',
   description:
     'Kerala Government Jobs 2026-27: Latest Kerala sarkari naukri for Kerala PSC, KTET, Kerala Police & more. Apply online for Kerala state government vacancies with eligibility, salary & last date.',
   keywords: [

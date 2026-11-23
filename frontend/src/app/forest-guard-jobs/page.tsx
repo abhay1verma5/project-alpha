@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Trees } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Forest Guard/Ranger Bharti 2026-27 — Van Vibhag Vacancy | SarkariAlert',
+  title: 'Forest Guard/Ranger Bharti 2026-27 — Van Vibhag Vacancy',
   description:
     'Forest Guard Bharti 2026-27: Latest van vibhag vacancy for Forest Guard, Forest Ranger, Vanpal, Forest Officer posts. State forest department recruitment, UPSC Indian Forest Service, wildlife warden & more. Apply online with eligibility, salary & last date.',
   keywords: [

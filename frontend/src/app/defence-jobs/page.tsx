@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Defence Government Jobs 2026-27 — Indian Army, Navy, Air Force Sarkari Naukri | SarkariAlert',
+  title: 'Defence Government Jobs 2026-27 — Indian Army, Navy, Air Force Sarkari Naukri',
   description:
     'Defence government jobs 2026-27: Browse latest sarkari naukri for Indian Army, Navy, Air Force, DRDO, OFB, Coast Guard, CAPF. NDA, CDS, AFCAT, Agniveer recruitment & Agnipath scheme vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

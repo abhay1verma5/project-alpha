@@ -6,6 +6,7 @@ import { BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Syllabus & Exam Pattern',
+  alternates: { canonical: '/syllabus' },
   description: 'Latest exam syllabus and pattern — SSC, UPSC, Railway, Banking, Police and more.',
 };
 

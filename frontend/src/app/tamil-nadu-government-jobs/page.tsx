@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Tamil Nadu Government Jobs 2026-27 — தமிழ்நாடு அரசு வேலை | SarkariAlert',
+  title: 'Tamil Nadu Government Jobs 2026-27 — தமிழ்நாடு அரசு வேலை',
   description:
     'Tamil Nadu Government Jobs 2026-27: Latest TN sarkari naukri for TNPSC, TN Police, TN TRB, MRB & more. Apply online for Tamil Nadu state government vacancies with eligibility, salary & last date.',
   keywords: [

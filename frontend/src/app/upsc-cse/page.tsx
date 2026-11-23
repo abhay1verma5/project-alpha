@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Crown, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'UPSC Civil Services 2026-27 — IAS, IPS, IFS Exam | SarkariAlert',
+  title: 'UPSC Civil Services 2026-27 — IAS, IPS, IFS Exam',
   description:
     'UPSC Civil Services Examination 2026-27 — IAS, IPS, IFS exam notification, eligibility, syllabus, exam pattern (Prelims + Mains + Interview). Age limit, number of attempts, optional subject selection & salary details.',
   keywords: [

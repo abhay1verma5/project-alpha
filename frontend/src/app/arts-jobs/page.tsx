@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'BA Government Jobs 2026-27 — Arts Graduate Sarkari Naukri | SarkariAlert',
+  title: 'BA Government Jobs 2026-27 — Arts Graduate Sarkari Naukri',
   description:
     'BA government jobs 2026-27: Browse latest sarkari naukri for arts graduates. UPSC, SSC CGL, State PCS, IAS, Bank PO & clerk vacancies for BA pass candidates. Apply online with eligibility, salary & last date.',
   keywords: [

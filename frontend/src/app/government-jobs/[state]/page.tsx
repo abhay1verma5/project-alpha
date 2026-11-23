@@ -15,7 +15,7 @@ export async function generateMetadata(
   const info = getState(state);
   if (!info) return { title: 'Not Found' };
   return {
-    title: `Government Jobs in ${info.name} — District-wise | SarkariAlert`,
+    title: `Government Jobs in ${info.name} — District-wise`,
     description: `Find government jobs in ${info.name} by district. ${info.recruitmentBodies.join(', ')} vacancies in ${info.districts.map(d => d.name).join(', ')} and more.`,
     alternates: { canonical: `https://sarkarialert.online/government-jobs/${state}` },
   };

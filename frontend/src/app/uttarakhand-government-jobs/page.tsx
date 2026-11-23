@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Uttarakhand Government Jobs 2026-27 — उत्तराखंड सरकारी नौकरी | SarkariAlert',
+  title: 'Uttarakhand Government Jobs 2026-27 — उत्तराखंड सरकारी नौकरी',
   description:
     'Uttarakhand Government Jobs 2026-27: Latest Uttarakhand sarkari naukri for UKPSC, UKSSSC, Uttarakhand Police & more. Apply online for Uttarakhand state government vacancies with eligibility, salary & last date.',
   keywords: [

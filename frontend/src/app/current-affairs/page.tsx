@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { CurrentAffairsClient } from '@/components/current-affairs/CurrentAffairsClient';
 
 export const metadata: Metadata = {
-  title: 'Daily Current Affairs — GK Today | SarkariAlert',
+  title: 'Daily Current Affairs — GK Today',
+  alternates: { canonical: '/current-affairs' },
   description:
     'Daily current affairs for UPSC, SSC, Banking, Railway, State PSC exams. Get today\'s GK updates with quiz, covering national, international, economy, science, sports & awards.',
   keywords: [

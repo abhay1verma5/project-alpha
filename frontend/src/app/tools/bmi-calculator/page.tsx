@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { BmiCalculator } from '@/components/tools/BmiCalculator';
 
 export const metadata: Metadata = {
-  title: 'BMI Calculator for Government Jobs — Army, Police, Defence | SarkariAlert',
+  title: 'BMI Calculator for Government Jobs — Army, Police, Defence',
   description: 'Calculate your BMI and check weight eligibility for Army, Police, Navy, Air Force, CRPF, SSC GD, and other government jobs. Shows ideal weight range.',
   keywords: ['bmi calculator', 'bmi calculator for government jobs', 'army bmi requirement', 'police weight requirement', 'defence bmi', 'ssc gd weight', 'crpf bmi'],
   alternates: { canonical: 'https://sarkarialert.online/tools/bmi-calculator' },

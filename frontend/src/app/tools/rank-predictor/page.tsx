@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { RankPredictor } from '@/components/tools/RankPredictor';
 
 export const metadata: Metadata = {
-  title: 'Rank Predictor — Marks se Rank aur Selection Probability Jaane | SarkariAlert',
+  title: 'Rank Predictor — Marks se Rank aur Selection Probability Jaane',
   description: 'Enter your exam marks and predict your rank, selection probability, and cutoff comparison for SSC CGL, CHSL, UPSC, IBPS PO, SBI, RRB NTPC, CTET, UGC NET. Category-wise analysis with historical cutoff data.',
   keywords: [
     'rank predictor',

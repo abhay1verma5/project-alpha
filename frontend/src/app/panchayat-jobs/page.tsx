@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Building2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Panchayat Jobs 2026-27 — Gram Panchayat Sachiv, Rozgar Sahayak Bharti | SarkariAlert',
+  title: 'Panchayat Jobs 2026-27 — Gram Panchayat Sachiv, Rozgar Sahayak Bharti',
   description:
     'Panchayat jobs 2026-27: Latest Gram Panchayat Sachiv, Rozgar Sahayak, Panchayat Secretary & block level vacancies. State-wise panchayat recruitment for graduate candidates. Apply online with eligibility, salary & last date.',
   keywords: [

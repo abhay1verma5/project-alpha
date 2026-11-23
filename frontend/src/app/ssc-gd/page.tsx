@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Shield, Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'SSC GD Constable 2026-27 — CRPF, BSF, CISF, ITBP Bharti | SarkariAlert',
+  title: 'SSC GD Constable 2026-27 — CRPF, BSF, CISF, ITBP Bharti',
   description:
     'SSC GD Constable 2026-27 recruitment for CRPF, BSF, CISF, ITBP, SSB, AR & NIA. Eligibility (10th/12th pass), physical standards, salary Rs 21,700-69,100, PET/PST details. Apply online for paramilitary forces.',
   keywords: [

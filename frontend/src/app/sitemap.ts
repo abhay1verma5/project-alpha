@@ -199,17 +199,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Year-wise real past papers: /pyq/<exam>/<year> (only exams that have real questions)
+  // Year-wise real past papers: /pyq/<exam>/<year>, from one backend call.
   try {
-    const meta = await fetch(`${API_BASE}/pyq/meta/`, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(8000) }).then((r) => r.json());
-    const exams = Object.keys((meta && meta.real_by_exam) || {});
-    const lists = await Promise.all(exams.map((e) =>
-      fetch(`${API_BASE}/pyq/papers/?exam=${e}`, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(8000) }).then((r) => r.json()).catch(() => null)));
-    lists.forEach((d, i) => {
-      for (const y of (d && d.years) || []) {
-        entries.push({ url: `${BASE_URL}/pyq/${exams[i]}/${y.year}`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 });
+    const index: Record<string, number[]> = await fetch(`${API_BASE}/pyq/paper-index/`, {
+      next: { revalidate: 86400 }, signal: AbortSignal.timeout(15000),
+    }).then((r) => r.json());
+    for (const [exam, years] of Object.entries(index || {})) {
+      for (const year of years) {
+        entries.push({ url: `${BASE_URL}/pyq/${exam}/${year}`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 });
       }
-    });
+    }
   } catch { /* sitemap still builds without these */ }
 
   // Category pages

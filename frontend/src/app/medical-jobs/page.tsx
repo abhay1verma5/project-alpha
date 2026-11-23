@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Stethoscope } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Medical Government Jobs 2026-27 — MBBS, BDS, AYUSH Doctor Sarkari Naukri | SarkariAlert',
+  title: 'Medical Government Jobs 2026-27 — MBBS, BDS, AYUSH Doctor Sarkari Naukri',
   description:
     'Medical government jobs 2026-27: Browse latest sarkari naukri for MBBS, BDS, AYUSH, BAMS, BHMS doctors. AIIMS, ESIC, Army Medical Corps, CHS, state health services vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

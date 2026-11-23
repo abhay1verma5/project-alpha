@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Nagaland Government Jobs 2026-27 — नागालैंड सरकारी नौकरी | SarkariAlert',
+  title: 'Nagaland Government Jobs 2026-27 — नागालैंड सरकारी नौकरी',
   description:
     'Nagaland Government Jobs 2026-27: Latest Nagaland sarkari naukri for NPSC, Nagaland Police, Education Dept & more. Apply online for Nagaland government vacancies.',
   keywords: [

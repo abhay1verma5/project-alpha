@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, FlaskConical } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'B.Sc Government Jobs 2026-27 — Science Graduate Sarkari Naukri | SarkariAlert',
+  title: 'B.Sc Government Jobs 2026-27 — Science Graduate Sarkari Naukri',
   description:
     'B.Sc government jobs 2026-27: Browse latest sarkari naukri for science graduates. Scientific Assistant, Lab Technician, Forest Officer, ISRO, Meteorological Dept & research vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

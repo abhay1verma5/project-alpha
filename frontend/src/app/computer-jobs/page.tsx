@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Monitor } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Computer/IT Government Jobs 2026-27 — BCA, B.Sc CS, MCA Sarkari Naukri | SarkariAlert',
+  title: 'Computer/IT Government Jobs 2026-27 — BCA, B.Sc CS, MCA Sarkari Naukri',
   description:
     'Computer/IT government jobs 2026-27: Browse latest sarkari naukri for BCA, B.Sc Computer Science, MCA, B.Tech CS/IT candidates. NIC, NIELIT, SSC Scientific Assistant, IBPS IT Officer, DRDO Computer Scientist vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

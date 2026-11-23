@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { PhysicalTestCalculator } from '@/components/tools/PhysicalTestCalculator';
 
 export const metadata: Metadata = {
-  title: 'Physical Test Calculator — Police, Army, SSC GD Body Standards | SarkariAlert',
+  title: 'Physical Test Calculator — Police, Army, SSC GD Body Standards',
   description: 'Check your height, weight, and chest eligibility for UP Police, SSC GD, Army GD, CRPF, BSF, Railway RPF, Delhi Police, and State Police physical tests.',
   keywords: ['physical test calculator', 'police physical test', 'army height weight', 'ssc gd physical', 'crpf physical standard', 'bsf height requirement', 'chest measurement police'],
   alternates: { canonical: 'https://sarkarialert.online/tools/physical-test-calculator' },

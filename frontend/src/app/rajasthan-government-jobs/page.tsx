@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Rajasthan Government Jobs 2026-27 — राजस्थान सरकारी नौकरी | SarkariAlert',
+  title: 'Rajasthan Government Jobs 2026-27 — राजस्थान सरकारी नौकरी',
   description:
     'Rajasthan Government Jobs 2026-27: Latest Rajasthan sarkari naukri for RPSC, RSMSSB, Rajasthan Police, Rajasthan Patwari, RAS & more. Apply online for Rajasthan state government vacancies with eligibility, salary & last date.',
   keywords: [

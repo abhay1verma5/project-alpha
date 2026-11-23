@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Sparkles, Brain, ClipboardCheck, MessageCircle, Search, ChevronRight, FileText, Mic, Keyboard, Lightbulb, BookOpen, PenTool, HelpCircle, Languages, Calculator } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'AI Tools — Quiz, Resume Builder, Interview Prep, Career Advisor | SarkariAlert',
+  title: 'AI Tools — Quiz, Resume Builder, Interview Prep, Career Advisor',
   description: 'Free AI-powered tools for government exam preparation. AI Quiz, Resume Builder, Interview Prep, Eligibility Checker, Career Advisor, Typing Test, GK Flashcards.',
   keywords: 'ai tools, sarkari exam ai, quiz generator, eligibility checker, career advisor, government job ai, resume builder, interview prep, typing test',
 };

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { CareerClient } from '@/components/ai-career/CareerClient';
 
 export const metadata: Metadata = {
-  title: 'AI Career Advisor — Government Career Guidance | SarkariAlert',
+  title: 'AI Career Advisor — Government Career Guidance',
+  alternates: { canonical: '/ai-career' },
   description: 'Get personalized government career guidance from AI. Ask about SSC, UPSC, Railway, Banking exams and career paths in Hindi or English.',
   keywords: 'career advisor, government career guidance, sarkari naukri advice, which govt exam, career counselor, hindi career advice',
 };

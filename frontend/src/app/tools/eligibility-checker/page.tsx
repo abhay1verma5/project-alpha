@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { EligibilityChecker } from '@/components/tools/EligibilityChecker';
 
 export const metadata: Metadata = {
-  title: 'Exam Eligibility Checker — कौन सी परीक्षा दे सकते हैं? | SarkariAlert',
+  title: 'Exam Eligibility Checker — कौन सी परीक्षा दे सकते हैं?',
   description: 'Check your eligibility for 29+ government exams like SSC CGL, UPSC, Railway, Bank PO, Police, Army. Enter DOB, qualification and category to see all eligible exams.',
   keywords: ['exam eligibility checker', 'government exam eligibility', 'ssc eligibility', 'upsc age limit', 'railway exam eligibility', 'bank exam eligibility', 'sarkari naukri eligibility', 'कौन सी परीक्षा दे सकते हैं'],
   alternates: { canonical: 'https://sarkarialert.online/tools/eligibility-checker' },

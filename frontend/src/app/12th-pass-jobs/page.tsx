@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '12th Pass Sarkari Naukri 2026-27 — 12th Pass Government Jobs | SarkariAlert',
+  title: '12th Pass Sarkari Naukri 2026-27 — 12th Pass Government Jobs',
   description:
     '12th pass sarkari naukri 2026-27: Browse latest government jobs for 12th pass / Intermediate candidates. SSC CHSL, Railway, Banking Clerk, Defence, Police & more. Apply online with eligibility & last date.',
   keywords: [

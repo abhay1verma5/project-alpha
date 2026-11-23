@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Wrench } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'ITI & Diploma Government Jobs 2026-27 — Sarkari Naukri for ITI/Diploma Holders | SarkariAlert',
+  title: 'ITI & Diploma Government Jobs 2026-27 — Sarkari Naukri for ITI/Diploma Holders',
   description:
     'ITI & Diploma sarkari naukri 2026-27: Browse latest government jobs for ITI & Diploma holders. Railway, Defence, DRDO, ISRO, Ordnance Factory, State PWD & more. Apply online with eligibility & last date.',
   keywords: [

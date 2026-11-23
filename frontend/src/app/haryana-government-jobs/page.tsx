@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Haryana Government Jobs 2026-27 — हरियाणा सरकारी नौकरी | SarkariAlert',
+  title: 'Haryana Government Jobs 2026-27 — हरियाणा सरकारी नौकरी',
   description:
     'Haryana Government Jobs 2026-27: Latest Haryana sarkari naukri for HSSC, HPSC, Haryana Police, Haryana Patwari, CET & more. Apply online for Haryana state government vacancies with eligibility, salary & last date.',
   keywords: [

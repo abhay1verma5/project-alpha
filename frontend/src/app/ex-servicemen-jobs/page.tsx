@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Medal } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Ex-Servicemen Government Jobs 2026-27 — ESM Reservation Vacancy | SarkariAlert',
+  title: 'Ex-Servicemen Government Jobs 2026-27 — ESM Reservation Vacancy',
   description:
     'Ex-servicemen government jobs 2026-27: Latest ESM reservation vacancies in central & state government. Retired army, navy, air force jobs with 10% reservation in Group C, 20% in Group D. Age relaxation, re-employment benefits & apply online.',
   keywords: [

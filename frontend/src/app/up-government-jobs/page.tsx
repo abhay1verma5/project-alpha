@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'UP Government Jobs 2026-27 — उत्तर प्रदेश सरकारी नौकरी | SarkariAlert',
+  title: 'UP Government Jobs 2026-27 — उत्तर प्रदेश सरकारी नौकरी',
   description:
     'UP Government Jobs 2026-27: Latest Uttar Pradesh sarkari naukri for UPPSC, UPSSSC, UP Police, UP TGT/PGT, Lekhpal, RO/ARO & more. Apply online for UP state government vacancies with eligibility, salary & last date.',
   keywords: [

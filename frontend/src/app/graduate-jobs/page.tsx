@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Graduate Government Jobs 2026-27 — Sarkari Naukri for Graduates | SarkariAlert',
+  title: 'Graduate Government Jobs 2026-27 — Sarkari Naukri for Graduates',
   description:
     'Graduate sarkari naukri 2026-27: Browse latest government jobs for graduates & degree holders. UPSC, SSC CGL, Banking PO, State PSC, Railway & more. Apply online with eligibility, salary & last date.',
   keywords: [

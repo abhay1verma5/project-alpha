@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '8th Pass Government Jobs 2026-27 — 8वीं पास सरकारी नौकरी | SarkariAlert',
+  title: '8th Pass Government Jobs 2026-27 — 8वीं पास सरकारी नौकरी',
   description:
     '8th pass government jobs 2026-27: Latest sarkari naukri for 8vi pass candidates. GDS, Peon, Safai Karamchari, Chowkidar, Mali, Anganwadi Helper vacancies. Apply online without exam — eligibility, salary & last date.',
   keywords: [

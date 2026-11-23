@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Wrench } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'ITI Government Jobs 2026-27 — Trade-wise Sarkari Naukri | SarkariAlert',
+  title: 'ITI Government Jobs 2026-27 — Trade-wise Sarkari Naukri',
   description:
     'ITI government jobs 2026-27: Browse latest sarkari naukri for ITI pass candidates. Railway, Defence, NTPC, ONGC, Ordnance Factory, Trade Apprentice & PSU vacancies for all ITI trades. Apply online with eligibility, salary & last date.',
   keywords: [

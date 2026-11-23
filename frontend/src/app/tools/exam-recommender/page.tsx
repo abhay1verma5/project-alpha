@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ExamRecommender } from '@/components/tools/ExamRecommender';
 
 export const metadata: Metadata = {
-  title: 'Which Government Exam Should I Take? — AI Quiz | SarkariAlert',
+  title: 'Which Government Exam Should I Take? — AI Quiz',
   description: 'Take this 5-minute AI quiz to find the best government exams for you. Based on your qualification, age, strengths & preferences — get personalized exam recommendations with match scores.',
   keywords: ['which government exam should I take', 'best sarkari exam for me', 'government exam recommender', 'exam finder quiz', 'ssc or upsc which is better', 'konsi sarkari naukri de', 'exam recommendation quiz', 'sarkari pariksha quiz'],
   alternates: { canonical: 'https://sarkarialert.online/tools/exam-recommender' },

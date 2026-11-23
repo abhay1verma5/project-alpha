@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '10th Pass Sarkari Naukri 2026-27 — 10th Pass Government Jobs | SarkariAlert',
+  title: '10th Pass Sarkari Naukri 2026-27 — 10th Pass Government Jobs',
   description:
     '10th pass sarkari naukri 2026-27: Browse latest government jobs for 10th pass candidates. SSC, Railway, Defence, Police, Postal & Group D vacancies. Apply online with eligibility, salary & last date.',
   keywords: [

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Lakshadweep Government Jobs 2026-27 — लक्षद्वीप सरकारी नौकरी | SarkariAlert',
+  title: 'Lakshadweep Government Jobs 2026-27 — लक्षद्वीप सरकारी नौकरी',
   description:
     'Lakshadweep Government Jobs 2026-27: Latest Lakshadweep UT sarkari naukri for Administration, Police, Navy, Coast Guard & more. Apply online for island UT vacancies.',
   keywords: [

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AnswerKeyCalculator } from '@/components/tools/AnswerKeyCalculator';
 
 export const metadata: Metadata = {
-  title: 'Answer Key Calculator — Calculate Marks with Negative Marking | SarkariAlert',
+  title: 'Answer Key Calculator — Calculate Marks with Negative Marking',
   description: 'Calculate your exam score with negative marking. Presets for SSC CGL, UPSC Prelims, SSC GD, Railway NTPC, IBPS PO. See total score, percentage, and marks lost.',
   keywords: ['answer key calculator', 'negative marking calculator', 'ssc cgl marks calculator', 'upsc prelims score', 'exam score calculator', 'marks calculator with negative marking'],
   alternates: { canonical: 'https://sarkarialert.online/tools/answer-key-calculator' },

@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Bihar Government Jobs 2026-27 — बिहार सरकारी नौकरी | SarkariAlert',
+  title: 'Bihar Government Jobs 2026-27 — बिहार सरकारी नौकरी',
   description:
     'Bihar Government Jobs 2026-27: Latest Bihar sarkari naukri for BPSC, BSSC, Bihar Police, Bihar Teacher TRE, CSBC & more. Apply online for Bihar state government vacancies with eligibility, salary & last date.',
   keywords: [

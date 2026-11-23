@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Factory } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'PSU Jobs 2026-27 — BHEL, NTPC, ONGC, IOCL Government Company | SarkariAlert',
+  title: 'PSU Jobs 2026-27 — BHEL, NTPC, ONGC, IOCL Government Company',
   description:
     'PSU jobs 2026-27: Latest Maharatna, Navratna & Miniratna company recruitment. BHEL, NTPC, ONGC, IOCL, GAIL, SAIL, PGCIL, BPCL, HPCL vacancy through GATE & direct recruitment. Check eligibility, salary, selection process & apply online.',
   keywords: [

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ post: str
   const post = getSalaryBySlug(slug);
   if (!post) return { title: 'Post Not Found' };
   return {
-    title: `${post.name} Salary 2026-27 — In-hand ₹${post.inHandSalary.metro.toLocaleString('en-IN')} (Metro) | SarkariAlert`,
+    title: `${post.name} Salary 2026-27 — In-hand ₹${post.inHandSalary.metro.toLocaleString('en-IN')} (Metro)`,
     description: `${post.name} salary: Basic ₹${post.basicPay.toLocaleString('en-IN')}, In-hand ₹${post.inHandSalary.other.toLocaleString('en-IN')}-₹${post.inHandSalary.metro.toLocaleString('en-IN')} per month. ${post.payLevel}. Exam: ${post.exam}.`,
     alternates: { canonical: `https://sarkarialert.online/salary/${slug}` },
   };

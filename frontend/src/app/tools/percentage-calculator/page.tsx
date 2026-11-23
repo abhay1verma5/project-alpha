@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { PercentageCalculator } from '@/components/tools/PercentageCalculator';
 
 export const metadata: Metadata = {
-  title: 'Percentage Calculator — Marks to Percentage Converter | SarkariAlert',
+  title: 'Percentage Calculator — Marks to Percentage Converter',
   description: 'Convert marks to percentage and percentage to marks instantly. Shows grade (A+, A, B+, B, C, D, F). Quick presets for all total marks.',
   keywords: ['percentage calculator', 'marks to percentage', 'percentage to marks', 'grade calculator', 'marks calculator', 'exam percentage'],
   alternates: { canonical: 'https://sarkarialert.online/tools/percentage-calculator' },

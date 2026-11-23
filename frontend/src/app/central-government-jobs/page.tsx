@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Landmark } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Central Government Jobs 2026-27 — केंद्र सरकार की नौकरी | SarkariAlert',
+  title: 'Central Government Jobs 2026-27 — केंद्र सरकार की नौकरी',
   description:
     'Central government jobs 2026-27: Browse latest sarkari naukri in central government departments. UPSC, SSC, Railway, Banking, Defence, central ministries & 7th pay commission jobs. Apply online with eligibility, salary & last date.',
   keywords: [

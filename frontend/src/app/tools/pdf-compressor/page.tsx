@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { PdfCompressor } from '@/components/tools/PdfCompressor';
 
 export const metadata: Metadata = {
-  title: 'PDF & Image Compressor — सरकारी फॉर्म के लिए फाइल साइज कम करें | SarkariAlert',
+  title: 'PDF & Image Compressor — सरकारी फॉर्म के लिए फाइल साइज कम करें',
   description: 'Check your PDF and image file sizes for government form requirements. SSC, UPSC, Railway photo and signature size checker. Free online tool.',
   keywords: ['pdf compressor', 'image compressor', 'sarkari form photo size', 'signature size reducer', 'ssc photo size', 'upsc photo requirements', 'government form file size', 'pdf size checker'],
   alternates: { canonical: 'https://sarkarialert.online/tools/pdf-compressor' },

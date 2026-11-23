@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { CgpaConverter } from '@/components/tools/CgpaConverter';
 
 export const metadata: Metadata = {
-  title: 'CGPA to Percentage Converter — CBSE, VTU, All Universities | SarkariAlert',
+  title: 'CGPA to Percentage Converter — CBSE, VTU, All Universities',
   description: 'Convert CGPA to percentage and percentage to CGPA. Supports CBSE, VTU, Mumbai University, Anna University, KTU and custom multiplier formulas.',
   keywords: ['cgpa to percentage', 'percentage to cgpa', 'cbse cgpa converter', 'vtu cgpa calculator', 'mumbai university cgpa', 'cgpa calculator'],
   alternates: { canonical: 'https://sarkarialert.online/tools/cgpa-to-percentage' },

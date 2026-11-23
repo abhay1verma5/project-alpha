@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Patwari/Lekhpal Bharti 2026-27 — Revenue Department Vacancy | SarkariAlert',
+  title: 'Patwari/Lekhpal Bharti 2026-27 — Revenue Department Vacancy',
   description:
     'Patwari/Lekhpal bharti 2026-27: Latest revenue department sarkari naukri. UP Lekhpal, MP Patwari, Rajasthan Patwari vacancy with eligibility, salary Rs 20,000-35,000, exam syllabus, selection process & apply online links.',
   keywords: [

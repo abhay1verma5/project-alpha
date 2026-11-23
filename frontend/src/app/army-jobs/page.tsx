@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Indian Army Bharti 2026-27 — Army Rally, Agniveer & Officer Entry | SarkariAlert',
+  title: 'Indian Army Bharti 2026-27 — Army Rally, Agniveer & Officer Entry',
   description:
     'Indian Army Bharti 2026-27: Latest army rally bharti, Agniveer recruitment, soldier GD, clerk, tradesman & officer entry vacancies. Check eligibility, age limit, physical standards, salary & apply online for Indian Army sarkari naukri.',
   keywords: [

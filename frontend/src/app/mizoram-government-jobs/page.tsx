@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Mizoram Government Jobs 2026-27 — मिज़ोरम सरकारी नौकरी | SarkariAlert',
+  title: 'Mizoram Government Jobs 2026-27 — मिज़ोरम सरकारी नौकरी',
   description:
     'Mizoram Government Jobs 2026-27: Latest Mizoram sarkari naukri for MPSC Mizoram, Mizoram Police, Education Dept & more. Apply online for Mizoram government vacancies.',
   keywords: [

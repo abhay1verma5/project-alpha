@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'West Bengal Government Jobs 2026-27 — পশ্চিমবঙ্গ সরকারি চাকরি | SarkariAlert',
+  title: 'West Bengal Government Jobs 2026-27 — পশ্চিমবঙ্গ সরকারি চাকরি',
   description:
     'West Bengal Government Jobs 2026-27: Latest WB sarkari naukri for WBPSC, WB Police, WB TET, WBSSC & more. Apply online for West Bengal state government vacancies with eligibility, salary & last date.',
   keywords: [

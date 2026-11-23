@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ exam: str
   const exam = result.exam;
   const url = `https://sarkarialert.online${BASE_PATH}/${slug}`;
   return {
-    title: `${exam.exam} Topic-wise Weightage — ${exam.paper} | SarkariAlert`,
+    title: `${exam.exam} Topic-wise Weightage — ${exam.paper}`,
     description: `Detailed subject-wise and topic-wise weightage analysis for ${exam.exam} ${exam.paper}. Know high-scoring topics and prioritize your preparation.`,
     alternates: { canonical: url },
     openGraph: {

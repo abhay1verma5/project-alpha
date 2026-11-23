@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, Mailbox } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Post Office Jobs 2026-27 — India Post GDS, Postman, MTS Vacancy | SarkariAlert',
+  title: 'Post Office Jobs 2026-27 — India Post GDS, Postman, MTS Vacancy',
   description:
     'Post office jobs 2026-27: Latest India Post GDS (Gramin Dak Sevak), Postman, Mail Guard, MTS, Postal Assistant & Sorting Assistant vacancy. Check eligibility, salary, selection process & apply online for postal department sarkari naukri.',
   keywords: [

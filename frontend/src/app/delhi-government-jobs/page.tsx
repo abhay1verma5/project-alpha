@@ -6,7 +6,7 @@ import { JobListSkeleton } from '@/components/JobCardSkeleton';
 import { Briefcase, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Delhi Government Jobs 2026-27 — दिल्ली सरकारी नौकरी | SarkariAlert',
+  title: 'Delhi Government Jobs 2026-27 — दिल्ली सरकारी नौकरी',
   description:
     'Delhi Government Jobs 2026-27: Latest Delhi sarkari naukri for DSSSB, Delhi Police, DTC, Delhi Jal Board, MCD & more. Apply online for Delhi government vacancies with eligibility, salary & last date.',
   keywords: [

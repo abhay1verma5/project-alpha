@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { QuizClient } from '@/components/ai-quiz/QuizClient';
 
 export const metadata: Metadata = {
-  title: 'AI Quiz Generator — Class 1-12, SSC, UPSC, Railway | SarkariAlert',
+  title: 'AI Quiz Generator — Class 1-12, SSC, UPSC, Railway',
   description: 'AI-powered quiz generator for school (Class 1-12 NCERT) and government exam preparation. Practice MCQs with chapter-wise questions in Hindi & English.',
   keywords: 'AI quiz, class 12 quiz, NCERT quiz, physics quiz, chemistry quiz, ssc cgl quiz, upsc quiz, hindi quiz, cbse quiz',
 };
