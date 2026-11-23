@@ -363,17 +363,9 @@ export default async function ApplyOnlinePage() {
               itemListElement: openForms.slice(0, 20).map((job, i) => ({
                 '@type': 'ListItem',
                 position: i + 1,
-                item: {
-                  '@type': 'JobPosting',
-                  title: job.title,
-                  hiringOrganization: {
-                    '@type': 'Organization',
-                    name: job.organization || 'Government of India',
-                  },
-                  datePosted: job.posted_date,
-                  validThrough: job.last_date || undefined,
-                  url: `https://sarkarialert.online/jobs/${job.slug}`,
-                },
+                // Plain links: JobPosting is only allowed on a page with a single job.
+                name: job.title,
+                url: `https://sarkarialert.online/jobs/${job.slug}`,
               })),
             },
           }),

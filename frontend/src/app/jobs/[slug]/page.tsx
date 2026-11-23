@@ -126,6 +126,9 @@ const EXAM_RESOURCES: Record<string, { label: string; url: string }[]> = {
   ],
 };
 
+// Shorter descriptions are 'incomplete' for Google's JobPosting rules.
+const MIN_JOB_DESCRIPTION = 300;
+
 export default async function JobDetailPage({ params }: Props) {
   const { slug } = await params;
   let job;
@@ -168,9 +171,17 @@ export default async function JobDetailPage({ params }: Props) {
     { icon: UserCheck, label: 'Age Limit / आयु सीमा', value: job.age_limit || 'See notification / नोटिफिकेशन देखें' },
   ] as { icon: typeof Building2; label: string; value: string; highlight?: boolean }[];
 
-  // JobPosting JSON-LD only for real vacancies. Google's guidelines forbid JobPosting
-  // markup on pages that are not job openings (notices, results, exam dates...).
-  const isVacancy = job.content_type === 'job';
+  // JobPosting JSON-LD only for a complete, still-open vacancy. Google forbids it on
+  // non-job pages (notices, results...), on incomplete descriptions and on expired
+  // jobs (manual action risk): developers.google.com/search/docs/appearance/structured-data/job-posting
+  const today = new Date().toISOString().slice(0, 10);
+  const isVacancy =
+    job.content_type === 'job' &&
+    job.is_active &&
+    (job.description || '').trim().length >= MIN_JOB_DESCRIPTION &&
+    !!job.last_date &&
+    job.last_date >= today &&
+    !!job.apply_link;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',

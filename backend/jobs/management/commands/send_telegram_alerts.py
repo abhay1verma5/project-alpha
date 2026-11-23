@@ -58,9 +58,9 @@ class Command(BaseCommand):
         parser.add_argument(
             "--max",
             type=int,
-            default=6,
-            help="Send at most this many per run, biggest exams first (default 6, so a channel "
-            "on the 3-hourly schedule gets <= ~48/day instead of every crawled item).",
+            default=4,
+            help="Send at most this many per run, biggest exams first (default 4: <= ~32/day on the "
+            "3-hourly schedule; big sarkari channels post ~6-30/day, more gets channels muted).",
         )
 
     def handle(self, *args, **options):
