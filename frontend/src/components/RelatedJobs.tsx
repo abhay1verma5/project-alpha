@@ -9,11 +9,16 @@ interface RelatedJobsProps {
   currentSlug: string;
 }
 
-export default async function RelatedJobs({ category, currentSlug }: RelatedJobsProps) {
+export default async function RelatedJobs({ category, state, currentSlug }: RelatedJobsProps) {
   let jobs: Job[];
   try {
-    const res = await getJobs({ category, page_size: '4' });
-    jobs = res.results.filter((j) => j.slug !== currentSlug).slice(0, 3);
+    // Same category in the same state first (more useful to the reader), then same category anywhere.
+    const sameState = state && state !== 'all_india'
+      ? (await getJobs({ category, state, page_size: '4' })).results
+      : [];
+    const anywhere = sameState.length >= 4 ? [] : (await getJobs({ category, page_size: '6' })).results;
+    const seen = new Set<string>([currentSlug]);
+    jobs = [...sameState, ...anywhere].filter((j) => !seen.has(j.slug) && (seen.add(j.slug), true)).slice(0, 3);
   } catch {
     return null;
   }

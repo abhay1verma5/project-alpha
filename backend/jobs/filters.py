@@ -61,6 +61,22 @@ class JobFilter(django_filters.FilterSet):
         field_name="posted_date", lookup_expr="gte"
     )
     qualification = django_filters.CharFilter(method="filter_qualification")
+    niche = django_filters.CharFilter(method="filter_niche")
+
+    # Landing pages people search for. Matched on the title (and organization),
+    # since crawled posts carry no structured flags for these.
+    NICHES = {
+        "women": r"(female|women|woman|mahila|lady|ladies|girls?|anganwadi|asha|midwife|\bANM\b|\bGNM\b|nurse)",
+        "no_exam": r"(walk[- ]?in|interview[- ]based|selection by interview|merit[- ]based|on merit|without exam|direct recruitment|apprentice|contract(ual)?|outsourc)",
+        "walk_in": r"walk[- ]?in",
+        "anganwadi": r"(anganwadi|aanganwadi|anganbadi|icds|आंगनवाड़ी)",
+    }
+
+    def filter_niche(self, queryset, name, value):
+        pattern = self.NICHES.get((value or "").lower())
+        if not pattern:
+            return queryset
+        return queryset.filter(Q(title__iregex=pattern) | Q(organization__iregex=pattern))
 
     def filter_qualification(self, queryset, name, value):
         """Smart qualification filter: search qualification field, title, and description."""

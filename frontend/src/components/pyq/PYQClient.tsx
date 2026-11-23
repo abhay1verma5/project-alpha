@@ -15,6 +15,7 @@ import {
 import { MathText } from './MathText';
 import { QuestionNotes } from './QuestionNotes';
 import { trackWrongAnswer } from '@/app/revision/RevisionClient';
+import { recordScore } from '@/lib/score-history';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -216,6 +217,7 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
     };
     setStats(updated);
     saveStats(updated);
+    recordScore('quiz', score, questions.length);
     setPhase('results');
   };
 
@@ -246,6 +248,7 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
       };
       setStats(updated);
       saveStats(updated);
+      recordScore('mock', data.score, data.total);
     } catch {
       // Fall through to results
     }

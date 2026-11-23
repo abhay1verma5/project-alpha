@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PYQClient } from '@/components/pyq/PYQClient';
+import { ShareBar } from '@/components/pyq/ShareBar';
 import { EXAM_CATEGORIES, findExamInfo } from '@/lib/pyq-types';
 
 type Props = { params: Promise<{ exam: string }> };
@@ -38,6 +39,7 @@ export default async function PracticeExamPage({ params }: Props) {
         Practice questions follow the {name} pattern; ones marked “Practice (AI)” are written by AI, ones marked
         “Previous year” are from real papers.
       </p>
+      <div className="mb-4"><ShareBar url={`https://sarkarialert.online/practice/${exam}`} title={`${name} free practice questions & mock test`} /></div>
       <PYQClient initialExam={exam} />
     </main>
   );

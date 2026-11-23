@@ -11,6 +11,7 @@ import {
   EXAM_CATEGORIES, findExamInfo,
   type PYQQuestion, type PYQMeta, type PYQCheckResult, type ExamCategory,
 } from '@/lib/pyq-types';
+import { recordScore } from '@/lib/score-history';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -204,6 +205,7 @@ export function MockTestsClient() {
       };
       setStats(updated);
       saveStats(updated);
+      recordScore('mock', data.score, data.total);
     } catch {}
     setPhase('results');
   };

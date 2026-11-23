@@ -117,7 +117,7 @@ function BreadcrumbSchema() {
 async function JobsContent() {
   let data;
   try {
-    data = await getJobs({ page: '1' });
+    data = await getJobs({ niche: 'walk_in', page: '1' });
   } catch {
     return (
       <div className="text-center py-16 bg-gray-50 dark:bg-gray-800/50 rounded-2xl">
@@ -135,7 +135,7 @@ async function JobsContent() {
       initialJobs={data.results}
       totalCount={data.count}
       nextUrl={data.next}
-      filterParams={{}}
+      filterParams={{ niche: 'walk_in' }}
     />
   );
 }

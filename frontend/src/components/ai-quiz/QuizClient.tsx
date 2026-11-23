@@ -15,6 +15,7 @@ interface Chapter { value: string; label: string; labelHi: string }
 interface Subject { value: string; label: string; labelHi: string; chapters?: Chapter[] }
 import { postAI } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { recordScore } from '@/lib/score-history';
 
 type Phase = 'setup' | 'loading' | 'playing' | 'results';
 
@@ -126,6 +127,7 @@ export function QuizClient() {
         bestScore: Math.max(stats.bestScore, pct),
       };
       setStats(updated); saveStats(updated);
+      recordScore('quiz', s, questions.length);
       setPhase('results');
     }
   };

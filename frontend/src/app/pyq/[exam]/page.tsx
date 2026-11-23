@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PYQClient } from '@/components/pyq/PYQClient';
 import { YearPapers } from './YearPapers';
+import { ShareBar } from '@/components/pyq/ShareBar';
 import { EXAM_CATEGORIES, findExamInfo } from '@/lib/pyq-types';
 
 type Props = { params: Promise<{ exam: string }> };
@@ -63,6 +64,7 @@ export default async function ExamPYQPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }} />
       <main className="max-w-3xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold mb-4">{name} Previous Year Questions (PYQ) with Solutions</h1>
+        <div className="mb-4"><ShareBar url={`https://sarkarialert.online/pyq/${exam}`} title={`${name} previous year papers (PYQ) — free, year-wise with answers`} /></div>
         <YearPapers exam={exam} name={name} />
         <h2 className="text-lg font-bold mb-2">Practice or take a timed test / अभ्यास या टेस्ट</h2>
         <PYQClient initialExam={exam} realOnlyMode />

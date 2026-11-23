@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { findExamInfo } from '@/lib/pyq-types';
 import { MathText } from '@/components/pyq/MathText';
+import { ShareBar, QuestionLink } from '@/components/pyq/ShareBar';
+
+const SITE = 'https://sarkarialert.online';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -70,8 +73,11 @@ export default async function PaperYearPage({ params, searchParams }: Props) {
       <h1 className="text-2xl font-bold mb-1">{name} {year} — Previous Year Questions</h1>
       <p className="text-sm text-muted mb-4">
         Real questions from the {year} paper with options and answers.
-        {' '}<Link href={`/pyq/${exam}`} className="font-semibold underline">Take a timed test →</Link>
+        {' '}<Link href={`/pyq/${exam}`} className="font-semibold underline print:hidden">Take a timed test →</Link>
       </p>
+      <div className="mb-4">
+        <ShareBar url={`${SITE}${link({ subject })}`} title={`${name} ${year} question paper with answers`} printable />
+      </div>
 
       {!paper ? (
         <p className="rounded-xl border border-border p-4 text-sm">Could not load this paper right now. Please try again in a minute.</p>
@@ -97,10 +103,13 @@ export default async function PaperYearPage({ params, searchParams }: Props) {
 
           <ol className="space-y-4">
             {paper.results.map((q, i) => (
-              <li key={q.id} className="rounded-xl border border-border bg-surface p-4">
-                <p className="text-[11px] font-semibold text-muted mb-1">
-                  Q{startNo + i + 1} · {q.subject}{q.chapter ? ` · ${q.chapter}` : ''}
-                </p>
+              <li key={q.id} id={`q-${q.id}`} className="rounded-xl border border-border bg-surface p-4 scroll-mt-20 break-inside-avoid">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <p className="text-[11px] font-semibold text-muted">
+                    Q{startNo + i + 1} · {q.subject}{q.chapter ? ` · ${q.chapter}` : ''}
+                  </p>
+                  <QuestionLink url={`${SITE}${link({ subject, page: paper.page })}#q-${q.id}`} />
+                </div>
                 <div className="text-sm sm:text-base font-semibold text-foreground mb-3 break-words"><MathText text={q.question_text} /></div>
                 <ul className="space-y-2 mb-3">
                   {q.options.map((o, oi) => (

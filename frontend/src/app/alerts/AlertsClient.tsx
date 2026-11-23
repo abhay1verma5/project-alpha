@@ -367,9 +367,9 @@ export default function AlertsClient() {
         {/* Info notice */}
         <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/50">
           <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
-            <strong>Note:</strong> Email notifications are coming soon. Your preferences are saved locally
-            on this device. Once the email notification system is ready, you will automatically start
-            receiving alerts based on these preferences. No spam, ever.
+            <strong>Note:</strong> We don&apos;t send emails yet. Your preferences are saved on this device and
+            used to show matching jobs here. For reminders, use &ldquo;Remind me&rdquo; on any job page to add its
+            last date to your Google Calendar.
           </p>
         </div>
 

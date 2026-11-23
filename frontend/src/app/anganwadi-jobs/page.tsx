@@ -115,7 +115,7 @@ function BreadcrumbSchema() {
 async function JobsContent() {
   let data;
   try {
-    data = await getJobs({ qualification: '8th', page: '1' });
+    data = await getJobs({ niche: 'anganwadi', page: '1' });
   } catch {
     return (
       <div className="text-center py-16 bg-gray-50 dark:bg-gray-800/50 rounded-2xl">
@@ -133,7 +133,7 @@ async function JobsContent() {
       initialJobs={data.results}
       totalCount={data.count}
       nextUrl={data.next}
-      filterParams={{ qualification: '8th' }}
+      filterParams={{ niche: 'anganwadi' }}
     />
   );
 }
