@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 TELEGRAM_API_URL = "https://api.telegram.org/bot{token}/sendMessage"
 
 
+SITE_URL = "https://sarkarialert.online"
+
+
 def send_telegram_message(text: str, chat_id: str = None) -> dict | None:
     """
     Send a message via the Telegram Bot API.
@@ -94,7 +97,8 @@ def notify_new_job(job) -> dict | None:
     if job.vacancies:
         lines.append(f"\U0001f465 <b>Vacancies:</b> {job.vacancies:,}")
     if job.qualification:
-        lines.append(f"\U0001f393 <b>Qualification:</b> {_escape_html(job.qualification)}")
+        q = job.qualification if len(job.qualification) <= 150 else job.qualification[:150].rsplit(" ", 1)[0] + "…"
+        lines.append(f"\U0001f393 <b>Qualification:</b> {_escape_html(q)}")
     if job.salary:
         lines.append(f"\U0001f4b0 <b>Salary:</b> {_escape_html(job.salary)}")
     if job.last_date:
@@ -102,8 +106,9 @@ def notify_new_job(job) -> dict | None:
     if job.age_limit:
         lines.append(f"\U0001f9d1 <b>Age Limit:</b> {_escape_html(job.age_limit)}")
 
-    # Links
+    # Links: our page first (dates, eligibility, all links), then the official ones.
     lines.append("")
+    lines.append(f'\U0001f449 <a href="{SITE_URL}/jobs/{job.slug}">Full details on SarkariAlert</a>')
     if job.apply_link:
         lines.append(f'\U0001f517 <a href="{job.apply_link}">Apply Online</a>')
     if job.notification_pdf:
