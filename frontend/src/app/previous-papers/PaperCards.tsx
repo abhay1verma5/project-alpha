@@ -6,8 +6,8 @@ import {
   BookOpen, ChevronDown, Play, FileText, TrendingUp,
 } from 'lucide-react';
 import { EXAM_CATEGORIES, type ExamCategory, type PYQMeta } from '@/lib/pyq-types';
+import { fetchPYQMetaWithRetry } from '@/lib/api';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 // Map category filters to exam category IDs
 const CATEGORY_FILTER_MAP: Record<string, string[]> = {
@@ -33,8 +33,7 @@ export function PaperCards({ filterCategory }: { filterCategory: string }) {
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set(['board_10', 'board_12']));
 
   useEffect(() => {
-    fetch(`${API_BASE}/pyq/meta/`)
-      .then(r => r.json())
+    fetchPYQMetaWithRetry()
       .then(d => setMeta(d))
       .catch(() => {});
   }, []);

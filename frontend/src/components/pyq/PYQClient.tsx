@@ -16,6 +16,7 @@ import { MathText } from './MathText';
 import { QuestionNotes } from './QuestionNotes';
 import { trackWrongAnswer } from '@/app/revision/RevisionClient';
 import { recordScore } from '@/lib/score-history';
+import { fetchPYQMetaWithRetry } from '@/lib/api';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -59,13 +60,15 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
   const [realOnly, setRealOnly] = useState(realOnlyMode);
   // exam_type -> real question count (PYQ section exam list)
   const [realByExam, setRealByExam] = useState<Record<string, number> | null>(null);
-  useEffect(() => {
-    if (!realOnlyMode) return;
-    fetch(`${API_BASE}/pyq/meta/`)
-      .then((r) => r.json())
+  const [realMetaFailed, setRealMetaFailed] = useState(false);
+  const loadRealMeta = useCallback(() => {
+    fetchPYQMetaWithRetry()
       .then((d: PYQMeta) => setRealByExam(d.real_by_exam || {}))
-      .catch(() => setRealByExam({}));
-  }, [realOnlyMode]);
+      .catch(() => setRealMetaFailed(true));
+  }, []);
+  useEffect(() => {
+    if (realOnlyMode) loadRealMeta();
+  }, [realOnlyMode, loadRealMeta]);
 
   // Meta from API
   const [meta, setMeta] = useState<PYQMeta | null>(null);
@@ -98,9 +101,7 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
   const fetchMeta = useCallback(async (exam: string) => {
     setMetaLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/pyq/meta/?exam=${exam}`);
-      const data: PYQMeta = await res.json();
-      setMeta(data);
+      setMeta(await fetchPYQMetaWithRetry(exam, 3));
     } catch {
       setMeta(null);
     }
@@ -337,7 +338,14 @@ export function PYQClient({ initialExam, realOnlyMode = false }: { initialExam?:
                 ? 'सिर्फ़ असली पिछले वर्ष के प्रश्नपत्र। जिन परीक्षाओं के असली प्रश्न उपलब्ध हैं:'
                 : 'Only questions from actual past papers. Exams with real papers available:'}
             </p>
-            {!realByExam ? (
+            {!realByExam && realMetaFailed ? (
+              <div className="flex flex-col items-center gap-3 py-10 text-sm text-foreground">
+                <p>{hi ? 'सर्वर से प्रश्न नहीं मिल पाए।' : 'Could not reach the server.'}</p>
+                <button onClick={() => { setRealMetaFailed(false); loadRealMeta(); }} className="rounded-lg bg-gov-saffron px-3 py-2 font-bold text-white">
+                  {hi ? 'दोबारा कोशिश करें' : 'Retry'}
+                </button>
+              </div>
+            ) : !realByExam ? (
               <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 animate-spin text-muted" /></div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

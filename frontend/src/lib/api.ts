@@ -201,6 +201,28 @@ export async function getPYQMeta(exam?: string): Promise<PYQMeta> {
   return fetchAPI(`/pyq/meta/${query}`);
 }
 
+/**
+ * Browser-side /pyq/meta/ with retries. The Render backend returns 502 for ~30-60s while it
+ * restarts after a data publish or wakes from idle; without retries the exam lists showed
+ * 0 questions. Throws after the last attempt so the caller can show a retry message.
+ */
+export async function fetchPYQMetaWithRetry(exam?: string, attempts = 5): Promise<PYQMeta> {
+  const url = `${API_BASE}/pyq/meta/${exam ? `?exam=${encodeURIComponent(exam)}` : ''}`;
+  let lastErr: unknown = null;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return (await res.json()) as PYQMeta;
+      lastErr = new Error(`API error: ${res.status}`);
+      if (res.status < 500) break; // 4xx won't fix itself
+    } catch (e) {
+      lastErr = e;
+    }
+    if (i < attempts - 1) await new Promise((r) => setTimeout(r, Math.min(2000 * 2 ** i, 15000)));
+  }
+  throw lastErr ?? new Error('meta fetch failed');
+}
+
 // ── Current Affairs API ──
 
 export async function getCurrentAffairs(days?: number): Promise<{ count: number; results: { date: string; items: { title: string; detail: string; category: string }[]; quiz: { question: string; options: string[]; correct: number; explanation: string }[] }[] }> {

@@ -12,6 +12,7 @@ import {
   type PYQQuestion, type PYQMeta, type PYQCheckResult, type ExamCategory,
 } from '@/lib/pyq-types';
 import { recordScore } from '@/lib/score-history';
+import { fetchPYQMetaWithRetry } from '@/lib/api';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -87,14 +88,17 @@ export function MockTestsClient() {
   const [checkResult, setCheckResult] = useState<PYQCheckResult | null>(null);
   const [stats, setStats] = useState<MockStats>(loadStats());
 
-  // Load global meta on mount
+  // Load global meta on mount (retries while the backend wakes up)
+  const [metaFailed, setMetaFailed] = useState(false);
+  const loadGlobalMeta = useCallback(() => {
+    fetchPYQMetaWithRetry()
+      .then(d => setGlobalMeta(d))
+      .catch(() => setMetaFailed(true));
+  }, []);
   useEffect(() => {
     setStats(loadStats());
-    fetch(`${API_BASE}/pyq/meta/`)
-      .then(r => r.json())
-      .then(d => setGlobalMeta(d))
-      .catch(() => {});
-  }, []);
+    loadGlobalMeta();
+  }, [loadGlobalMeta]);
 
   // Build exam counts from global meta
   const examCounts: Record<string, number> = {};
@@ -106,9 +110,7 @@ export function MockTestsClient() {
 
   const fetchMeta = useCallback(async (exam: string) => {
     try {
-      const res = await fetch(`${API_BASE}/pyq/meta/?exam=${exam}`);
-      const data: PYQMeta = await res.json();
-      setMeta(data);
+      setMeta(await fetchPYQMetaWithRetry(exam, 3));
     } catch {
       setMeta(null);
     }
@@ -261,6 +263,10 @@ export function MockTestsClient() {
             </div>
             <Timer className="w-8 h-8 text-[#ff6f00]" />
           </div>
+        )}
+
+        {!globalMeta && (
+          <MetaStatus failed={metaFailed} hi={hi} onRetry={() => { setMetaFailed(false); loadGlobalMeta(); }} />
         )}
 
         {/* Exam categories */}
@@ -687,6 +693,26 @@ export function MockTestsClient() {
           <Printer className="w-4 h-4" /> {hi ? 'प्रिंट करें' : 'Print Results'}
         </button>
       </div>
+    </div>
+  );
+}
+
+/** Shown instead of "0 questions" while /pyq/meta/ is loading or after it failed. */
+function MetaStatus({ failed, hi, onRetry }: { failed: boolean; hi: boolean; onRetry: () => void }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4 mb-4 flex items-center justify-between gap-3">
+      <p className="text-sm text-foreground">
+        {failed
+          ? (hi ? 'सर्वर से प्रश्न नहीं मिल पाए। कृपया दोबारा कोशिश करें।' : 'Could not reach the server. Please try again.')
+          : (hi ? 'प्रश्न लोड हो रहे हैं… (सर्वर शुरू होने में कुछ सेकंड लग सकते हैं)' : 'Loading questions… (the server may take a few seconds to wake up)')}
+      </p>
+      {failed ? (
+        <button onClick={onRetry} className="shrink-0 rounded-lg bg-[#ff6f00] px-3 py-2 text-sm font-bold text-white">
+          {hi ? 'दोबारा कोशिश करें' : 'Retry'}
+        </button>
+      ) : (
+        <Loader2 className="w-5 h-5 shrink-0 animate-spin text-muted" />
+      )}
     </div>
   );
 }
